@@ -1,9 +1,8 @@
-package ru.nsu.ccfit.boltava;
+package ru.nsu.ccfit.boltava.filter;
 
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.nio.file.Files;
 
 public class LastModifiedFilter implements IFilter {
@@ -13,7 +12,7 @@ public class LastModifiedFilter implements IFilter {
 
     public LastModifiedFilter(Comparator configuration, String timestamp) {
         mComparator = configuration;
-        mTimeStamp = FileTime.fromMillis(Long.parseLong(timestamp));
+        mTimeStamp = FileTime.fromMillis(Long.parseLong(timestamp) * 1000);
     }
 
     public boolean check(Path filePath) {

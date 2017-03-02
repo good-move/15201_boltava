@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava;
+package ru.nsu.ccfit.boltava.filter;
 
 import java.nio.file.Path;
 
