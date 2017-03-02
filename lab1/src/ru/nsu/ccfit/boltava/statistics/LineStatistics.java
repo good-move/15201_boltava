@@ -13,29 +13,38 @@ public class LineStatistics extends Statistics<Path, String, LineStatistics.Pair
 
         Pair currentData = super.get(filterId);
 
-        currentData.mFilesCount += filterData.mFilesCount;
-        currentData.mLinesCount += filterData.mLinesCount;
+        if (currentData == null) {
+            currentData = filterData;
+        } else {
+            currentData.mFilesCount += filterData.mFilesCount;
+            currentData.mLinesCount += filterData.mLinesCount;
+        }
 
         super.update(filterId, currentData);
 
         return true;
     }
 
+
     public boolean register(Path path, long linesCount) {
-        mTotalLinesCount+=linesCount;
-        return super.register(path);
+        if (super.register(path)) {
+            mTotalLinesCount += linesCount;
+            return true;
+        }
+
+        return false;
     }
 
     public void printFormattedStats(PrintStream ps) {
 
         ps.println("Total - " + mTotalLinesCount
-                        + " lines in " + super.getRawGlobalData().size() + " files");
+                        + " lines in " + getRawGlobalData().size() + " files");
 
         if (mTotalLinesCount > 0) {
             ps.println("---------------");
         }
 
-        for (Map.Entry<String, Pair> entry : super.getRawDetailedData().entrySet()) {
+        for (Map.Entry<String, Pair> entry : getRawDetailedData().entrySet()) {
             ps.print(entry.getKey() + " - ");
             Pair pair = entry.getValue();
             ps.print(pair.mLinesCount + " lines in " + pair.mFilesCount + " files\n");

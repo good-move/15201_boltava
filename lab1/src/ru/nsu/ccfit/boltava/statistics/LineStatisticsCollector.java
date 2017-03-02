@@ -6,15 +6,16 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.nio.file.*;
 import java.io.*;
+import java.util.List;
 
 import static java.nio.file.FileVisitResult.*;
 
 public class LineStatisticsCollector {
 
-    private ArrayList<IFilter> mFilters;
+    private List<IFilter> mFilters;
     private LineStatistics mStats;
 
-    public LineStatisticsCollector(ArrayList<IFilter> filters) {
+    public LineStatisticsCollector(List<IFilter> filters) {
         mFilters = filters;
         mStats = new LineStatistics();
     }
@@ -49,11 +50,12 @@ public class LineStatisticsCollector {
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+            int linesCount = countLines(file);
+            LineStatistics.Pair pair = new LineStatistics.Pair(linesCount, 1);
+
             for (IFilter filter : mFilters){
                 if (filter.check(file)) {
-                    int linesCount = countLines(file);
-                    LineStatistics.Pair pair = new LineStatistics.Pair(linesCount, 1);
-                    mStats.register(file);
+                    mStats.register(file, linesCount);
                     mStats.update(filter.toString(), pair);
                 }
             }

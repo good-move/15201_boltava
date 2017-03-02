@@ -16,7 +16,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        LineStatistics ls = new LineStatistics();
-        ls.printFormattedStats(System.out);
+        IFilter filter = new FileExtensionFilter(".class");
+        ArrayList<IFilter> filters = new ArrayList<>();
+        filters.add(filter);
+        LineStatisticsCollector lnColl = new LineStatisticsCollector(filters);
+        lnColl.collectStats("out");
+        lnColl.getStats().printFormattedStats(System.out);;
+
     }
 }

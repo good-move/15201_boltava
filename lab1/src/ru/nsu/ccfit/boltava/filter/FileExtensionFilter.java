@@ -15,7 +15,7 @@ public class FileExtensionFilter implements IFilter {
 
     public boolean check(Path path) {
         Matcher matcher =  Pattern
-                            .compile(".*/.*?(\\..*)")
+                            .compile(".*/*.*?(\\..*)")
                             .matcher(path.toString());
 
         return matcher.matches() && matcher.group(1).equals(mExtension);
