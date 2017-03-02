@@ -15,5 +15,8 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
+
+        LineStatistics ls = new LineStatistics();
+        ls.printFormattedStats(System.out);
     }
 }

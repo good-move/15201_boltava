@@ -2,16 +2,17 @@ package ru.nsu.ccfit.boltava.statistics;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
-public abstract class Statistics<GlobalData, PartialDataKey, PartialDataValue> {
+public abstract class Statistics<GlobalData, DetailedDataKey, DetailedDataValue> {
 
-    private HashSet<GlobalData> mGlobalData;
-    private HashMap<PartialDataKey, PartialDataValue> mPartialData;
+    private Set<GlobalData> mGlobalData;
+    private Map<DetailedDataKey, DetailedDataValue> mDetailedData;
 
     Statistics() {
         mGlobalData = new HashSet<>();
-        mPartialData = new HashMap<>();
+        mDetailedData = new HashMap<>();
     }
 
     boolean register(GlobalData object) {
@@ -24,17 +25,25 @@ public abstract class Statistics<GlobalData, PartialDataKey, PartialDataValue> {
         return false;
     }
 
-    PartialDataValue get(PartialDataKey key) {
-        return mPartialData.get(key);
+    DetailedDataValue get(DetailedDataKey key) {
+        return mDetailedData.get(key);
     }
 
-    public boolean update(PartialDataKey key, PartialDataValue value) {
-        mPartialData.put(key, value);
+    public Set<GlobalData> getRawGlobalData() {
+        return mGlobalData;
+    }
+
+    public Map<DetailedDataKey, DetailedDataValue> getRawDetailedData() {
+        return mDetailedData;
+    }
+
+    public boolean update(DetailedDataKey key, DetailedDataValue value) {
+        mDetailedData.put(key, value);
         return true;
     }
 
-    public PartialDataValue remove(PartialDataKey key) {
-        return mPartialData.remove(key);
+    public DetailedDataValue remove(DetailedDataKey key) {
+        return mDetailedData.remove(key);
     }
 
 }

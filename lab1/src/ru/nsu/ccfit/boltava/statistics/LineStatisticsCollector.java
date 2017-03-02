@@ -22,7 +22,6 @@ public class LineStatisticsCollector {
     public void collectStats(String rootPath) {
         try {
             Files.walkFileTree(Paths.get(rootPath), new StatisticsCollector());
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,9 +51,10 @@ public class LineStatisticsCollector {
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             for (IFilter filter : mFilters){
                 if (filter.check(file)) {
-                    mStats.register(file);
                     int linesCount = countLines(file);
-                    mStats.update(filter.toString(), linesCount);
+                    LineStatistics.Pair pair = new LineStatistics.Pair(linesCount, 1);
+                    mStats.register(file);
+                    mStats.update(filter.toString(), pair);
                 }
             }
 
