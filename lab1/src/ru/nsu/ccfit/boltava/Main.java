@@ -16,11 +16,17 @@ public class Main {
 
     public static void main(String[] args) {
 
-        IFilter filter = new FileExtensionFilter(".class");
+        IFilter filter = new FileExtensionFilter("java");
         ArrayList<IFilter> filters = new ArrayList<>();
         filters.add(filter);
         LineStatisticsCollector lnColl = new LineStatisticsCollector(filters);
-        lnColl.collectStats("out");
+
+        try {
+            lnColl.collectStats("src");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         lnColl.getStats().printFormattedStats(System.out);;
 
     }

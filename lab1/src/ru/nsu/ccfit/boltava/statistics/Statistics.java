@@ -16,16 +16,14 @@ public abstract class Statistics<GlobalData, DetailedDataKey, DetailedDataValue>
     }
 
     boolean register(GlobalData object) {
-        try {
-            return mGlobalData.add(object);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        if (object == null) throw new IllegalArgumentException();
 
-        return false;
+        return mGlobalData.add(object);
     }
 
     DetailedDataValue get(DetailedDataKey key) {
+        if (key == null) throw new IllegalArgumentException();
+
         return mDetailedData.get(key);
     }
 
@@ -38,11 +36,15 @@ public abstract class Statistics<GlobalData, DetailedDataKey, DetailedDataValue>
     }
 
     public boolean update(DetailedDataKey key, DetailedDataValue value) {
+        if (key == null || value == null) throw new IllegalArgumentException();
+
         mDetailedData.put(key, value);
         return true;
     }
 
     public DetailedDataValue remove(DetailedDataKey key) {
+        if (key == null) throw new IllegalArgumentException();
+
         return mDetailedData.remove(key);
     }
 

@@ -4,14 +4,16 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.Map;
 
-public class LineStatistics extends Statistics<Path, String, LineStatistics.Pair> {
+public class LineStatistics extends Statistics<Path, String, LineStatistics.FilterStats> {
 
     private long mTotalLinesCount = 0;
 
     @Override
-    public boolean update(String filterId, Pair filterData) {
+    public boolean update(String filterId, FilterStats filterData) {
 
-        Pair currentData = super.get(filterId);
+        if (filterId == null || filterData == null) throw new IllegalArgumentException();
+
+        FilterStats currentData = super.get(filterId);
 
         if (currentData == null) {
             currentData = filterData;
@@ -44,22 +46,22 @@ public class LineStatistics extends Statistics<Path, String, LineStatistics.Pair
             ps.println("---------------");
         }
 
-        for (Map.Entry<String, Pair> entry : getRawDetailedData().entrySet()) {
+        for (Map.Entry<String, FilterStats> entry : getRawDetailedData().entrySet()) {
             ps.print(entry.getKey() + " - ");
-            Pair pair = entry.getValue();
-            ps.print(pair.mLinesCount + " lines in " + pair.mFilesCount + " files\n");
+            FilterStats filterStats = entry.getValue();
+            ps.print(filterStats.mLinesCount + " lines in " + filterStats.mFilesCount + " files\n");
         }
 
     }
 
-    static class Pair {
+    static class FilterStats {
 
         long mFilesCount = 0;
         long mLinesCount = 0;
 
-        Pair() {}
+        FilterStats() {}
 
-        Pair(long linesCount, long filesCount) {
+        FilterStats(long linesCount, long filesCount) {
             mLinesCount = linesCount;
             mFilesCount = filesCount;
         }
