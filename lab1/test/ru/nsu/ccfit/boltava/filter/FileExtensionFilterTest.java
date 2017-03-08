@@ -1,8 +1,8 @@
 package ru.nsu.ccfit.boltava.filter;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.nsu.ccfit.boltava.filter.leaf.FileExtensionFilter;
 
 import java.nio.file.Paths;
 
