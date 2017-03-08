@@ -1,6 +1,7 @@
-package ru.nsu.ccfit.boltava.filter;
+package ru.nsu.ccfit.boltava.filter.leaf;
 
 import org.jetbrains.annotations.Contract;
+import ru.nsu.ccfit.boltava.filter.IFilter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

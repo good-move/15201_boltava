@@ -11,7 +11,7 @@ import static java.nio.file.FileVisitResult.*;
 
 public class LineStatisticsCollector {
 
-    private List<IFilter> mFilters;
+    private final List<IFilter> mFilters;
     private LineStatistics mStats;
 
     public LineStatisticsCollector(List<IFilter> filters) {
@@ -41,7 +41,8 @@ public class LineStatisticsCollector {
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             try {
                 int linesCount = countLines(file);
-                LineStatistics.FilterStats filterStats = new LineStatistics.FilterStats(linesCount, 1);
+                final long filesCount = 1;
+                LineStatistics.FilterStats filterStats = new LineStatistics.FilterStats(linesCount, filesCount);
 
                 for (IFilter filter : mFilters) {
                     if (filter.check(file)) {
