@@ -63,4 +63,5 @@ public class FileExtensionFilterTest {
         FileExtensionFilter filter = new FileExtensionFilter(null);
         assertEquals(false, filter.check(Paths.get("any")));
     }
+
 }

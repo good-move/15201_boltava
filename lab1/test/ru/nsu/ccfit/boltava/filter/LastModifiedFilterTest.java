@@ -30,7 +30,7 @@ public class LastModifiedFilterTest {
                 "/beforeTimeStamp2.txt"
         };
 
-        final String helpersPath = "test/ru/nsu/ccfit/boltava/filter/LastModifedFilter/helpers";
+        final String helpersPath = "test/ru/nsu/ccfit/boltava/filter/LastModifiedFilterHelpers";
         for (int i = 0; i < afterFiles.length; ++i) {
             afterFiles[i] = helpersPath + afterFiles[i];
             beforeFiles[i] = helpersPath + beforeFiles[i];

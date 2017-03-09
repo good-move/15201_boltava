@@ -1,10 +1,7 @@
-package ru.nsu.ccfit.boltava.FilterParser;
+package ru.nsu.ccfit.boltava.parser;
 
 import ru.nsu.ccfit.boltava.filter.IFilter;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConfigReader {
