@@ -13,21 +13,20 @@ import com.florianingerl.util.regex.Matcher;
 
 import static ru.nsu.ccfit.boltava.resources.FilterPatterns.*;
 
-public class FilterParser {
+class FilterParser {
 
     private static final int minFilterStringLength = 2;
     private static final String mLeafFilterString = LEAF_FILTER;
     private static final Pattern mParserPattern = Pattern.compile(PARSER);
     private FilterSerializerFactory serializerFactory;
 
-    public FilterParser() {
+    FilterParser() {
         serializerFactory = new FilterSerializerFactory();
     }
 
-    public IFilter parse(String filterString) throws IllegalArgumentException {
+    IFilter parse(String filterString) throws IllegalArgumentException {
 
         if (filterString == null) throw new IllegalArgumentException();
-
 
         filterString = filterString.trim();
 

@@ -1,32 +1,31 @@
 package ru.nsu.ccfit.boltava.parser;
 
 import ru.nsu.ccfit.boltava.filter.IFilter;
+import ru.nsu.ccfit.boltava.filter.serializer.FilterSerializerFactory;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConfigReader {
 
-    public static ArrayList<IFilter> getFiltersFromConfig(String configFile) {
+    private static final FilterParser mParser = new FilterParser();
 
-        /*ArrayList<IFilter> filters = new ArrayList<IFilter>();
+    public static ArrayList<IFilter> getFiltersFromConfig(String configFile)
+            throws IOException, IllegalArgumentException, IllegalStateException, IllegalAccessException
+    {
+        ArrayList<IFilter> filters = new ArrayList<IFilter>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(configFile))) {
-            String filterRepresentation;
-            FilterSerializerFactory factory = new FilterSerializerFactory();
+        BufferedReader br = new BufferedReader(new FileReader(configFile));
+        String filterString;
 
-            while ((filterRepresentation = br.readLine()) != null) {
-                String filterPrefix = filterRepresentation.substring(0,1);
-                factory.register(filterPrefix);
-                IFilter filter = factory.get(filterPrefix).getFilter(filterRepresentation);
-                filters.add(filter);
-            }
+        while ((filterString = br.readLine()) != null) {
+            filters.add(mParser.parse(filterString));
+        }
 
-            return filters;
-        } catch (IOException e) {
-        }*/
-
-        return null;
-
+        return filters;
     }
 
 }
