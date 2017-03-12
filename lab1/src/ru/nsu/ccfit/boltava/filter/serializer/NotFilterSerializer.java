@@ -11,7 +11,7 @@ public class NotFilterSerializer implements IFilterSerializer {
 
     @Override
     public NotFilter getFilter(String filterString) {
-        if (filterString == null) throw new IllegalArgumentException();
+        if (filterString == null) throw new IllegalArgumentException("Null pointer argument passed");
         if (!Pattern.matches(NOT_FILTER, filterString.trim())) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }

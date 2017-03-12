@@ -12,7 +12,7 @@ public class AndFilterSerializer implements IFilterSerializer {
 
     @Override
     public AndFilter getFilter(String filterString) {
-        if (filterString == null) throw new IllegalArgumentException();
+        if (filterString == null) throw new IllegalArgumentException("Null pointer argument passed");
         if (!Pattern.matches(filterPattern, filterString.trim())) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }

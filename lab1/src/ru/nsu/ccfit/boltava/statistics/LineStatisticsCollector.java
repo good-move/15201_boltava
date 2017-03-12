@@ -52,7 +52,7 @@ public class LineStatisticsCollector {
                 }
 
                 return  CONTINUE;
-            } catch (IOException e) {
+            } catch (IOException | IllegalAccessException e) {
                 System.err.println(e.getMessage());
                 return FileVisitResult.TERMINATE;
             }

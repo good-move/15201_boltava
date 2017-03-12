@@ -16,6 +16,8 @@ import static ru.nsu.ccfit.boltava.resources.FilterPatterns.*;
 public class FilterParser {
 
     private static final int minFilterStringLength = 2;
+    private static final String mLeafFilterString = LEAF_FILTER;
+    private static final Pattern mParserPattern = Pattern.compile(PARSER);
     private FilterSerializerFactory serializerFactory;
 
     public FilterParser() {
@@ -36,7 +38,7 @@ public class FilterParser {
             );
         }
 
-        Matcher matcher = Pattern.compile(PARSER).matcher(filterString);
+        Matcher matcher = mParserPattern.matcher(filterString);
 
         if (!matcher.matches()) {
             throw new IllegalArgumentException(
@@ -62,19 +64,13 @@ public class FilterParser {
 
     private String[] getChildren(String filterString) {
 
-//        (?<primitive>(?<prefix>[ \t]*([^()\s])[ \t]*)(?3)+\s*)|(?<composite>(?&prefix)\(+?((?&primitive)+|(?&composite)+)+\)+?[ \t]*) <-- get filters from valid string
-//        (\s*?([^\(\)\s])(?2)+\s*?) <-- match simple expressions
-//        (\s*?([^\(\)\s])(?2)+\s*?)|(\s*?([^\(\)\s])\s*\((?2)+\s*(?2)+?\)) <-- match full expression
-//        ^((?>\s*\()+)[^\(\)]+((?>\)\s*)+)$ <-- composite
-//        (\s*([^\(\)\s])\s*(?2)+\s*)|(\s*(?2)\s*\(+(?2)+\s*(?2)+\s*\)+)
-
-        if (filterString.matches(LEAF_FILTER)) {
+        if (filterString.matches(mLeafFilterString)) {
             return new String[]{};
         }
 
         String filterBody = filterString.substring(1).trim();
 
-        Matcher matcher = parserPattern.matcher(filterBody);
+        Matcher matcher = mParserPattern.matcher(filterBody);
         List<String> allMatches = new ArrayList<>();
         while(matcher.find()) {
             allMatches.add(matcher.group().trim());
@@ -84,18 +80,4 @@ public class FilterParser {
 
     }
 
-    private boolean isValidFormat(String filterString) {
-
-        if (filterString.matches(LEAF_FILTER)) {
-            return true;
-        }
-
-
-        return false;
-    }
-
-    private static final String compositeFilterPattern = COMPOSITE_FILTER;
-    private static final String leafFilterPattern = LEAF_FILTER;
-    private static final Pattern parserPattern = Pattern.compile(PARSER);
-//    private static final Pattern parserPattern = Pattern.compile("[ \\t]*([^()\\s])[ \\t]*[^()\\s]+\\s*");
 }

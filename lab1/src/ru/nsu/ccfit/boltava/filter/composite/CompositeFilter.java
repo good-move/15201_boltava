@@ -15,7 +15,7 @@ public abstract class CompositeFilter implements IFilter {
         mChildFilters = new ArrayList<IFilter>();
     }
 
-    public abstract boolean check(Path fileName);
+    public abstract boolean check(Path fileName) throws IllegalAccessException;
 
     @Override
     public void add(IFilter filter) { this.mChildFilters.add(filter); };

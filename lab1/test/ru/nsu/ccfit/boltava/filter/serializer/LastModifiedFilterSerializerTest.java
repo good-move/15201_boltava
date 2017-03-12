@@ -101,8 +101,12 @@ public class LastModifiedFilterSerializerTest {
 
         assertEquals(LastModifiedFilter.class, filter.getClass());
 
-        for (String stringPath : afterFiles) {
-            assertEquals(true, filter.check(Paths.get(stringPath)));
+        try {
+            for (String stringPath : afterFiles) {
+                assertEquals(true, filter.check(Paths.get(stringPath)));
+            }
+        } catch (IllegalAccessException e) {
+                e.printStackTrace();
         }
 
     }
@@ -117,10 +121,13 @@ public class LastModifiedFilterSerializerTest {
 
         assertEquals(LastModifiedFilter.class, filter.getClass());
 
-        for (String stringPath : afterFiles) {
-            assertEquals(true, filter.check(Paths.get(stringPath)));
+        try {
+            for (String stringPath : afterFiles) {
+                assertEquals(true, filter.check(Paths.get(stringPath)));
+            }
+        } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
-
-    }
 
 }

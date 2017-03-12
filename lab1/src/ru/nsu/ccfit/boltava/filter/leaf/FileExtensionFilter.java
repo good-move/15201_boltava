@@ -14,7 +14,7 @@ public class FileExtensionFilter implements IFilter {
 
     @Contract("null -> fail")
     public FileExtensionFilter(String extension) {
-        if (extension == null) throw new IllegalArgumentException();
+        if (extension == null) throw new IllegalArgumentException("Null pointer passed ");
         extension = extension.trim();
         mExtension = extension.startsWith(".") ? extension.trim() : "." + extension;
     }

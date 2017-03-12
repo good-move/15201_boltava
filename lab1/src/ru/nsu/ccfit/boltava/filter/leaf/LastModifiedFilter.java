@@ -31,7 +31,7 @@ public class LastModifiedFilter implements IFilter {
 
             return mComparator == Comparator.BEFORE ? result < 0 : result > 0;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.print(e.getMessage());
 
             return false;
         }

@@ -93,13 +93,16 @@ public class FileExtensionFilterSerializerTest {
 
         assertEquals(FileExtensionFilter.class, filter.getClass());
 
-        for (String stringPath : validTxtPaths) {
-            assertEquals(true, filter.check(Paths.get(stringPath)));
-        }
+        try {
+            for (String stringPath : validTxtPaths) {
+                assertEquals(true, filter.check(Paths.get(stringPath)));
+            }
 
-        for (String stringPath : invalidTxtPaths) {
-            assertEquals(false, filter.check(Paths.get(stringPath)));
+            for (String stringPath : invalidTxtPaths) {
+                assertEquals(false, filter.check(Paths.get(stringPath)));
+            }
+        } catch (IllegalAccessException e) {
+            System.out.println(e.getMessage());
         }
     }
-
 }

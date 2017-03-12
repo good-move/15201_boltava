@@ -4,15 +4,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import ru.nsu.ccfit.boltava.filter.IFilter;
-import ru.nsu.ccfit.boltava.filter.composite.AndFilter;
-import ru.nsu.ccfit.boltava.filter.leaf.FileExtensionFilter;
-
-import java.nio.file.Paths;
+import ru.nsu.ccfit.boltava.filter.composite.OrFilter;
 
 import static org.junit.Assert.assertEquals;
 
-public class AndFilterSerializerTest {
+public class OrFilterSerializerTest {
 
     private String[] validBodies;
     private String[] invalidBodies;
@@ -20,22 +16,22 @@ public class AndFilterSerializerTest {
     @Before
     public void setUp() throws Exception {
         validBodies = new String[] {
-                "&(sequence)",
-                "  &(sequence)  ",
-                "  &  ( e v e n   chars)  ",
-                "  &  ( f1 f2    f  3 )  ",
-                "  &(  .h )",
-                " &   (  .       cpp   )  "
+                "|(sequence)",
+                "  |(sequence)  ",
+                "  |  ( e v e n   chars)  ",
+                " |  ( f1 f2    f  3 )  ",
+                "  | (  .h )",
+                " |   (  .       cpp   )  "
         };
 
         invalidBodies = new String[] {
-                "|(sequence)",
-                "  &  ( o d d )  ",
+                "&(sequence)",
+                "  |  ( o d d )  ",
                 "a/b.java",
                 "a/b/c/d/e/f/g.py",
                 "java",
-                " &     (  <   5555 >  9 .)",
-                " &     (  <   5555 | (>  9 . )  )"
+                " |     (  <   5555 >  9 .)",
+                " |     (  <   5555 | (>  9 . )  )"
         };
 
     }
@@ -47,7 +43,7 @@ public class AndFilterSerializerTest {
     public void expectThrowOnNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Null pointer argument passed");
-        new AndFilterSerializer().getFilter(null);
+        new OrFilterSerializer().getFilter(null);
     }
 
     @Test
@@ -55,7 +51,7 @@ public class AndFilterSerializerTest {
 
         for (String wrongFormat : invalidBodies) {
             try {
-                new AndFilterSerializer().getFilter(wrongFormat);
+                new OrFilterSerializer().getFilter(wrongFormat);
             } catch (IllegalArgumentException e) {
                 assertEquals("Wrong filter format: " + wrongFormat, e.getMessage());
             }
@@ -65,10 +61,10 @@ public class AndFilterSerializerTest {
 
     @Test
     public void checkCreationOnValidPatterns() {
-        AndFilterSerializer s = new AndFilterSerializer();
+        OrFilterSerializer s = new OrFilterSerializer();
 
         for (String filterBody : validBodies) {
-            assertEquals(AndFilter.class, s.getFilter(filterBody).getClass());
+            assertEquals(OrFilter.class, s.getFilter(filterBody).getClass());
         }
     }
 
