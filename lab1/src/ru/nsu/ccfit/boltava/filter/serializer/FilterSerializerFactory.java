@@ -7,9 +7,9 @@ public class FilterSerializerFactory {
     public IFilterSerializer get(String prefix) {
 
         switch (prefix) {
-            case ".":return new FileExtensionFilterSerializer();
-            case "<":return new LastModifiedFilterSerializer();
-            case ">":return new LastModifiedFilterSerializer();
+            case ".": return new FileExtensionFilterSerializer();
+            case "<":
+            case ">": return new LastModifiedFilterSerializer();
             case "&": return new AndFilterSerializer();
             case "|": return new OrFilterSerializer();
             case "!": return new NotFilterSerializer();

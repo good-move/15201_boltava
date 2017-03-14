@@ -1,5 +1,6 @@
 package ru.nsu.ccfit.boltava.filter;
 
+
 import org.junit.Before;
 import org.junit.Test;
 import ru.nsu.ccfit.boltava.filter.leaf.FileExtensionFilter;

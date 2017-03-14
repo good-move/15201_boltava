@@ -6,6 +6,8 @@ import java.nio.file.Path;
 
 public class AndFilter extends CompositeFilter {
 
+    public static final String prefix = "&";
+
     @Override
     public boolean check(Path fileName) throws IllegalAccessException {
         if (mChildFilters.size() == 0) {

@@ -1,6 +1,5 @@
 package ru.nsu.ccfit.boltava.filter.leaf;
 
-import org.jetbrains.annotations.Contract;
 import ru.nsu.ccfit.boltava.filter.IFilter;
 
 import java.nio.file.Path;
@@ -13,7 +12,6 @@ public class LastModifiedFilter implements IFilter {
     private final FileTime mTimeStamp;
     private final Comparator mComparator;
 
-    @Contract("null, _ -> fail; !null, null -> fail")
     public LastModifiedFilter(Comparator configuration, String timestamp) throws NumberFormatException {
         if (configuration == null || timestamp == null) {
             throw new IllegalArgumentException();
@@ -35,6 +33,25 @@ public class LastModifiedFilter implements IFilter {
 
             return false;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LastModifiedFilter that = (LastModifiedFilter) o;
+
+        if (mTimeStamp != null ? !mTimeStamp.equals(that.mTimeStamp) : that.mTimeStamp != null)
+            return false;
+        return mComparator == that.mComparator;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mTimeStamp != null ? mTimeStamp.hashCode() : 0;
+        result = 31 * result + (mComparator != null ? mComparator.hashCode() : 0);
+        return result;
     }
 
     public enum Comparator { BEFORE, AFTER };

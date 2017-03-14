@@ -2,10 +2,7 @@ package ru.nsu.ccfit.boltava.statistics;
 
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class OrderedStringLineStats extends StatisticsSerializer<Path, String, LineStatistics.FilterStats, String> {
 

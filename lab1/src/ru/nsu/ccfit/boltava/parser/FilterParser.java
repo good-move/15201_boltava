@@ -1,14 +1,13 @@
 package ru.nsu.ccfit.boltava.parser;
 
 
+import com.florianingerl.util.regex.Matcher;
+import com.florianingerl.util.regex.Pattern;
 import ru.nsu.ccfit.boltava.filter.IFilter;
 import ru.nsu.ccfit.boltava.filter.serializer.FilterSerializerFactory;
 
 
 import java.util.ArrayList;
-import java.util.List;
-import com.florianingerl.util.regex.Pattern;
-import com.florianingerl.util.regex.Matcher;
 
 
 import static ru.nsu.ccfit.boltava.resources.FilterPatterns.*;
@@ -17,7 +16,7 @@ class FilterParser {
 
     private static final int minFilterStringLength = 2;
     private static final String mLeafFilterString = LEAF_FILTER;
-    private static final Pattern mParserPattern = Pattern.compile(PARSER);
+    private static final com.florianingerl.util.regex.Pattern mParserPattern = Pattern.compile(PARSER);
     private FilterSerializerFactory serializerFactory;
 
     FilterParser() {
@@ -68,15 +67,14 @@ class FilterParser {
         }
 
         String filterBody = filterString.substring(1).trim();
-
         Matcher matcher = mParserPattern.matcher(filterBody);
-        List<String> allMatches = new ArrayList<>();
+        ArrayList<String> allMatches = new ArrayList<>();
+
         while(matcher.find()) {
             allMatches.add(matcher.group().trim());
         }
 
         return allMatches.toArray(new String[]{});
-
     }
 
 }
