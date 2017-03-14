@@ -54,6 +54,10 @@ public class LineStatistics extends Statistics<Path, String, LineStatistics.Filt
 
     }
 
+    public long getLinesCount() {
+        return mTotalLinesCount;
+    }
+
     static class FilterStats {
 
         long mFilesCount = 0;
