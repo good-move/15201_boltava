@@ -2,26 +2,18 @@ package ru.nsu.ccfit.boltava.filter.composite;
 
 import ru.nsu.ccfit.boltava.filter.IFilter;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class NotFilter extends CompositeFilter {
 
-    @Override
-    public void add(IFilter filter) {
-        if (mChildFilters.size() == 0) {
-            super.add(filter);
-            return;
-        }
+    public static final String prefix = "!";
 
-        throw new IllegalStateException("Not filter cannot contain more than one child filter");
-    }
+    public NotFilter(ArrayList<IFilter> children) { super(children); }
 
     @Override
-    public boolean check(Path fileName) throws IllegalAccessException {
-        if (mChildFilters.size() == 0) {
-            throw new IllegalAccessError("Filter is not set up");
-        }
-
+    public boolean check(Path fileName) throws IllegalAccessException, IOException {
         return !mChildFilters.get(0).check(fileName);
     }
 

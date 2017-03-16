@@ -2,6 +2,7 @@ package ru.nsu.ccfit.boltava.filter.composite;
 
 import ru.nsu.ccfit.boltava.filter.IFilter;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +10,19 @@ import java.util.List;
 public abstract class CompositeFilter implements IFilter {
 
     List<IFilter> mChildFilters;
-    public static String prefix;
 
-    CompositeFilter() {
-        mChildFilters = new ArrayList<IFilter>();
+    CompositeFilter(ArrayList<IFilter> children) {
+        if (children.size() == 0) {
+            throw new IllegalArgumentException("Composite filter must not be empty");
+        }
+        mChildFilters = children;
     }
 
-    public abstract boolean check(Path fileName) throws IllegalAccessException;
+    public abstract boolean check(Path fileName) throws IllegalAccessException, IOException;
 
-    @Override
-    public void add(IFilter filter) { this.mChildFilters.add(filter); };
+    public List<IFilter> getChildFilters() {
+        return mChildFilters;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -33,5 +37,9 @@ public abstract class CompositeFilter implements IFilter {
     @Override
     public int hashCode() {
         return mChildFilters != null ? mChildFilters.hashCode() : 0;
+    }
+
+    List<IFilter> getChildren() {
+        return mChildFilters;
     }
 }
