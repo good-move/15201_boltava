@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.parser;
+package ru.nsu.ccfit.boltava.filter.parser;
 
 import org.junit.Test;
 import ru.nsu.ccfit.boltava.filter.IFilter;

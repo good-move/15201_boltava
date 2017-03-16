@@ -16,7 +16,7 @@ public class NotFilterSerializer implements IFilterSerializer {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }
 
-        return new NotFilter(FilterParser.getChildren(filterString));
+        return new NotFilter(FilterParser.getChildren(filterString).get(0));
     }
 
     @Override

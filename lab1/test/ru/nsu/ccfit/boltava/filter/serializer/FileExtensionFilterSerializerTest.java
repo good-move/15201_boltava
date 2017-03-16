@@ -7,6 +7,7 @@ import org.junit.rules.ExpectedException;
 import ru.nsu.ccfit.boltava.filter.IFilter;
 import ru.nsu.ccfit.boltava.filter.leaf.FileExtensionFilter;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
@@ -47,13 +48,6 @@ public class FileExtensionFilterSerializerTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void expectThrowOnNull() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Null pointer argument passed");
-        new FileExtensionFilterSerializer().getFilter(null);
-    }
-
-    @Test
     public void expectThrowIllegalArgument() {
 
         String[] wrongFormats = new String[] {
@@ -67,7 +61,7 @@ public class FileExtensionFilterSerializerTest {
 
         for (String wrongFormat : wrongFormats) {
             try {
-                new FileExtensionFilterSerializer().getFilter(wrongFormat);
+                new FileExtensionFilterSerializer().serialize(wrongFormat);
             } catch (IllegalArgumentException e) {
                 assertEquals("Wrong filter format: " + wrongFormat, e.getMessage());
             }
@@ -80,7 +74,7 @@ public class FileExtensionFilterSerializerTest {
         FileExtensionFilterSerializer s = new FileExtensionFilterSerializer();
 
         for (String filterBody : validBodies) {
-            assertEquals(FileExtensionFilter.class, s.getFilter(filterBody).getClass());
+            assertEquals(FileExtensionFilter.class, s.serialize(filterBody).getClass());
         }
     }
 
@@ -89,7 +83,7 @@ public class FileExtensionFilterSerializerTest {
         FileExtensionFilterSerializer s = new FileExtensionFilterSerializer();
         String filterBody = "   .       txt     ";
 
-        IFilter filter = s.getFilter(filterBody);
+        IFilter filter = s.serialize(filterBody);
 
         assertEquals(FileExtensionFilter.class, filter.getClass());
 
@@ -103,6 +97,8 @@ public class FileExtensionFilterSerializerTest {
             }
         } catch (IllegalAccessException e) {
             System.out.println(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

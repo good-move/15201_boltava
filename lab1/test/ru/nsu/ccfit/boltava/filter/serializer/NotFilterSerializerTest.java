@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.nsu.ccfit.boltava.filter.IFilter;
 import ru.nsu.ccfit.boltava.filter.composite.NotFilter;
-import ru.nsu.ccfit.boltava.filter.composite.OrFilter;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,16 +17,13 @@ public class NotFilterSerializerTest {
     @Before
     public void setUp() throws Exception {
         validBodies = new String[] {
-                "!(sequence)",
-                "  !(sequence)  ",
-                "  !  ( e v e n)  ",
-                " !  ( f1   )  ",
-                "  ! (  .h )",
+                "!(.txt)",
+                "  !(.txt)  ",
                 " !   (  .       cpp   )  "
         };
 
         invalidBodies = new String[] {
-                "!(sequence)",
+                "!(.txt .txt)",
                 "  |  ( o d d )  ",
                 "a/b.java",
                 "a/b/c/d/e/f/g.py",
@@ -38,22 +34,12 @@ public class NotFilterSerializerTest {
 
     }
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-    @Test
-    public void expectThrowOnNull() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Null pointer argument passed");
-        new NotFilterSerializer().getFilter(null);
-    }
-
     @Test
     public void expectThrowIllegalArgument() {
 
         for (String wrongFormat : invalidBodies) {
             try {
-                new NotFilterSerializer().getFilter(wrongFormat);
+                new NotFilterSerializer().serialize(wrongFormat);
             } catch (IllegalArgumentException e) {
                 assertEquals("Wrong filter format: " + wrongFormat, e.getMessage());
             }
@@ -66,23 +52,8 @@ public class NotFilterSerializerTest {
         NotFilterSerializer s = new NotFilterSerializer();
 
         for (String filterBody : validBodies) {
-            assertEquals(NotFilter.class, s.getFilter(filterBody).getClass());
+            assertEquals(NotFilter.class, s.serialize(filterBody).getClass());
         }
-    }
-
-    @Test
-    public void checkAddExtra() throws IllegalAccessException {
-        NotFilterSerializer s = new NotFilterSerializer();
-        IFilter filter = s.getFilter("!(.java)");
-        try {
-            filter.add(new FileExtensionFilterSerializer().getFilter(".java"));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        thrown.expect(IllegalStateException.class);
-        filter.add(new FileExtensionFilterSerializer().getFilter(".java"));
-
     }
 
 }

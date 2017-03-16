@@ -18,7 +18,7 @@ public class GreaterLastModifiedFilterSerializer implements IFilterSerializer {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }
 
-        Long timestamp = Long.parseLong(filterString.substring(1));
+        Long timestamp = Long.parseLong(filterString.substring(1).trim());
 
         return new GreaterLastModifiedFilter(timestamp);
     }

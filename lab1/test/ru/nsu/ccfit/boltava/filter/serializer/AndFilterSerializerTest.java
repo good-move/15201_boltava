@@ -4,11 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import ru.nsu.ccfit.boltava.filter.IFilter;
 import ru.nsu.ccfit.boltava.filter.composite.AndFilter;
-import ru.nsu.ccfit.boltava.filter.leaf.FileExtensionFilter;
-
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,11 +16,10 @@ public class AndFilterSerializerTest {
     @Before
     public void setUp() throws Exception {
         validBodies = new String[] {
-                "&(sequence)",
-                "  &(sequence)  ",
-                "  &  ( e v e n   chars)  ",
-                "  &  ( f1 f2    f  3 )  ",
-                "  &(  .h )",
+                "&(.txt)",
+                "  &(.txt .txt)  ",
+                "  &  ( . txt   .  java   )  ",
+                "  &(  &   ( .txt . java  ) <  1 )",
                 " &   (  .       cpp   )  "
         };
 
@@ -43,21 +38,15 @@ public class AndFilterSerializerTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Test
-    public void expectThrowOnNull() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Null pointer argument passed");
-        new AndFilterSerializer().getFilter(null);
-    }
 
     @Test
     public void expectThrowIllegalArgument() {
 
         for (String wrongFormat : invalidBodies) {
             try {
-                new AndFilterSerializer().getFilter(wrongFormat);
+                new AndFilterSerializer().serialize(wrongFormat);
             } catch (IllegalArgumentException e) {
-                assertEquals("Wrong filter format: " + wrongFormat, e.getMessage());
+                assertEquals("Wrong filter format: " + wrongFormat.trim(), e.getMessage());
             }
         }
 
@@ -68,7 +57,7 @@ public class AndFilterSerializerTest {
         AndFilterSerializer s = new AndFilterSerializer();
 
         for (String filterBody : validBodies) {
-            assertEquals(AndFilter.class, s.getFilter(filterBody).getClass());
+            assertEquals(AndFilter.class, s.serialize(filterBody).getClass());
         }
     }
 

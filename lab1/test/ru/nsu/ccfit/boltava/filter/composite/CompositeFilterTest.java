@@ -1,17 +1,30 @@
 package ru.nsu.ccfit.boltava.filter.composite;
 
+import org.junit.Before;
 import org.junit.Test;
 import ru.nsu.ccfit.boltava.filter.IFilter;
+import ru.nsu.ccfit.boltava.filter.serializer.FileExtensionFilterSerializer;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class CompositeFilterTest {
+
+    ArrayList<IFilter> child = new ArrayList<IFilter>();
+
+    @Before
+    public void prepare() {
+        child.add(new FileExtensionFilterSerializer().serialize(".txt"));
+    }
+
+
     @Test
     public void shouldDifferentClassesNotEqual() throws Exception {
 
-        IFilter andFilter = new AndFilter();
-        IFilter orFilter = new OrFilter();
-        IFilter notFilter = new NotFilter();
+        IFilter andFilter = new AndFilter(child);
+        IFilter orFilter = new OrFilter(child);
+        IFilter notFilter = new NotFilter(child.get(0));
 
         assertTrue(!andFilter.equals(orFilter));
         assertTrue(!andFilter.equals(notFilter));
@@ -26,9 +39,9 @@ public class CompositeFilterTest {
 
     @Test
     public void emptyAndEquals() throws Exception {
-        IFilter and1 = new AndFilter();
-        IFilter and2 = new AndFilter();
-        IFilter and3 = new AndFilter();
+        IFilter and1 = new AndFilter(child);
+        IFilter and2 = new AndFilter(child);
+        IFilter and3 = new AndFilter(child);
 
         assertEquals(and1, and2);
         assertEquals(and1, and3);
@@ -36,9 +49,9 @@ public class CompositeFilterTest {
 
     @Test
     public void emptyOrEquals() throws Exception {
-        IFilter or1 = new OrFilter();
-        IFilter or2 = new OrFilter();
-        IFilter or3 = new OrFilter();
+        IFilter or1 = new OrFilter(child);
+        IFilter or2 = new OrFilter(child);
+        IFilter or3 = new OrFilter(child);
 
         assertEquals(or1, or2);
         assertEquals(or1, or3);
@@ -46,9 +59,9 @@ public class CompositeFilterTest {
 
     @Test
     public void emptyNotEquals() throws Exception {
-        IFilter not1 = new OrFilter();
-        IFilter not2 = new OrFilter();
-        IFilter not3 = new OrFilter();
+        IFilter not1 = new NotFilter(child.get(0));
+        IFilter not2 = new NotFilter(child.get(0));
+        IFilter not3 = new NotFilter(child.get(0));
 
         assertEquals(not1, not2);
         assertEquals(not1, not3);

@@ -35,7 +35,7 @@ public class FilterParser {
 
         if (!matcher.matches()) {
             throw new IllegalArgumentException(
-                    "Invalid filter format: " + filterString
+                    "Wrong filter format: " + filterString
             );
         }
 
@@ -50,7 +50,7 @@ public class FilterParser {
 
         if (!matcher.matches()) {
             throw new IllegalArgumentException(
-                    "Invalid filter format: " + filterString
+                    "Wrong filter format: " + filterString
             );
         }
 

@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import ru.nsu.ccfit.boltava.filter.leaf.LastModifiedFilter;
+import ru.nsu.ccfit.boltava.filter.leaf.GreaterLastModifiedFilter;
+import ru.nsu.ccfit.boltava.filter.leaf.LessLastModifiedFilter;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
@@ -38,42 +40,20 @@ public class LastModifiedFilterTest {
 
     }
 
-    @Test
-    public void checkNullConfig() {
-        thrown.expect(IllegalArgumentException.class);
-        LastModifiedFilter filter = new LastModifiedFilter(null, "123");
-    }
-
-    @Test
-    public void checkNullTimestamp() {
-        thrown.expect(IllegalArgumentException.class);
-        LastModifiedFilter filter = new LastModifiedFilter(LastModifiedFilter.Comparator.BEFORE, null);
-    }
-
-    @Test
-    public void checkEmptyTimestamp() {
-        thrown.expect(NumberFormatException.class);
-        LastModifiedFilter filter = new LastModifiedFilter(LastModifiedFilter.Comparator.BEFORE, "");
-    }
-
-    @Test
-    public void checkInvalidTimestamp() {
-        thrown.expect(NumberFormatException.class);
-        LastModifiedFilter filter = new LastModifiedFilter(LastModifiedFilter.Comparator.BEFORE, "sdf");
-    }
 
     @Test
     public void checkBeforeTimeStamp() {
 
         final String validTimeStamp = "1488739799";
 
-        LastModifiedFilter filter = new LastModifiedFilter(
-                LastModifiedFilter.Comparator.BEFORE,
-                validTimeStamp
-                );
+        LessLastModifiedFilter filter = new LessLastModifiedFilter(1488739799L);
 
         for (String stringPath : beforeFiles) {
-            assertEquals(true, filter.check(Paths.get(stringPath)));
+            try {
+                assertEquals(true, filter.check(Paths.get(stringPath)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -83,13 +63,14 @@ public class LastModifiedFilterTest {
 
         final String validTimeStamp = "1480000000";
 
-        LastModifiedFilter filter = new LastModifiedFilter(
-                LastModifiedFilter.Comparator.AFTER,
-                validTimeStamp
-        );
+        GreaterLastModifiedFilter filter = new GreaterLastModifiedFilter(1480000000L);
 
         for (String stringPath : afterFiles) {
-            assertEquals(true, filter.check(Paths.get(stringPath)));
+            try {
+                assertEquals(true, filter.check(Paths.get(stringPath)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }

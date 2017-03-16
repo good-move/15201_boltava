@@ -16,11 +16,10 @@ public class OrFilterSerializerTest {
     @Before
     public void setUp() throws Exception {
         validBodies = new String[] {
-                "|(sequence)",
-                "  |(sequence)  ",
-                "  |  ( e v e n   chars)  ",
-                " |  ( f1 f2    f  3 )  ",
-                "  | (  .h )",
+                "|(.txt)",
+                "  |(.txt .txt)  ",
+                "  |  ( . txt   .  java   )  ",
+                "  |(  &   ( .txt . java  ) <  1 )",
                 " |   (  .       cpp   )  "
         };
 
@@ -36,22 +35,12 @@ public class OrFilterSerializerTest {
 
     }
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-    @Test
-    public void expectThrowOnNull() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Null pointer argument passed");
-        new OrFilterSerializer().getFilter(null);
-    }
-
     @Test
     public void expectThrowIllegalArgument() {
 
         for (String wrongFormat : invalidBodies) {
             try {
-                new OrFilterSerializer().getFilter(wrongFormat);
+                new OrFilterSerializer().serialize(wrongFormat);
             } catch (IllegalArgumentException e) {
                 assertEquals("Wrong filter format: " + wrongFormat, e.getMessage());
             }
@@ -64,7 +53,7 @@ public class OrFilterSerializerTest {
         OrFilterSerializer s = new OrFilterSerializer();
 
         for (String filterBody : validBodies) {
-            assertEquals(OrFilter.class, s.getFilter(filterBody).getClass());
+            assertEquals(OrFilter.class, s.serialize(filterBody).getClass());
         }
     }
 
