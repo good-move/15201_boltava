@@ -1,5 +1,10 @@
 package ru.nsu.ccfit.boltava.statistics;
 
+import com.sun.org.apache.xml.internal.serialize.SerializerFactory;
+import ru.nsu.ccfit.boltava.filter.IFilter;
+import ru.nsu.ccfit.boltava.filter.serializer.FilterSerializerFactory;
+import ru.nsu.ccfit.boltava.filter.serializer.Serializer;
+
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
@@ -26,8 +31,8 @@ public class OrderedStringLineStats extends StatisticsSerializer<Path, String, L
 
         result += "\n---------------\n";
 
-        Map<String, LineStatistics.FilterStats> stats = mLineStats.getRawDetailedData();
-        String[] mapKeys = stats.keySet().toArray(new String[]{});
+        Map<IFilter, LineStatistics.FilterStats> stats = mLineStats.getRawDetailedData();
+        IFilter[] mapKeys = stats.keySet().toArray(new IFilter[]{});
 
         // sort `stats` in descending order by the number of lines counted
         Arrays.sort(mapKeys, (s1, s2) -> {
@@ -40,10 +45,10 @@ public class OrderedStringLineStats extends StatisticsSerializer<Path, String, L
             }
         });
 
-        for (String key: mapKeys) {
-            LineStatistics.FilterStats statsEntry = stats.get(key);
+        for (IFilter filter: mapKeys) {
+            LineStatistics.FilterStats statsEntry = stats.get(filter);
 //            if (statsEntry.mLinesCount == 0) break;
-            result += (key + " - ");
+            result += (FilterSerializerFactory.create(filter.getPrefix()).serialize(filter) + " - ");
             result += (statsEntry.mLinesCount + " lines in " + statsEntry.mFilesCount + " files\n");
         }
 

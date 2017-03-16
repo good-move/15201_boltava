@@ -47,7 +47,7 @@ public class LineStatisticsCollector {
                 for (IFilter filter : mFilters) {
                     if (filter.check(file)) {
                         mStats.register(file, linesCount);
-                        mStats.update(filter.toString(), filterStats);
+                        mStats.update(filter, filterStats);
                     }
                 }
 

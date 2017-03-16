@@ -1,15 +1,23 @@
 package ru.nsu.ccfit.boltava.filter.serializer;
 
+import java.util.HashMap;
 import java.util.UnknownFormatConversionException;
 
 public class FilterSerializerFactory {
 
-    public IFilterSerializer get(String prefix) {
+
+    private static final HashMap<String, String> mSerializers;
+
+    static {
+        mSerializers = new HashMap<>();
+    }
+
+    public static IFilterSerializer create(String prefix) {
 
         switch (prefix) {
             case ".": return new FileExtensionFilterSerializer();
-            case "<":
-            case ">": return new LastModifiedFilterSerializer();
+            case "<": return new LessLastModifiedFilterSerializer();
+            case ">": return new GreaterLastModifiedFilterSerializer();
             case "&": return new AndFilterSerializer();
             case "|": return new OrFilterSerializer();
             case "!": return new NotFilterSerializer();

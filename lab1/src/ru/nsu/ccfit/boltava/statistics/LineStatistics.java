@@ -1,15 +1,17 @@
 package ru.nsu.ccfit.boltava.statistics;
 
+import ru.nsu.ccfit.boltava.filter.IFilter;
+
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.Map;
 
-public class LineStatistics extends Statistics<Path, String, LineStatistics.FilterStats> {
+public class LineStatistics extends Statistics<Path, IFilter, LineStatistics.FilterStats> {
 
     private long mTotalLinesCount = 0;
 
     @Override
-    public boolean update(String filterId, FilterStats filterData) {
+    public boolean update(IFilter filterId, FilterStats filterData) {
 
         if (filterId == null || filterData == null) throw new IllegalArgumentException();
 

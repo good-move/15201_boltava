@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class AndFilter extends CompositeFilter {
 
-    public static final String prefix = "&";
+    private static final String prefix = "&";
 
     public AndFilter(ArrayList<IFilter> children) { super(children); }
 
@@ -22,6 +22,9 @@ public class AndFilter extends CompositeFilter {
         return true;
     }
 
-
+    @Override
+    public String getPrefix() {
+        return prefix;
+    }
 
 }

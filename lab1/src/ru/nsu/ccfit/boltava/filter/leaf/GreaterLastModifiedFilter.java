@@ -9,7 +9,7 @@ import java.nio.file.Files;
 
 public class GreaterLastModifiedFilter implements IFilter {
 
-    public static final String prefix = ">";
+    private static final String prefix = ">";
     private final FileTime mTimeStamp;
 
     public GreaterLastModifiedFilter(Long timestamp) {
@@ -35,5 +35,13 @@ public class GreaterLastModifiedFilter implements IFilter {
     public int hashCode() {
         return mTimeStamp != null ? mTimeStamp.hashCode() : 0;
     }
+
+    @Override
+    public String getPrefix() {
+        return prefix;
+    }
+
+    @Override
+    public String toString() { return prefix + (mTimeStamp.toMillis()/1000); }
 
 }

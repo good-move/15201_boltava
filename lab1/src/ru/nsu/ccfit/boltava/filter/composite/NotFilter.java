@@ -8,13 +8,18 @@ import java.util.ArrayList;
 
 public class NotFilter extends CompositeFilter {
 
-    public static final String prefix = "!";
+    private static final String prefix = "!";
 
     public NotFilter(ArrayList<IFilter> children) { super(children); }
 
     @Override
     public boolean check(Path fileName) throws IllegalAccessException, IOException {
         return !mChildFilters.get(0).check(fileName);
+    }
+
+    @Override
+    public String getPrefix() {
+        return prefix;
     }
 
 }

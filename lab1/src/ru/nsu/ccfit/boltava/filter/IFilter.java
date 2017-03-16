@@ -5,4 +5,5 @@ import java.nio.file.Path;
 
 public interface IFilter {
     boolean check(Path fileName) throws IllegalAccessException, IOException;
+    String getPrefix();
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class OrFilter extends CompositeFilter {
 
-    public static final String prefix = "|";
+    private static final String prefix = "|";
 
     public OrFilter(ArrayList<IFilter> children) { super(children); }
 
@@ -19,6 +19,11 @@ public class OrFilter extends CompositeFilter {
         }
 
         return false;
+    }
+
+    @Override
+    public String getPrefix() {
+        return prefix;
     }
 
 }

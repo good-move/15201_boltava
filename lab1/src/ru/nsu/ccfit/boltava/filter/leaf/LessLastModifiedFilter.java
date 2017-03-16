@@ -9,7 +9,7 @@ import java.nio.file.attribute.FileTime;
 
 public class LessLastModifiedFilter implements IFilter {
 
-    public static final String prefix = "<";
+    private static final String prefix = "<";
     private final FileTime mTimeStamp;
 
     public LessLastModifiedFilter(Long timestamp) {
@@ -35,4 +35,10 @@ public class LessLastModifiedFilter implements IFilter {
     public int hashCode() {
         return mTimeStamp != null ? mTimeStamp.hashCode() : 0;
     }
+
+    @Override
+    public String getPrefix() { return prefix; }
+
+    @Override
+    public String toString() { return prefix + (mTimeStamp.toMillis()/1000); }
 }
