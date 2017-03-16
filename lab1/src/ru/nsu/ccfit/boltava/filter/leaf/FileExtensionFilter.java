@@ -47,6 +47,6 @@ public class FileExtensionFilter implements IFilter {
 
     @Override
     public String toString() {
-        return prefix + mExtension;
+        return mExtension;
     }
 }

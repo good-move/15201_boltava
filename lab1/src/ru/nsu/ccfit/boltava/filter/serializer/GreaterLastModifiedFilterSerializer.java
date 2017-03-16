@@ -25,7 +25,7 @@ public class GreaterLastModifiedFilterSerializer implements IFilterSerializer {
 
     @Override
     public String serialize(IFilter filter) throws IllegalArgumentException {
-        return filter.toString();
+        return GreaterLastModifiedFilter.class.cast(filter).toString();
     }
 
 }

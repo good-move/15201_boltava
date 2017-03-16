@@ -19,8 +19,9 @@ public class LineStatisticsCollector {
         mStats = new LineStatistics();
     }
 
-    public void collectStats(String rootPath) throws IOException {
+    public LineStatistics collectStats(String rootPath) throws IOException {
         Files.walkFileTree(Paths.get(rootPath), new StatisticsCollector());
+        return mStats;
     }
 
     public int countLines(Path filePath) throws IOException {

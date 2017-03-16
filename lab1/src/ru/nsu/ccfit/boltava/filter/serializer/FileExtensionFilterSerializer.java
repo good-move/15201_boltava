@@ -22,7 +22,7 @@ public class FileExtensionFilterSerializer implements IFilterSerializer {
 
     @Override
     public String serialize(IFilter filter) throws IllegalArgumentException {
-        return filter.toString();
+        return FileExtensionFilter.class.cast(filter).toString();
     }
 
 }

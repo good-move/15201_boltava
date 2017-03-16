@@ -13,7 +13,7 @@ public class OrderedStringLineStats extends StatisticsSerializer<Path, String, L
 
     private LineStatistics mLineStats;
 
-    OrderedStringLineStats(LineStatistics lineStats) {
+    public OrderedStringLineStats(LineStatistics lineStats) {
         mLineStats = lineStats;
     }
 

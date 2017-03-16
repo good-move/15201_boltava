@@ -21,9 +21,10 @@ public class NotFilterSerializer implements IFilterSerializer {
 
     @Override
     public String serialize(IFilter filter) throws IllegalArgumentException {
-        NotFilter f = NotFilter.class.cast(filter);
+        NotFilter notFilter = NotFilter.class.cast(filter);
         String result =  filter.getPrefix() + "(";
-        result += FilterSerializerFactory.create(f.getChildFilters().get(0).getPrefix()).serialize(filter);
+        IFilter child = notFilter.getChildFilters().get(0);
+        result += FilterSerializerFactory.create(child.getPrefix()).serialize(child);
         return result + ")";
     }
 

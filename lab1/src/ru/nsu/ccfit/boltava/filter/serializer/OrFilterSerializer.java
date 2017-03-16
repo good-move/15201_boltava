@@ -22,11 +22,11 @@ public class OrFilterSerializer implements IFilterSerializer {
     }
 
     public String serialize(IFilter filter) {
-        OrFilter f = OrFilter.class.cast(filter);
+        OrFilter orFilter = OrFilter.class.cast(filter);
         String result =  filter.getPrefix() + "(";
 
-        for (IFilter child : f.getChildFilters()) {
-            result += (" " + FilterSerializerFactory.create(child.getPrefix()).serialize(filter));
+        for (IFilter child : orFilter.getChildFilters()) {
+            result += (" " + FilterSerializerFactory.create(child.getPrefix()).serialize(child));
         }
 
         return result + " )";

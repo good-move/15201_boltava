@@ -23,11 +23,11 @@ public class AndFilterSerializer implements IFilterSerializer {
     }
 
     public String serialize(IFilter filter) {
-        AndFilter f = AndFilter.class.cast(filter);
+        AndFilter andFilter = AndFilter.class.cast(filter);
         String result =  filter.getPrefix() + "(";
 
-        for (IFilter child : f.getChildFilters()) {
-            result += (" " + FilterSerializerFactory.create(child.getPrefix()).serialize(filter));
+        for (IFilter child : andFilter.getChildFilters()) {
+            result += (" " + FilterSerializerFactory.create(child.getPrefix()).serialize(child));
         }
 
         return result + ")";

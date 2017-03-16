@@ -11,23 +11,24 @@ public class FilterParserTest {
 
     @Test
     public void expectEqualFileExtensionFilter() {
-        FilterParser filterParser = new FilterParser();
         IFilter filter;
 
-
-        filter = filterParser.parse(".java");
+        filter = FilterParser.parse(".java");
         assertEquals(FileExtensionFilter.class, filter.getClass());
 
-        filter = filterParser.parse("  .java   ");
+        filter = FilterParser.parse("  .java   ");
         assertEquals(FileExtensionFilter.class, filter.getClass());
 
-        filter = filterParser.parse("  .   java   ");
+        filter = FilterParser.parse("  .   java   ");
         assertEquals(FileExtensionFilter.class, filter.getClass());
 
-        filter = filterParser.parse("&(.txt .java)");
+        filter = FilterParser.parse("&(.txt .java)");
         assertEquals(AndFilter.class, filter.getClass());
 
-        filter = filterParser.parse("&(|(.java .txt)  |( <30 >50 &(.css   .   php) .ttt !(.java)))");
+        filter = FilterParser.parse("&(|(.java .txt)  |( <30 >50 &(.css   .   php) .ttt !(.java)))");
+        assertEquals(AndFilter.class, filter.getClass());
+
+        filter = FilterParser.parse("&  (  |  (  . java   . txt  ! (.zip) )  |  ( < 30 >  50 & ( . css   .   php) .ttt ! (.java)))");
         assertEquals(AndFilter.class, filter.getClass());
     }
 
