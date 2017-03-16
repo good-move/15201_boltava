@@ -41,3 +41,12 @@ What a config file can look like:
 &(  .css <15000000  )
 |( & (.h .c)  &     ( .  hpp .  cpp) .jar )
 ```
+The resulting output might be:
+```
+Total - 8637 lines in 110 files
+---------------
+>140505040 - 8637 lines in 110 files
+|( &( .h .c) &( .hpp .cpp) .jar ) - 4344 lines in 4 files
+.java - 1646 lines in 36 files
+.txt - 72 lines in 16 files
+```
