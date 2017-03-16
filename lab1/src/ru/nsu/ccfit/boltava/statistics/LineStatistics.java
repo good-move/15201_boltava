@@ -37,22 +37,6 @@ public class LineStatistics extends Statistics<Path, String, LineStatistics.Filt
         return false;
     }
 
-    public void printFormattedStats(PrintStream ps) {
-
-        ps.println("Total - " + mTotalLinesCount
-                        + " lines in " + getRawGlobalData().size() + " files");
-
-        if (mTotalLinesCount > 0) {
-            ps.println("---------------");
-        }
-
-        for (Map.Entry<String, FilterStats> entry : getRawDetailedData().entrySet()) {
-            ps.print(entry.getKey() + " - ");
-            FilterStats filterStats = entry.getValue();
-            ps.print(filterStats.mLinesCount + " lines in " + filterStats.mFilesCount + " files\n");
-        }
-
-    }
 
     public long getLinesCount() {
         return mTotalLinesCount;
