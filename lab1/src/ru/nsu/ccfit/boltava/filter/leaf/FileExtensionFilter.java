@@ -8,6 +8,8 @@ import java.nio.file.Path;
 
 public class FileExtensionFilter implements IFilter {
 
+    public static final String prefix = ".";
+
     private final String mExtension;
     private static Pattern mPattern = Pattern.compile(".*/*.*?(\\..*)");
 
@@ -37,5 +39,10 @@ public class FileExtensionFilter implements IFilter {
     @Override
     public int hashCode() {
         return mExtension != null ? mExtension.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return null ;
     }
 }
