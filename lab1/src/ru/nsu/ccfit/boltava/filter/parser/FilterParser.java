@@ -27,7 +27,7 @@ public class FilterParser {
         if (filterString.length() < mMinFilterStringLength) {
             throw new IllegalArgumentException(
                     "Expected filter with min length of " +
-                            mMinFilterStringLength
+                            mMinFilterStringLength + ". Got: " + filterString
             );
         }
 
@@ -54,7 +54,7 @@ public class FilterParser {
             );
         }
 
-        ArrayList<IFilter> children = new ArrayList<IFilter>();
+        ArrayList<IFilter> children = new ArrayList<>();
 
         String filterBody = filterString.trim().substring(1);
         matcher = mParserPattern.matcher(filterBody);

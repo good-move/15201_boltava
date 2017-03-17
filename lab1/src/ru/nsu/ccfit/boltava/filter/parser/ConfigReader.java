@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 public class ConfigReader {
 
-    private static final FilterParser mParser = new FilterParser();
-
     public static ArrayList<IFilter> getFiltersFromConfig(String configFile)
             throws IOException, IllegalArgumentException, IllegalStateException, IllegalAccessException
     {
@@ -20,7 +18,9 @@ public class ConfigReader {
         String filterString;
 
         while ((filterString = br.readLine()) != null) {
-            filters.add(mParser.parse(filterString));
+            if (filterString.length() > 0) {
+                filters.add(FilterParser.parse(filterString));
+            }
         }
 
         return filters;
