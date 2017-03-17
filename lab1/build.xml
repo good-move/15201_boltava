@@ -9,7 +9,7 @@
 
     <property name="main.output.dir" value="${basedir}/out/production"/>
     <property name="test.output.dir" value="${basedir}/out/test"/>
-    <property name="jar.output.dir" value="${basedir}/out/jar"/>
+    <property name="jar.output.dir" value="${basedir}"/>
 
     <!-- Named properties -->
 
