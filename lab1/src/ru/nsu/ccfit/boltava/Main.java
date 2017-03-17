@@ -3,11 +3,14 @@ package ru.nsu.ccfit.boltava;
 import ru.nsu.ccfit.boltava.filter.IFilter;
 import ru.nsu.ccfit.boltava.filter.parser.ConfigReader;
 import ru.nsu.ccfit.boltava.filter.serializer.FilterSerializerFactory;
+import ru.nsu.ccfit.boltava.statistics.LineStatistics;
 import ru.nsu.ccfit.boltava.statistics.LineStatisticsCollector;
 import ru.nsu.ccfit.boltava.statistics.OrderedStringLineStats;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
 
@@ -20,10 +23,10 @@ public class Main {
         try {
             ArrayList<IFilter> filters;
             filters = ConfigReader.getFiltersFromConfig(args[0].trim());
-            System.out.print(new OrderedStringLineStats(
-                    new LineStatisticsCollector(filters).collectStats(args[1].trim())
-            ).serialize());
-
+            LineStatistics stats = new LineStatisticsCollector(filters).collectStats(args[1].trim());
+            for (String line : new OrderedStringLineStats(stats).serialize()) {
+                System.out.println(line);
+            }
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

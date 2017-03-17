@@ -22,10 +22,10 @@ public class LineStatisticsCollectorTest {
         try {
             ArrayList<IFilter> filters;
             filters = ConfigReader.getFiltersFromConfig("./test/sample_config.txt");
-            System.out.print(new OrderedStringLineStats(
-                    new LineStatisticsCollector(filters).collectStats("./")
-            ).serialize());
-
+            LineStatistics stats = new LineStatisticsCollector(filters).collectStats("./");
+            for (String line : new OrderedStringLineStats(stats).serialize()) {
+                System.out.println(line);
+            }
         } catch (IOException | IllegalAccessException e) {
             e.printStackTrace();
         }
