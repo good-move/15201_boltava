@@ -1,9 +1,7 @@
 package ru.nsu.ccfit.boltava.statistics;
 
-import com.sun.org.apache.xml.internal.serialize.SerializerFactory;
 import ru.nsu.ccfit.boltava.filter.IFilter;
 import ru.nsu.ccfit.boltava.filter.serializer.FilterSerializerFactory;
-import ru.nsu.ccfit.boltava.filter.serializer.Serializer;
 
 import java.nio.file.Path;
 import java.util.Arrays;

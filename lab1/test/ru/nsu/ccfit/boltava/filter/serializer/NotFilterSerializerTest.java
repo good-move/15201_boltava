@@ -28,6 +28,7 @@ public class NotFilterSerializerTest {
                 "a/b.java",
                 "a/b/c/d/e/f/g.py",
                 "java",
+                "!(.txt .java)",
                 " |     (  <   5555 >  9 .)",
                 " !     (  <   5555 | (>  9 . )  )"
         };

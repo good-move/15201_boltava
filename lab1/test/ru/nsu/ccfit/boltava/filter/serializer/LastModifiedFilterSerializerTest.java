@@ -19,38 +19,33 @@ public class LastModifiedFilterSerializerTest {
     private String[] validBodiesGreater;
     private String[] validBodiesLess;
     private String[] validTxtPaths;
-
-    private String[] afterFiles;
-    private String helpersPath = "test/ru/nsu/ccfit/boltava/filter/LastModifiedFilterHelpers";
+    private String[] beforeFiles;
 
 
     @Before
     public void setUp() throws Exception {
+        beforeFiles = new String[] {
+                "/beforeTimeStamp1.txt",
+                "/beforeTimeStamp2.txt"
+        };
+
         validBodiesGreater = new String[] {
-                "<123",
                 ">123",
-                "<      123",
-                ">  123",
-                "  <   12321335345345345   ",
+                "   >      123",
+                "  >   12321335345345345   ",
                 "    >   123213   "
         };
 
         validBodiesLess = new String[] {
                 "<123",
-                ">123",
                 "<      123",
-                ">  123",
                 "  <   12321335345345345   ",
-                "    >   123213   "
         };
 
-        afterFiles = new String[] {
-                "/afterTimeStamp1.txt",
-                "/afterTimeStamp2.txt"
-        };
 
-        for (int i = 0; i < afterFiles.length; ++i) {
-            afterFiles[i] = helpersPath + afterFiles[i];
+        String helpersPath = "test/ru/nsu/ccfit/boltava/filter/LastModifiedFilterHelpers";
+        for (int i = 0; i < beforeFiles.length; ++i) {
+            beforeFiles[i] = helpersPath + beforeFiles[i];
         }
 
     }
@@ -107,14 +102,14 @@ public class LastModifiedFilterSerializerTest {
     @Test
     public void shouldFilterWorkCorrectly() {
         GreaterLastModifiedFilterSerializer s = new GreaterLastModifiedFilterSerializer();
-        String filterBody = "   >       " + 1480000000 + "     ";
+        String filterBody = "   <       " + 1480000000 + "     ";
 
         IFilter filter = s.serialize(filterBody);
 
         assertEquals(GreaterLastModifiedFilter.class, filter.getClass());
 
         try {
-            for (String stringPath : afterFiles) {
+            for (String stringPath : beforeFiles) {
                 assertEquals(true, filter.check(Paths.get(stringPath)));
             }
         } catch (IllegalAccessException | IOException e) {
@@ -134,7 +129,7 @@ public class LastModifiedFilterSerializerTest {
         assertEquals(LessLastModifiedFilter.class, filter.getClass());
 
         try {
-            for (String stringPath : afterFiles) {
+            for (String stringPath : beforeFiles) {
                 assertEquals(true, filter.check(Paths.get(stringPath)));
             }
         } catch (IllegalAccessException | IOException e) {

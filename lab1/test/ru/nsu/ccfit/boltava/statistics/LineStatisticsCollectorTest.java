@@ -19,11 +19,9 @@ public class LineStatisticsCollectorTest {
 
         System.out.println("\nExample run\n");
 
-        ArrayList<IFilter> filters;
         try {
-
-            filters = ConfigReader.getFiltersFromConfig("config.txt");
-
+            ArrayList<IFilter> filters;
+            filters = ConfigReader.getFiltersFromConfig("./test/sample_config.txt");
             System.out.print(new OrderedStringLineStats(
                     new LineStatisticsCollector(filters).collectStats("./")
             ).serialize());

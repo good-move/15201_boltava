@@ -5,7 +5,6 @@ import ru.nsu.ccfit.boltava.filter.IFilter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class NotFilter extends CompositeFilter {

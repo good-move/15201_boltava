@@ -30,7 +30,7 @@ public class AndFilterSerializer implements IFilterSerializer {
             result += (" " + FilterSerializerFactory.create(child.getPrefix()).serialize(child));
         }
 
-        return result + ")";
+        return result + " )";
     }
 
 
