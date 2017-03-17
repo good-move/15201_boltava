@@ -43,10 +43,10 @@ What a config file can look like:
 ```
 The resulting output might be:
 ```
-Total - 8637 lines in 110 files
----------------
->140505040 - 8637 lines in 110 files
-|( &( .h .c) &( .hpp .cpp) .jar ) - 4344 lines in 4 files
-.java - 1646 lines in 36 files
-.txt - 72 lines in 16 files
+Total - 9429 lines in 142 files
+-----------------------------------
+>140505040                          - 9429 lines in 142 files
+|( &( .h .c ) &( .hpp .cpp ) .jar ) - 4826 lines in 6 files
+.java                               - 1825 lines in 43 files
+.txt                                - 34 lines in 15 files
 ```
