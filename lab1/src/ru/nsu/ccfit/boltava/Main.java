@@ -24,10 +24,8 @@ public class Main {
                     new LineStatisticsCollector(filters).collectStats(args[1].trim())
             ).serialize());
 
-        } catch (IOException | IllegalAccessException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
-        } catch (FilterSerializerFactory.FilterSerializationException e) {
-            e.printStackTrace();
         }
     }
 }

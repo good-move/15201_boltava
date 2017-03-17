@@ -20,7 +20,10 @@ public class FilterParser {
     private static final com.florianingerl.util.regex.Pattern mParserPattern = Pattern.compile(PARSER);
 
 
-    public static IFilter parse(String filterString) throws IllegalArgumentException, FilterSerializerFactory.FilterSerializationException {
+    public static IFilter parse(String filterString)
+            throws IllegalArgumentException, FilterSerializerFactory.FilterSerializationException {
+
+        if (filterString == null) throw new IllegalArgumentException("Null pointer passed to parser");
 
         filterString = filterString.trim();
 
@@ -44,7 +47,10 @@ public class FilterParser {
         return FilterSerializerFactory.create(prefix).serialize(filterString);
     }
 
-    public static ArrayList<IFilter> getChildren(String filterString) throws IllegalArgumentException, FilterSerializerFactory.FilterSerializationException {
+    public static ArrayList<IFilter> getChildren(String filterString)
+            throws IllegalArgumentException, FilterSerializerFactory.FilterSerializationException {
+
+        if (filterString == null) throw new IllegalArgumentException("Null pointer passed to parser");
 
         Matcher matcher = mParserPattern.matcher(filterString);
 
