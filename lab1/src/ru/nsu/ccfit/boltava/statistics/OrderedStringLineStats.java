@@ -21,13 +21,13 @@ public class OrderedStringLineStats extends StatisticsSerializer<Path, String, L
         long totalLinesCount = mLineStats.getLinesCount();
 
         result += "Total - " + totalLinesCount +
-        " lines in " + mLineStats.getRawGlobalData().size() + " files";
+        " lines in " + mLineStats.getRawGlobalData().size() + " files\n";
 
         if (totalLinesCount == 0) {
             return result;
         }
 
-        result += "\n---------------\n";
+        result += "---------------\n";
 
         Map<IFilter, LineStatistics.FilterStats> stats = mLineStats.getRawDetailedData();
         IFilter[] mapKeys = stats.keySet().toArray(new IFilter[]{});
