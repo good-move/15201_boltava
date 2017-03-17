@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class NotFilter extends CompositeFilter {
 
-    private static final String prefix = "!";
+    public static final String prefix = "!";
 
     public NotFilter(IFilter child) {
         super(new ArrayList<IFilter>(Collections.singletonList(child)));

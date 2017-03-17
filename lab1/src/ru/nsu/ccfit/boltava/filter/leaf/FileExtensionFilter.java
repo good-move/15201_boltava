@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class FileExtensionFilter implements IFilter {
 
-    private static final String prefix = ".";
+    public static final String prefix = ".";
     private final String mExtension;
     private static Pattern mPattern = Pattern.compile(".*/*.*?(\\..*)");
 

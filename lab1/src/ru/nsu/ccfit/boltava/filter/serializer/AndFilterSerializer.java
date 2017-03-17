@@ -13,7 +13,7 @@ public class AndFilterSerializer implements IFilterSerializer {
     private static final String mFilterPattern = AND_FILTER;
 
     @Override
-    public AndFilter serialize(String filterString) {
+    public AndFilter serialize(String filterString) throws FilterSerializerFactory.FilterSerializationException {
         filterString = filterString.trim();
         if (!Pattern.matches(mFilterPattern, filterString)) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
@@ -22,7 +22,7 @@ public class AndFilterSerializer implements IFilterSerializer {
         return new AndFilter(FilterParser.getChildren(filterString));
     }
 
-    public String serialize(IFilter filter) {
+    public String serialize(IFilter filter) throws FilterSerializerFactory.FilterSerializationException {
         AndFilter andFilter = AndFilter.class.cast(filter);
         String result =  filter.getPrefix() + "(";
 

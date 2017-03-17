@@ -43,6 +43,8 @@ public class OrFilterSerializerTest {
                 new OrFilterSerializer().serialize(wrongFormat);
             } catch (IllegalArgumentException e) {
                 assertEquals("Wrong filter format: " + wrongFormat, e.getMessage());
+            } catch (FilterSerializerFactory.FilterSerializationException e) {
+                e.printStackTrace();
             }
         }
 
@@ -53,7 +55,11 @@ public class OrFilterSerializerTest {
         OrFilterSerializer s = new OrFilterSerializer();
 
         for (String filterBody : validBodies) {
-            assertEquals(OrFilter.class, s.serialize(filterBody).getClass());
+            try {
+                assertEquals(OrFilter.class, s.serialize(filterBody).getClass());
+            } catch (FilterSerializerFactory.FilterSerializationException e) {
+                System.err.println("Error: " + e.getMessage());
+            }
         }
     }
 

@@ -47,6 +47,8 @@ public class AndFilterSerializerTest {
                 new AndFilterSerializer().serialize(wrongFormat);
             } catch (IllegalArgumentException e) {
                 assertEquals("Wrong filter format: " + wrongFormat.trim(), e.getMessage());
+            } catch (FilterSerializerFactory.FilterSerializationException e) {
+                e.printStackTrace();
             }
         }
 
@@ -57,7 +59,11 @@ public class AndFilterSerializerTest {
         AndFilterSerializer s = new AndFilterSerializer();
 
         for (String filterBody : validBodies) {
-            assertEquals(AndFilter.class, s.serialize(filterBody).getClass());
+            try {
+                assertEquals(AndFilter.class, s.serialize(filterBody).getClass());
+            } catch (FilterSerializerFactory.FilterSerializationException e) {
+                System.err.println("Error: " + e.getMessage());
+            }
         }
     }
 

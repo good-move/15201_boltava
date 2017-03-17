@@ -20,7 +20,7 @@ public class FilterParser {
     private static final com.florianingerl.util.regex.Pattern mParserPattern = Pattern.compile(PARSER);
 
 
-    public static IFilter parse(String filterString) throws IllegalArgumentException {
+    public static IFilter parse(String filterString) throws IllegalArgumentException, FilterSerializerFactory.FilterSerializationException {
 
         filterString = filterString.trim();
 
@@ -44,7 +44,7 @@ public class FilterParser {
         return FilterSerializerFactory.create(prefix).serialize(filterString);
     }
 
-    public static ArrayList<IFilter> getChildren(String filterString) throws IllegalArgumentException {
+    public static ArrayList<IFilter> getChildren(String filterString) throws IllegalArgumentException, FilterSerializerFactory.FilterSerializationException {
 
         Matcher matcher = mParserPattern.matcher(filterString);
 

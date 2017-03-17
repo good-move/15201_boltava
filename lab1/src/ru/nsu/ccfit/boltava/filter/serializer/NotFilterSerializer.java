@@ -11,7 +11,7 @@ import static ru.nsu.ccfit.boltava.resources.FilterPatterns.NOT_FILTER;
 public class NotFilterSerializer implements IFilterSerializer {
 
     @Override
-    public NotFilter serialize(String filterString) {
+    public NotFilter serialize(String filterString) throws FilterSerializerFactory.FilterSerializationException {
         if (!Pattern.matches(NOT_FILTER, filterString.trim())) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }
@@ -20,7 +20,7 @@ public class NotFilterSerializer implements IFilterSerializer {
     }
 
     @Override
-    public String serialize(IFilter filter) throws IllegalArgumentException {
+    public String serialize(IFilter filter) throws IllegalArgumentException, FilterSerializerFactory.FilterSerializationException {
         NotFilter notFilter = NotFilter.class.cast(filter);
         String result =  filter.getPrefix() + "(";
         IFilter child = notFilter.getChildFilters().get(0);

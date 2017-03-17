@@ -13,7 +13,7 @@ public class OrFilterSerializer implements IFilterSerializer {
     private static final String filterPattern = OR_FILTER;
 
     @Override
-    public OrFilter serialize(String filterString) {
+    public OrFilter serialize(String filterString) throws FilterSerializerFactory.FilterSerializationException {
         if (!Pattern.matches(filterPattern, filterString.trim())) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }
@@ -21,7 +21,7 @@ public class OrFilterSerializer implements IFilterSerializer {
         return new OrFilter(FilterParser.getChildren(filterString));
     }
 
-    public String serialize(IFilter filter) {
+    public String serialize(IFilter filter) throws FilterSerializerFactory.FilterSerializationException {
         OrFilter orFilter = OrFilter.class.cast(filter);
         String result =  filter.getPrefix() + "(";
 

@@ -1,6 +1,7 @@
 package ru.nsu.ccfit.boltava.filter.parser;
 
 import ru.nsu.ccfit.boltava.filter.IFilter;
+import ru.nsu.ccfit.boltava.filter.serializer.FilterSerializerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,8 +11,7 @@ import java.util.ArrayList;
 public class ConfigReader {
 
     public static ArrayList<IFilter> getFiltersFromConfig(String configFile)
-            throws IOException, IllegalArgumentException, IllegalStateException, IllegalAccessException
-    {
+            throws IOException, IllegalArgumentException, IllegalStateException, IllegalAccessException, FilterSerializerFactory.FilterSerializationException {
         ArrayList<IFilter> filters = new ArrayList<IFilter>();
 
         BufferedReader br = new BufferedReader(new FileReader(configFile));

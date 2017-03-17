@@ -7,12 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 
-public class LessLastModifiedFilter implements IFilter {
+public class ModifiedEarlierFilter implements IFilter {
 
-    private static final String prefix = "<";
+    public static final String prefix = "<";
     private final FileTime mTimeStamp;
 
-    public LessLastModifiedFilter(Long timestamp) {
+    public ModifiedEarlierFilter(Long timestamp) {
         mTimeStamp = FileTime.fromMillis(timestamp * 1000);
     }
 
@@ -26,7 +26,7 @@ public class LessLastModifiedFilter implements IFilter {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LessLastModifiedFilter that = (LessLastModifiedFilter) o;
+        ModifiedEarlierFilter that = (ModifiedEarlierFilter) o;
 
         return mTimeStamp != null ? mTimeStamp.equals(that.mTimeStamp) : that.mTimeStamp == null;
     }

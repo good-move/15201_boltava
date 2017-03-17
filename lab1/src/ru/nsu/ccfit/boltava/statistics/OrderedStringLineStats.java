@@ -16,7 +16,7 @@ public class OrderedStringLineStats extends StatisticsSerializer<Path, String, L
     }
 
     @Override
-    public String serialize() {
+    public String serialize() throws FilterSerializerFactory.FilterSerializationException {
         String result = "";
         long totalLinesCount = mLineStats.getLinesCount();
 

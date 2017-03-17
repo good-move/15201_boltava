@@ -6,7 +6,9 @@ public abstract class FilterPatterns {
 
     public static final String FILE_EXTENSION_FILTER = "^\\." + spaces + "[^\\s()]+";
 
-    public static final String LAST_MODIFIED_FILTER = "^(<|>)" + spaces + "\\d+$";
+    public static final String MODIFIED_EARLIER_FILTER = "^<" + spaces + "\\d+$";
+
+    public static final String MODIFIED_LATER_FILTER = "^>" + spaces + "\\d+$";
 
     public static final String OR_FILTER = "^\\|[ \\t]*\\(.+\\)$";
 

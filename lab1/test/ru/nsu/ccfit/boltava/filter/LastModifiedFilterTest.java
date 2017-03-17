@@ -4,8 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import ru.nsu.ccfit.boltava.filter.leaf.GreaterLastModifiedFilter;
-import ru.nsu.ccfit.boltava.filter.leaf.LessLastModifiedFilter;
+import ru.nsu.ccfit.boltava.filter.leaf.ModifiedEarlierFilter;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -40,7 +39,7 @@ public class LastModifiedFilterTest {
 
         final String validTimeStamp = "1488739799";
 
-        LessLastModifiedFilter filter = new LessLastModifiedFilter(new Date().getTime()/1000);
+        ModifiedEarlierFilter filter = new ModifiedEarlierFilter(new Date().getTime()/1000);
 
         for (String stringPath : beforeFiles) {
             try {

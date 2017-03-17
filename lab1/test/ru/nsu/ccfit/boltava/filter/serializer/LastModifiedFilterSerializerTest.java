@@ -5,8 +5,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.nsu.ccfit.boltava.filter.IFilter;
-import ru.nsu.ccfit.boltava.filter.leaf.GreaterLastModifiedFilter;
-import ru.nsu.ccfit.boltava.filter.leaf.LessLastModifiedFilter;
+import ru.nsu.ccfit.boltava.filter.leaf.ModifiedLaterFilter;
+import ru.nsu.ccfit.boltava.filter.leaf.ModifiedEarlierFilter;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -19,14 +19,16 @@ public class LastModifiedFilterSerializerTest {
     private String[] validBodiesGreater;
     private String[] validBodiesLess;
     private String[] validTxtPaths;
-    private String[] beforeFiles;
+    private String[] timestampFiles;
 
 
     @Before
     public void setUp() throws Exception {
-        beforeFiles = new String[] {
+        timestampFiles = new String[] {
                 "/beforeTimeStamp1.txt",
-                "/beforeTimeStamp2.txt"
+                "/beforeTimeStamp2.txt",
+                "/afterTimeStamp1.txt",
+                "/afterTimeStamp1.txt"
         };
 
         validBodiesGreater = new String[] {
@@ -44,8 +46,8 @@ public class LastModifiedFilterSerializerTest {
 
 
         String helpersPath = "test/ru/nsu/ccfit/boltava/filter/LastModifiedFilterHelpers";
-        for (int i = 0; i < beforeFiles.length; ++i) {
-            beforeFiles[i] = helpersPath + beforeFiles[i];
+        for (int i = 0; i < timestampFiles.length; ++i) {
+            timestampFiles[i] = helpersPath + timestampFiles[i];
         }
 
     }
@@ -68,7 +70,8 @@ public class LastModifiedFilterSerializerTest {
                 "<let123",
                 ">let123",
                 "<123 456",
-                "<>564"
+                "<>564",
+                " .   676"
         };
 
         for (String wrongFormat : wrongFormats) {
@@ -83,53 +86,35 @@ public class LastModifiedFilterSerializerTest {
 
     @Test
     public void checkGreaterCreationOnValidPatterns() {
-        GreaterLastModifiedFilterSerializer s = new GreaterLastModifiedFilterSerializer();
+        ModifiedLaterFilterSerializer s = new ModifiedLaterFilterSerializer();
 
         for (String filterBody : validBodiesGreater) {
-            assertEquals(GreaterLastModifiedFilter.class, s.serialize(filterBody).getClass());
+            assertEquals(ModifiedLaterFilter.class, s.serialize(filterBody).getClass());
         }
     }
 
     @Test
     public void checkLessCreationOnValidPatterns() {
-        LessLastModifiedFilterSerializer s = new LessLastModifiedFilterSerializer();
+        ModifiedEarlierFilterSerializer s = new ModifiedEarlierFilterSerializer();
 
         for (String filterBody : validBodiesLess) {
-            assertEquals(LessLastModifiedFilter.class, s.serialize(filterBody).getClass());
+            assertEquals(ModifiedEarlierFilter.class, s.serialize(filterBody).getClass());
         }
     }
 
-    @Test
-    public void shouldFilterWorkCorrectly() {
-        GreaterLastModifiedFilterSerializer s = new GreaterLastModifiedFilterSerializer();
-        String filterBody = "   <       " + 1480000000 + "     ";
-
-        IFilter filter = s.serialize(filterBody);
-
-        assertEquals(GreaterLastModifiedFilter.class, filter.getClass());
-
-        try {
-            for (String stringPath : beforeFiles) {
-                assertEquals(true, filter.check(Paths.get(stringPath)));
-            }
-        } catch (IllegalAccessException | IOException e) {
-                e.printStackTrace();
-        }
-
-    }
 
     @Test
     public void checkNowTimestamp() {
-        LessLastModifiedFilterSerializer s = new LessLastModifiedFilterSerializer();
+        ModifiedEarlierFilterSerializer s = new ModifiedEarlierFilterSerializer();
         long nowTimeStamp = new Date().getTime() / 1000;
         String filterBody = "   <       " + nowTimeStamp + "     ";
 
         IFilter filter = s.serialize(filterBody);
 
-        assertEquals(LessLastModifiedFilter.class, filter.getClass());
+        assertEquals(ModifiedEarlierFilter.class, filter.getClass());
 
         try {
-            for (String stringPath : beforeFiles) {
+            for (String stringPath : timestampFiles) {
                 assertEquals(true, filter.check(Paths.get(stringPath)));
             }
         } catch (IllegalAccessException | IOException e) {

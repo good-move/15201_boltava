@@ -1,18 +1,18 @@
 package ru.nsu.ccfit.boltava.filter.serializer;
 
 import ru.nsu.ccfit.boltava.filter.IFilter;
-import ru.nsu.ccfit.boltava.filter.leaf.LessLastModifiedFilter;
+import ru.nsu.ccfit.boltava.filter.leaf.ModifiedEarlierFilter;
 
 import java.util.regex.Pattern;
 
-import static ru.nsu.ccfit.boltava.resources.FilterPatterns.LAST_MODIFIED_FILTER;
+import static ru.nsu.ccfit.boltava.resources.FilterPatterns.MODIFIED_EARLIER_FILTER;
 
-public class LessLastModifiedFilterSerializer implements IFilterSerializer {
+public class ModifiedEarlierFilterSerializer implements IFilterSerializer {
 
-    private static final String filterPattern = LAST_MODIFIED_FILTER;
+    private static final String filterPattern = MODIFIED_EARLIER_FILTER;
 
     @Override
-    public LessLastModifiedFilter serialize(String filterString) {
+    public ModifiedEarlierFilter serialize(String filterString) {
         filterString = filterString.trim();
         if (!Pattern.matches(filterPattern, filterString)) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
@@ -20,12 +20,12 @@ public class LessLastModifiedFilterSerializer implements IFilterSerializer {
 
         Long timestamp = Long.parseLong(filterString.substring(1).trim());
 
-        return new LessLastModifiedFilter(timestamp);
+        return new ModifiedEarlierFilter(timestamp);
     }
 
     @Override
     public String serialize(IFilter filter) throws IllegalArgumentException {
-        return LessLastModifiedFilter.class.cast(filter).toString();
+        return ModifiedEarlierFilter.class.cast(filter).toString();
     }
 
 }

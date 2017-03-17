@@ -43,13 +43,15 @@ public class NotFilterSerializerTest {
                 new NotFilterSerializer().serialize(wrongFormat);
             } catch (IllegalArgumentException e) {
                 assertEquals("Wrong filter format: " + wrongFormat, e.getMessage());
+            } catch (FilterSerializerFactory.FilterSerializationException e) {
+                e.printStackTrace();
             }
         }
 
     }
 
     @Test
-    public void checkCreationOnValidPatterns() {
+    public void checkCreationOnValidPatterns() throws FilterSerializerFactory.FilterSerializationException {
         NotFilterSerializer s = new NotFilterSerializer();
 
         for (String filterBody : validBodies) {

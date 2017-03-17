@@ -2,6 +2,7 @@ package ru.nsu.ccfit.boltava;
 
 import ru.nsu.ccfit.boltava.filter.IFilter;
 import ru.nsu.ccfit.boltava.filter.parser.ConfigReader;
+import ru.nsu.ccfit.boltava.filter.serializer.FilterSerializerFactory;
 import ru.nsu.ccfit.boltava.statistics.LineStatisticsCollector;
 import ru.nsu.ccfit.boltava.statistics.OrderedStringLineStats;
 
@@ -25,6 +26,8 @@ public class Main {
 
         } catch (IOException | IllegalAccessException e) {
             System.err.println(e.getMessage());
+        } catch (FilterSerializerFactory.FilterSerializationException e) {
+            e.printStackTrace();
         }
     }
 }
