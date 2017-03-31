@@ -12,6 +12,9 @@ public class OrderedStringLineStats extends StatisticsSerializer<Path, String, L
     private LineStatistics mLineStats;
 
     public OrderedStringLineStats(LineStatistics lineStats) {
+        if (lineStats == null) throw new NullPointerException(
+                "Serializer cannot be constructed from null object"
+        );
         mLineStats = lineStats;
     }
 

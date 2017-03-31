@@ -12,6 +12,10 @@ public class NotFilterSerializer implements IFilterSerializer {
 
     @Override
     public NotFilter serialize(String filterString) throws FilterSerializerFactory.FilterSerializationException {
+        if (filterString == null) throw new IllegalArgumentException(
+                this.getClass().getName() + "null string passed"
+        );
+
         if (!Pattern.matches(mFilterPattern, filterString.trim())) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }

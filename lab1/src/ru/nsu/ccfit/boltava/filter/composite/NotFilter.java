@@ -7,16 +7,18 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class NotFilter extends CompositeFilter {
+public final class NotFilter extends CompositeFilter {
 
     public static final String prefix = "!";
 
     public NotFilter(IFilter child) {
-        super(new ArrayList<IFilter>(Collections.singletonList(child)));
+        super(new ArrayList<>(Collections.singletonList(child)));
     }
 
     @Override
     public boolean check(Path fileName) throws IllegalAccessException, IOException {
+        if (fileName == null) throw new IllegalArgumentException("Null pointer passed as filename");
+
         return !mChildFilters.get(0).check(fileName);
     }
 

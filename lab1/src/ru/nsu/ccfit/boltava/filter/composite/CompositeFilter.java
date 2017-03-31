@@ -39,7 +39,4 @@ public abstract class CompositeFilter implements IFilter {
         return mChildFilters != null ? mChildFilters.hashCode() : 0;
     }
 
-    List<IFilter> getChildren() {
-        return mChildFilters;
-    }
 }

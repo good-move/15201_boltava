@@ -11,6 +11,10 @@ public class ModifiedEarlierFilterSerializer implements IFilterSerializer {
 
     @Override
     public ModifiedEarlierFilter serialize(String filterString) {
+        if (filterString == null) throw new IllegalArgumentException(
+                this.getClass().getName() + "null string passed"
+        );
+
         filterString = filterString.trim();
         if (!Pattern.matches(mFilterPattern, filterString)) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);

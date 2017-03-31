@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class AndFilter extends CompositeFilter {
+public final class AndFilter extends CompositeFilter {
 
     public static final String prefix = "&";
 
@@ -14,6 +14,8 @@ public class AndFilter extends CompositeFilter {
 
     @Override
     public boolean check(Path fileName) throws IllegalAccessException, IOException {
+
+        if (fileName == null) throw new IllegalArgumentException("Null pointer passed as filename");
 
         for (IFilter filter : mChildFilters) {
             if (!filter.check(fileName)) return false;

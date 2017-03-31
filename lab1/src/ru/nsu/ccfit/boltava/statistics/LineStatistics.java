@@ -11,7 +11,9 @@ public class LineStatistics extends Statistics<Path, IFilter, LineStatistics.Fil
     @Override
     public boolean update(IFilter filterId, FilterStats filterData) {
 
-        if (filterId == null || filterData == null) throw new IllegalArgumentException();
+        if (filterId == null || filterData == null) throw new IllegalArgumentException(
+                this.getClass().getName() + ": Null pointer passed"
+        );
 
         FilterStats currentData = super.get(filterId);
 

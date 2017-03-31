@@ -15,15 +15,19 @@ public class ConfigReader {
             throws  IllegalArgumentException,
                     IllegalAccessException,
                     FilterSerializerFactory.FilterSerializationException,
-                    IOException {
-        ArrayList<IFilter> filters = new ArrayList<IFilter>();
+                    IOException
+    {
+        ArrayList<IFilter> filters = new ArrayList<>();
 
-        BufferedReader br = null;
+        BufferedReader br;
         try {
             br = new BufferedReader(new FileReader(configFile));
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException("File not found: " + e.getMessage());
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("Null config file");
         }
+
         String filterString;
 
         try {

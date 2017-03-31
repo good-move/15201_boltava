@@ -12,11 +12,13 @@ import static java.nio.file.FileVisitResult.*;
 public class LineStatisticsCollector {
 
     private final List<IFilter> mFilters;
-    private LineStatistics mStats;
+    private LineStatistics mStats = new LineStatistics();
 
     public LineStatisticsCollector(List<IFilter> filters) {
+        if (filters == null) throw new NullPointerException(
+                this.getClass().getName() + "Null pointer list passed"
+        );
         mFilters = filters;
-        mStats = new LineStatistics();
     }
 
     public LineStatistics collectStats(String rootPath) throws IOException {
@@ -25,6 +27,9 @@ public class LineStatisticsCollector {
     }
 
     public int countLines(Path filePath) throws IOException {
+        if (filePath == null) throw new NullPointerException(
+                this.getClass().getName() + ": Null pointer file path"
+        );
         FileReader fileReader = new FileReader(filePath.toFile());
         LineNumberReader lnReader = new LineNumberReader(fileReader);
         lnReader.skip(Long.MAX_VALUE);

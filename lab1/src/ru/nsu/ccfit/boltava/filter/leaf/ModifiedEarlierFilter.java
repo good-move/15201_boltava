@@ -13,12 +13,20 @@ public class ModifiedEarlierFilter implements IFilter {
     private final FileTime mTimeStamp;
 
     public ModifiedEarlierFilter(Long timestamp) {
+        if (timestamp == null) throw new IllegalArgumentException(
+                this.getClass().getName() +  ": Null pointer timestamp passed"
+        );
+
         mTimeStamp = FileTime.fromMillis(timestamp * 1000);
     }
 
     @Override
     public boolean check(Path filePath) throws IOException {
-            return Files.getLastModifiedTime(filePath).compareTo(mTimeStamp) < 0;
+        if (filePath == null) throw new IllegalArgumentException(
+                this.getClass().getName() +  ": null path"
+        );
+
+        return Files.getLastModifiedTime(filePath).compareTo(mTimeStamp) < 0;
     }
 
     @Override
@@ -41,4 +49,5 @@ public class ModifiedEarlierFilter implements IFilter {
 
     @Override
     public String toString() { return prefix + (mTimeStamp.toMillis()/1000); }
+
 }

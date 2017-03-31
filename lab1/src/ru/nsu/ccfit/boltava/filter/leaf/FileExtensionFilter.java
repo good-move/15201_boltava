@@ -13,14 +13,15 @@ public class FileExtensionFilter implements IFilter {
     private static Pattern mPattern = Pattern.compile(".*/*.*?(\\..*)");
 
     public FileExtensionFilter(String extension) {
-        if (extension == null)
-            throw new IllegalArgumentException("Null pointer passed");
+        if (extension == null) throw new IllegalArgumentException("Null pointer passed");
         extension = extension.trim();
         mExtension = extension.startsWith(".") ? extension.trim() : "." + extension;
     }
 
     @Override
     public boolean check(Path path) {
+        if (path == null) throw new IllegalArgumentException("Null pointer passed");
+
         Matcher matcher = mPattern.matcher(path.toString());
         return matcher.matches() && matcher.group(1).equals(mExtension);
     }

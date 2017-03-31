@@ -24,12 +24,15 @@ public class FilterSerializerFactory {
     }
 
     public static IFilterSerializer create(String prefix) throws FilterSerializationException {
+        if (prefix == null) throw new IllegalArgumentException(
+                "null prefix passed to factory"
+        );
 
         try {
             return mSerializers.get(prefix).newInstance();
         } catch (InstantiationException e) {
             throw new FilterSerializationException("Couldn't instantiate serializer for prefix " + prefix);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException | NullPointerException e) {
             throw new FilterSerializationException("Unknown filter prefix: " + prefix);
         }
 

@@ -16,13 +16,17 @@ public abstract class Statistics<GlobalData, DetailedDataKey, DetailedDataValue>
     }
 
     boolean register(GlobalData object) {
-        if (object == null) throw new IllegalArgumentException();
+        if (object == null) throw new IllegalArgumentException(
+                this.getClass().getName() + ": Cannot register null objects"
+        );
 
         return mGlobalData.add(object);
     }
 
     DetailedDataValue get(DetailedDataKey key) {
-        if (key == null) throw new IllegalArgumentException();
+        if (key == null) throw new IllegalArgumentException(
+                this.getClass().getName() + ": Null keys are not allowed"
+        );
 
         return mDetailedData.get(key);
     }
@@ -36,14 +40,18 @@ public abstract class Statistics<GlobalData, DetailedDataKey, DetailedDataValue>
     }
 
     public boolean update(DetailedDataKey key, DetailedDataValue value) {
-        if (key == null || value == null) throw new IllegalArgumentException();
+        if (key == null || value == null) throw new IllegalArgumentException(
+                this.getClass().getName() + ": Null keys and values are not allowed"
+        );
 
         mDetailedData.put(key, value);
         return true;
     }
 
     public DetailedDataValue remove(DetailedDataKey key) {
-        if (key == null) throw new IllegalArgumentException();
+        if (key == null) throw new IllegalArgumentException(
+                this.getClass().getName() + ": Null keys are not allowed"
+        );
 
         return mDetailedData.remove(key);
     }

@@ -13,11 +13,19 @@ public class ModifiedLaterFilter implements IFilter {
     private final FileTime mTimeStamp;
 
     public ModifiedLaterFilter(Long timestamp) {
+        if (timestamp == null) throw new IllegalArgumentException(
+                this.getClass().getName() +  ": Null pointer timestamp passed"
+        );
+
         mTimeStamp = FileTime.fromMillis(timestamp * 1000);
     }
 
     @Override
     public boolean check(Path filePath) throws IOException {
+        if (filePath == null) throw new IllegalArgumentException(
+                this.getClass().getName() +  ": null path"
+        );
+
         return Files.getLastModifiedTime(filePath).compareTo(mTimeStamp) > 0;
     }
 

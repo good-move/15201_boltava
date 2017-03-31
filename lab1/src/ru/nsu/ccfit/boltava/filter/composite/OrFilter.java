@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class OrFilter extends CompositeFilter {
+public final class OrFilter extends CompositeFilter {
 
     public static final String prefix = "|";
 
@@ -14,6 +14,8 @@ public class OrFilter extends CompositeFilter {
 
     @Override
     public boolean check(Path fileName) throws IllegalAccessException, IOException {
+        if (fileName == null) throw new IllegalArgumentException("Null pointer passed as filename");
+
         for (IFilter filter : mChildFilters) {
             if (filter.check(fileName)) return true;
         }
