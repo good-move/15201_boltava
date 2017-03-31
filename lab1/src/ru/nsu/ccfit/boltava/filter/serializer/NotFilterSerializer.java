@@ -6,13 +6,13 @@ import ru.nsu.ccfit.boltava.filter.parser.FilterParser;
 
 import java.util.regex.Pattern;
 
-import static ru.nsu.ccfit.boltava.resources.FilterPatterns.NOT_FILTER;
-
 public class NotFilterSerializer implements IFilterSerializer {
+
+    private static final String mFilterPattern = "^![ \\t]*\\(.+\\)";
 
     @Override
     public NotFilter serialize(String filterString) throws FilterSerializerFactory.FilterSerializationException {
-        if (!Pattern.matches(NOT_FILTER, filterString.trim())) {
+        if (!Pattern.matches(mFilterPattern, filterString.trim())) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }
 

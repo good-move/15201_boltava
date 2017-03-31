@@ -5,16 +5,14 @@ import ru.nsu.ccfit.boltava.filter.leaf.ModifiedEarlierFilter;
 
 import java.util.regex.Pattern;
 
-import static ru.nsu.ccfit.boltava.resources.FilterPatterns.MODIFIED_EARLIER_FILTER;
-
 public class ModifiedEarlierFilterSerializer implements IFilterSerializer {
 
-    private static final String filterPattern = MODIFIED_EARLIER_FILTER;
+    private static final String mFilterPattern = "^<[ \\t]*\\d+$";;
 
     @Override
     public ModifiedEarlierFilter serialize(String filterString) {
         filterString = filterString.trim();
-        if (!Pattern.matches(filterPattern, filterString)) {
+        if (!Pattern.matches(mFilterPattern, filterString)) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }
 

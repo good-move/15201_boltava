@@ -1,24 +1,14 @@
 package ru.nsu.ccfit.boltava.filter.parser;
 
-
 import com.florianingerl.util.regex.Matcher;
 import com.florianingerl.util.regex.Pattern;
 import ru.nsu.ccfit.boltava.filter.IFilter;
 import ru.nsu.ccfit.boltava.filter.serializer.FilterSerializerFactory;
 
-
 import java.util.ArrayList;
 
 
-import static ru.nsu.ccfit.boltava.resources.FilterPatterns.*;
-
 public class FilterParser {
-
-    private static final int mMinFilterStringLength = 2;
-
-    private static final String mLeafFilterString = LEAF_FILTER;
-    private static final com.florianingerl.util.regex.Pattern mParserPattern = Pattern.compile(PARSER);
-
 
     public static IFilter parse(String filterString)
             throws IllegalArgumentException, FilterSerializerFactory.FilterSerializationException {
@@ -71,5 +61,13 @@ public class FilterParser {
 
         return children;
     }
+
+
+    private static final String mParserString = "(?<primitive>(?<prefix>[ \\t]*([^()\\s])[ \\t]*)(?3)+\\s*)|" +
+            "(?<composite>(?prefix)\\(+?((?primitive)+|(?composite)+)+\\)+?[ \\t]*)";
+    private static final int mMinFilterStringLength = 2;
+
+    private static final String mLeafFilterString = "([ \\t]*([^()\\s])[ \\t]*[^()\\s]+\\s*)";
+    private static final com.florianingerl.util.regex.Pattern mParserPattern = Pattern.compile(mParserString);
 
 }

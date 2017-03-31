@@ -6,15 +6,13 @@ import ru.nsu.ccfit.boltava.filter.composite.OrFilter;
 
 import java.util.regex.Pattern;
 
-import static ru.nsu.ccfit.boltava.resources.FilterPatterns.OR_FILTER;
-
 public class OrFilterSerializer implements IFilterSerializer {
 
-    private static final String filterPattern = OR_FILTER;
+    private static final String mFilterPattern = "^\\|[ \\t]*\\(.+\\)$";
 
     @Override
     public OrFilter serialize(String filterString) throws FilterSerializerFactory.FilterSerializationException {
-        if (!Pattern.matches(filterPattern, filterString.trim())) {
+        if (!Pattern.matches(mFilterPattern, filterString.trim())) {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }
 

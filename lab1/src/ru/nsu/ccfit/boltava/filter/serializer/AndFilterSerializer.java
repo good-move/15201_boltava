@@ -6,11 +6,9 @@ import ru.nsu.ccfit.boltava.filter.parser.FilterParser;
 
 import java.util.regex.Pattern;
 
-import static ru.nsu.ccfit.boltava.resources.FilterPatterns.AND_FILTER;
-
 public class AndFilterSerializer implements IFilterSerializer {
 
-    private static final String mFilterPattern = AND_FILTER;
+    private static final String mFilterPattern = "^&[ \\t]*\\(.+\\)$";
 
     @Override
     public AndFilter serialize(String filterString) throws FilterSerializerFactory.FilterSerializationException {
