@@ -7,9 +7,7 @@ import ru.nsu.ccfit.boltava.filter.parser.ConfigReader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -54,7 +52,7 @@ public class LineStatisticsCollectorTest {
 
             String configFilePath = mTestConfigsPath +"/"+row[0];
             long expectedLinesMatched = Long.parseLong(row[1]);
-            long expectedFilesMatched = Long.parseLong(row[2]);
+            Long expectedFilesMatched = Long.parseLong(row[2]);
 
             System.out.print("Testing " + row[0]);
 
@@ -62,7 +60,7 @@ public class LineStatisticsCollectorTest {
             LineStatistics stats = new LineStatisticsCollector(filters).collectStats(mTestDataPath);
 
             assertEquals(expectedLinesMatched, stats.getLinesCount());
-            assertEquals(expectedFilesMatched, stats.getRawGlobalData().size());
+            assertEquals(expectedFilesMatched, stats.getSummary());
 
             System.out.println(" --- PASSED");
         }

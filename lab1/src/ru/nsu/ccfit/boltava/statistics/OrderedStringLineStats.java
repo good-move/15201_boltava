@@ -1,6 +1,5 @@
 package ru.nsu.ccfit.boltava.statistics;
 
-import ru.nsu.ccfit.boltava.Main;
 import ru.nsu.ccfit.boltava.filter.IFilter;
 import ru.nsu.ccfit.boltava.filter.serializer.FilterSerializerFactory;
 
@@ -22,7 +21,7 @@ public class OrderedStringLineStats extends StatisticsSerializer<Path, String, L
     public String[] serialize() throws FilterSerializerFactory.FilterSerializationException {
         long totalLinesCount = mLineStats.getLinesCount();
         String header = "Total - " + totalLinesCount + " lines in " +
-                        mLineStats.getRawGlobalData().size() + " files";
+                        mLineStats.getSummary() + " files";
 
         if (totalLinesCount == 0) {
             return new String[]{header};

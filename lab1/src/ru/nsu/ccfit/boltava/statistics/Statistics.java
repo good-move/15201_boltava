@@ -5,38 +5,32 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Statistics<GlobalData, DetailedDataKey, DetailedDataValue> {
+public abstract class Statistics<SummaryType, DetailedDataKey, DetailedDataValue> {
 
-    private Set<GlobalData> mGlobalData;
-    private Map<DetailedDataKey, DetailedDataValue> mDetailedData;
+    private SummaryType mSummary;
+    private Map<DetailedDataKey, DetailedDataValue> mData;
 
-    Statistics() {
-        mGlobalData = new HashSet<>();
-        mDetailedData = new HashMap<>();
+    Statistics(SummaryType summary) {
+        mData = new HashMap<>();
+        mSummary = summary;
     }
 
-    boolean register(GlobalData object) {
-        if (object == null) throw new IllegalArgumentException(
-                this.getClass().getName() + ": Cannot register null objects"
-        );
-
-        return mGlobalData.add(object);
-    }
+    public abstract void register(SummaryType object);
 
     DetailedDataValue get(DetailedDataKey key) {
         if (key == null) throw new IllegalArgumentException(
                 this.getClass().getName() + ": Null keys are not allowed"
         );
 
-        return mDetailedData.get(key);
+        return mData.get(key);
     }
 
-    public Set<GlobalData> getRawGlobalData() {
-        return mGlobalData;
+    public SummaryType getSummary() {
+        return mSummary;
     }
 
     public Map<DetailedDataKey, DetailedDataValue> getRawDetailedData() {
-        return mDetailedData;
+        return mData;
     }
 
     public boolean update(DetailedDataKey key, DetailedDataValue value) {
@@ -44,7 +38,7 @@ public abstract class Statistics<GlobalData, DetailedDataKey, DetailedDataValue>
                 this.getClass().getName() + ": Null keys and values are not allowed"
         );
 
-        mDetailedData.put(key, value);
+        mData.put(key, value);
         return true;
     }
 
@@ -53,7 +47,7 @@ public abstract class Statistics<GlobalData, DetailedDataKey, DetailedDataValue>
                 this.getClass().getName() + ": Null keys are not allowed"
         );
 
-        return mDetailedData.remove(key);
+        return mData.remove(key);
     }
 
 }

@@ -48,15 +48,20 @@ public class LineStatisticsCollector {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             try {
+                boolean passed = false;
                 long linesCount = countLines(file);
                 final long filesCount = 1;
                 final FilterStats filterStats = new FilterStats(linesCount, filesCount);
 
                 for (IFilter filter : mFilters) {
                     if (filter.check(file)) {
-                        mStats.register(file, linesCount);
+                        passed = true;
                         mStats.update(filter, filterStats);
                     }
+                }
+
+                if (passed) {
+                    mStats.register(linesCount);
                 }
 
                 return  CONTINUE;

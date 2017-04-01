@@ -6,12 +6,14 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LineStatistics extends Statistics<Path, IFilter, LineStatistics.FilterStats> {
+public class LineStatistics extends Statistics<Long, IFilter, LineStatistics.FilterStats> {
 
     private long mTotalLinesCount = 0;
+    private long mTotalFilesCount = 0;
 
-    private Map<IFilter, LineStatistics.FilterStats> mDetailedData = new HashMap<>();
-
+    public LineStatistics() {
+        super(0L);
+    }
 
     @Override
     public boolean update(IFilter filterId, FilterStats filterData) {
@@ -34,13 +36,19 @@ public class LineStatistics extends Statistics<Path, IFilter, LineStatistics.Fil
         return true;
     }
 
-    public boolean register(Path path, long linesCount) {
-        if (super.register(path)) {
-            mTotalLinesCount += linesCount;
-            return true;
-        }
+    @Override
+    public Long getSummary() {
+        return mTotalFilesCount;
+    }
 
-        return false;
+    @Override
+    public void register(Long linesCount) {
+        if (linesCount == null) throw new IllegalArgumentException(
+                this.getClass().getName() + ": Cannot register null objects"
+        );
+
+        mTotalLinesCount += linesCount;
+        mTotalFilesCount += 1;
     }
 
 
