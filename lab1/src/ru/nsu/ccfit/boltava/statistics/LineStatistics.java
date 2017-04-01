@@ -3,10 +3,15 @@ package ru.nsu.ccfit.boltava.statistics;
 import ru.nsu.ccfit.boltava.filter.IFilter;
 
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LineStatistics extends Statistics<Path, IFilter, LineStatistics.FilterStats> {
 
     private long mTotalLinesCount = 0;
+
+    private Map<IFilter, LineStatistics.FilterStats> mDetailedData = new HashMap<>();
+
 
     @Override
     public boolean update(IFilter filterId, FilterStats filterData) {
@@ -28,7 +33,6 @@ public class LineStatistics extends Statistics<Path, IFilter, LineStatistics.Fil
 
         return true;
     }
-
 
     public boolean register(Path path, long linesCount) {
         if (super.register(path)) {

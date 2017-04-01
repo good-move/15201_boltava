@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -20,7 +22,7 @@ public class LineStatisticsCollectorTest {
         System.out.println("\nExample run\n");
 
         try {
-            ArrayList<IFilter> filters;
+            Set<IFilter> filters;
             filters = ConfigReader.getFiltersFromConfig("./test/sample_config.txt");
             LineStatistics stats = new LineStatisticsCollector(filters).collectStats("./");
             for (String line : new OrderedStringLineStats(stats).serialize()) {
@@ -41,7 +43,7 @@ public class LineStatisticsCollectorTest {
 
 
         BufferedReader br = new BufferedReader(new FileReader(mTestProfile));
-        ArrayList<IFilter> filters;
+        Set<IFilter> filters;
         String filterString;
 
         while ((filterString = br.readLine()) != null) {

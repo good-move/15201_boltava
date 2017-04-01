@@ -1,20 +1,21 @@
 package ru.nsu.ccfit.boltava.statistics;
 
 import ru.nsu.ccfit.boltava.filter.IFilter;
+import ru.nsu.ccfit.boltava.statistics.LineStatistics.FilterStats;
 
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.*;
 import java.io.*;
-import java.util.List;
+import java.util.Set;
 
 import static java.nio.file.FileVisitResult.*;
 
 public class LineStatisticsCollector {
 
-    private final List<IFilter> mFilters;
+    private final Set<IFilter> mFilters;
     private LineStatistics mStats = new LineStatistics();
 
-    public LineStatisticsCollector(List<IFilter> filters) {
+    public LineStatisticsCollector(Set<IFilter> filters) {
         if (filters == null) throw new NullPointerException(
                 this.getClass().getName() + "Null pointer list passed"
         );
@@ -26,10 +27,11 @@ public class LineStatisticsCollector {
         return mStats;
     }
 
-    public int countLines(Path filePath) throws IOException {
+    public long countLines(Path filePath) throws IOException {
         if (filePath == null) throw new NullPointerException(
                 this.getClass().getName() + ": Null pointer file path"
         );
+
         FileReader fileReader = new FileReader(filePath.toFile());
         LineNumberReader lnReader = new LineNumberReader(fileReader);
         lnReader.skip(Long.MAX_VALUE);
@@ -46,22 +48,22 @@ public class LineStatisticsCollector {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             try {
-                int linesCount = countLines(file);
+                long linesCount = countLines(file);
                 final long filesCount = 1;
-                LineStatistics.FilterStats filterStats = new LineStatistics.FilterStats(linesCount, filesCount);
 
                 for (IFilter filter : mFilters) {
                     if (filter.check(file)) {
                         mStats.register(file, linesCount);
-                        mStats.update(filter, filterStats);
+                        mStats.update(filter, new FilterStats(linesCount, filesCount));
                     }
                 }
 
                 return  CONTINUE;
             } catch (IOException | IllegalAccessException e) {
-                System.err.println(e.getMessage());
-                return FileVisitResult.TERMINATE;
+                System.out.println(e.getMessage());
             }
+
+            return FileVisitResult.TERMINATE;
         }
 
     }

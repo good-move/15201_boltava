@@ -20,14 +20,14 @@ public class NotFilterSerializer implements IFilterSerializer {
             throw new IllegalArgumentException("Wrong filter format: " + filterString);
         }
 
-        return new NotFilter(FilterParser.getChildren(filterString).get(0));
+        return new NotFilter(FilterParser.getChildren(filterString).toArray(new IFilter[1])[0]);
     }
 
     @Override
     public String serialize(IFilter filter) throws IllegalArgumentException, FilterSerializerFactory.FilterSerializationException {
         NotFilter notFilter = NotFilter.class.cast(filter);
         String result =  filter.getPrefix() + "(";
-        IFilter child = notFilter.getChildFilters().get(0);
+        IFilter child = notFilter.getChildFilters().toArray(new IFilter[1])[0];
         result += FilterSerializerFactory.create(child.getPrefix()).serialize(child);
         return result + ")";
     }

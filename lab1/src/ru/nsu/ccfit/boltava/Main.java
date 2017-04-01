@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 
 public class Main {
 
@@ -21,7 +22,7 @@ public class Main {
         }
 
         try {
-            ArrayList<IFilter> filters;
+            Set<IFilter> filters;
             filters = ConfigReader.getFiltersFromConfig(args[0].trim());
             LineStatistics stats = new LineStatisticsCollector(filters).collectStats(args[1].trim());
             for (String line : new OrderedStringLineStats(stats).serialize()) {

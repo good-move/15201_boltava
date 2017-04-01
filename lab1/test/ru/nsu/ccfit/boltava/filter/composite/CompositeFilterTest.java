@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class CompositeFilterTest {
 
-    ArrayList<IFilter> child = new ArrayList<IFilter>();
+    private ArrayList<IFilter> child = new ArrayList<>();
 
     @Before
     public void prepare() {
@@ -59,6 +59,7 @@ public class CompositeFilterTest {
 
     @Test
     public void emptyNotEquals() throws Exception {
+
         IFilter not1 = new NotFilter(child.get(0));
         IFilter not2 = new NotFilter(child.get(0));
         IFilter not3 = new NotFilter(child.get(0));

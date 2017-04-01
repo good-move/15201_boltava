@@ -76,7 +76,7 @@
         <junit printsummary="on" haltonfailure="yes" fork="true">
             <classpath refid="module.classpath" />
             <test name="ru.nsu.ccfit.boltava.AllTests" />
-            <formatter type="brief" usefile="false"/>
+            <formatter type="plain" usefile="false"/>
         </junit>
     </target>
 

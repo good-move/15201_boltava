@@ -29,4 +29,17 @@ public final class AndFilter extends CompositeFilter {
         return prefix;
     }
 
+    @Override
+    public int hashCode() {
+        return prefix.hashCode() + 37 * super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        return super.equals(o);
+    }
+
 }

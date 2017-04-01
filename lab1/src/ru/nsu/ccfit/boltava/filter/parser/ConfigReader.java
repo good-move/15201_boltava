@@ -8,16 +8,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ConfigReader {
 
-    public static ArrayList<IFilter> getFiltersFromConfig(String configFile)
+    public static Set<IFilter> getFiltersFromConfig(String configFile)
             throws  IllegalArgumentException,
                     IllegalAccessException,
                     FilterSerializerFactory.FilterSerializationException,
                     IOException
     {
-        ArrayList<IFilter> filters = new ArrayList<>();
+        HashSet<IFilter> filters = new HashSet<>();
 
         BufferedReader br;
         try {

@@ -27,4 +27,18 @@ public final class NotFilter extends CompositeFilter {
         return prefix;
     }
 
+    @Override
+    public int hashCode() {
+        return prefix.hashCode() + 37 * super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NotFilter that = (NotFilter) o;
+
+        return super.equals(o);
+    }
 }

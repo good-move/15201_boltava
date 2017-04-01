@@ -29,6 +29,8 @@ public class ModifiedEarlierFilter implements IFilter {
         return Files.getLastModifiedTime(filePath).compareTo(mTimeStamp) < 0;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,10 +41,6 @@ public class ModifiedEarlierFilter implements IFilter {
         return mTimeStamp != null ? mTimeStamp.equals(that.mTimeStamp) : that.mTimeStamp == null;
     }
 
-    @Override
-    public int hashCode() {
-        return mTimeStamp != null ? mTimeStamp.hashCode() : 0;
-    }
 
     @Override
     public String getPrefix() { return prefix; }
@@ -50,4 +48,8 @@ public class ModifiedEarlierFilter implements IFilter {
     @Override
     public String toString() { return prefix + (mTimeStamp.toMillis()/1000); }
 
+    @Override
+    public int hashCode() {
+        return prefix.hashCode() * mTimeStamp.hashCode();
+    }
 }

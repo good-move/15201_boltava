@@ -38,7 +38,7 @@ public class FileExtensionFilter implements IFilter {
 
     @Override
     public int hashCode() {
-        return mExtension != null ? mExtension.hashCode() : 0;
+        return mExtension != null ?  prefix.hashCode() * mExtension.hashCode() : 0;
     }
 
     @Override

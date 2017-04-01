@@ -41,7 +41,7 @@ public class ModifiedLaterFilter implements IFilter {
 
     @Override
     public int hashCode() {
-        return mTimeStamp != null ? mTimeStamp.hashCode() : 0;
+        return prefix.hashCode() * mTimeStamp.hashCode();
     }
 
     @Override
