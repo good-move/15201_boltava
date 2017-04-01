@@ -23,7 +23,7 @@ public class LineStatistics extends Statistics<Path, IFilter, LineStatistics.Fil
         FilterStats currentData = super.get(filterId);
 
         if (currentData == null) {
-            currentData = filterData;
+            currentData = new FilterStats(filterData);
         } else {
             currentData.mFilesCount += filterData.mFilesCount;
             currentData.mLinesCount += filterData.mLinesCount;
@@ -58,6 +58,11 @@ public class LineStatistics extends Statistics<Path, IFilter, LineStatistics.Fil
         FilterStats(long linesCount, long filesCount) {
             mLinesCount = linesCount;
             mFilesCount = filesCount;
+        }
+
+        FilterStats(FilterStats stats) {
+            mLinesCount = stats.mLinesCount;
+            mFilesCount = stats.mFilesCount;
         }
 
     }

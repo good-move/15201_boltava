@@ -50,11 +50,12 @@ public class LineStatisticsCollector {
             try {
                 long linesCount = countLines(file);
                 final long filesCount = 1;
+                final FilterStats filterStats = new FilterStats(linesCount, filesCount);
 
                 for (IFilter filter : mFilters) {
                     if (filter.check(file)) {
                         mStats.register(file, linesCount);
-                        mStats.update(filter, new FilterStats(linesCount, filesCount));
+                        mStats.update(filter, filterStats);
                     }
                 }
 
