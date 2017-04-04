@@ -22,8 +22,10 @@ public class FileExtensionFilter implements IFilter {
     public boolean check(Path path) {
         if (path == null) throw new IllegalArgumentException("Null pointer passed");
 
-        Matcher matcher = mPattern.matcher(path.toString());
-        return matcher.matches() && matcher.group(1).equals(mExtension);
+        String filename = path.getFileName().toString();
+        int dotIndex = filename.lastIndexOf(".");
+
+        return dotIndex != -1 && filename.substring(dotIndex).equals(mExtension);
     }
 
     @Override

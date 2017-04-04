@@ -32,11 +32,13 @@ public class LineStatisticsCollector {
                 this.getClass().getName() + ": Null pointer file path"
         );
 
-        FileReader fileReader = new FileReader(filePath.toFile());
-        LineNumberReader lnReader = new LineNumberReader(fileReader);
-        lnReader.skip(Long.MAX_VALUE);
-
-        return lnReader.getLineNumber() + 1;
+        long linesCount = 0;
+        BufferedReader reader = new BufferedReader(new FileReader(filePath.toString()));
+        while (reader.readLine() != null) {
+            linesCount++;
+        }
+        reader.close();
+        return linesCount;
     }
 
     public LineStatistics getStats() {
@@ -50,6 +52,7 @@ public class LineStatisticsCollector {
             try {
                 boolean passed = false;
                 long linesCount = countLines(file);
+
                 final long filesCount = 1;
                 final FilterStats filterStats = new FilterStats(linesCount, filesCount);
 
@@ -63,10 +66,11 @@ public class LineStatisticsCollector {
                 if (passed) {
                     mStats.register(linesCount);
                 }
-
                 return  CONTINUE;
+
             } catch (IOException | IllegalAccessException e) {
                 System.out.println(e.getMessage());
+                e.printStackTrace();
             }
 
             return FileVisitResult.TERMINATE;
