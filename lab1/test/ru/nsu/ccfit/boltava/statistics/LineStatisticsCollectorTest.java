@@ -35,9 +35,9 @@ public class LineStatisticsCollectorTest {
     @Test
     public void countLines() throws Exception {
 
-        String mTestDataPath = "test resources/root";
-        String mTestProfile = "test resources/test_profile.csv";
-        String mTestConfigsPath = "test resources/configs";
+        String mTestDataPath = "./test resources/root";
+        String mTestProfile = "./test resources/test_profile.csv";
+        String mTestConfigsPath = "./test resources/configs";
 
 
         BufferedReader br = new BufferedReader(new FileReader(mTestProfile));

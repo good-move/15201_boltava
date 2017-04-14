@@ -22,8 +22,12 @@ public class LineStatisticsCollector {
         mFilters = filters;
     }
 
-    public LineStatistics collectStats(String rootPath) throws IOException {
-        Files.walkFileTree(Paths.get(rootPath), new StatisticsCollector());
+    public LineStatistics collectStats(String rootPath) {
+        try {
+            Files.walkFileTree(Paths.get(rootPath), new StatisticsCollector());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
         return mStats;
     }
 
@@ -32,12 +36,11 @@ public class LineStatisticsCollector {
                 this.getClass().getName() + ": Null pointer file path"
         );
 
-        long linesCount = 0;
-        BufferedReader reader = new BufferedReader(new FileReader(filePath.toString()));
-        while (reader.readLine() != null) {
-            linesCount++;
-        }
-        reader.close();
+        LineNumberReader lnreader = new LineNumberReader(new FileReader(filePath.toFile()));
+        lnreader.skip(Long.MAX_VALUE);
+        long linesCount = lnreader.getLineNumber() + 1;
+        lnreader.close();
+
         return linesCount;
     }
 
@@ -48,32 +51,38 @@ public class LineStatisticsCollector {
     private class StatisticsCollector extends SimpleFileVisitor<Path> {
 
         @Override
+        public FileVisitResult visitFileFailed(Path path, IOException e) throws IOException {
+            System.out.println(e.getClass().getName() + ": " + e.getMessage());
+            return CONTINUE;
+        }
+
+        @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             try {
                 boolean passed = false;
-                long linesCount = countLines(file);
+                long linesCount = 0;
 
                 final long filesCount = 1;
-                final FilterStats filterStats = new FilterStats(linesCount, filesCount);
+                FilterStats filterStats = new FilterStats();
 
                 for (IFilter filter : mFilters) {
                     if (filter.check(file)) {
-                        passed = true;
+                        if (!passed) {
+                            passed = true;
+                            linesCount = countLines(file);
+                            mStats.register(linesCount);
+                            filterStats.mFilesCount = filesCount;
+                            filterStats.mLinesCount = linesCount;
+                        }
                         mStats.update(filter, filterStats);
                     }
                 }
 
-                if (passed) {
-                    mStats.register(linesCount);
-                }
-                return  CONTINUE;
-
             } catch (IOException | IllegalAccessException e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
+                System.err.println(e.getMessage());
             }
 
-            return FileVisitResult.TERMINATE;
+            return CONTINUE;
         }
 
     }
