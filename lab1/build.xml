@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="LoC" basedir="." default="all">
+
+    <!-- Directories -->
+
+    <property name="src.dir" value="src"/>
+    <property name="src.test.dir" value="test"/>
+    <property name="manifest.dir" value="${basedir}"/>
+
+    <property name="main.output.dir" value="${basedir}/out/production"/>
+    <property name="test.output.dir" value="${basedir}/out/test"/>
+    <property name="jar.output.dir" value="${basedir}"/>
+
+    <!-- Named properties -->
+
+    <property name="jar.output.name" value="LoC.jar"/>
+    <property name="manifest.mainclass.name" value="ru.nsu.ccfit.boltava.Main"/>
+
+    <!-- Compiler options -->
+
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+
+    <!-- Project Libraries -->
+
+    <path id="library.annotations-java8.classpath">
+        <pathelement location="${basedir}/lib/annotations-java8.jar"/>
+    </path>
+
+    <path id="library.junit4.classpath">
+        <pathelement location="${basedir}/lib/hamcrest-core-1.3.jar"/>
+        <pathelement location="${basedir}/lib/junit-4.12.jar"/>
+    </path>
+
+    <path id="library.regexp.classpath">
+        <pathelement location="${basedir}/lib/RegExp.jar"/>
+    </path>
+
+
+    <!-- LoC module -->
+
+    <path id="module.production.classpath">
+        <path refid="library.annotations-java8.classpath"/>
+        <path refid="library.regexp.classpath"/>
+    </path>
+
+    <path id="module.classpath">
+        <pathelement location="${main.output.dir}"/>
+        <pathelement location="${test.output.dir}"/>
+        <path refid="library.annotations-java8.classpath"/>
+        <path refid="library.junit4.classpath"/>
+        <path refid="library.regexp.classpath"/>
+    </path>
+
+    <property name="compiler.args.LoC" value="-encoding UTF-8 source -8 target -8 ${compiler.args}"/>
+
+    <target name="compile.module.LoC" depends="compile.module.LoC.production, compile.module.LoC.tests" description="Compile module LoC"/>
+
+    <target name="compile.module.LoC.production" description="Compile production classes">
+        <mkdir dir="${main.output.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${main.output.dir}" includeantruntime="false">
+            <classpath refid="module.production.classpath" />
+        </javac>
+    </target>
+
+    <target name="compile.module.LoC.tests" depends="compile.module.LoC.production" description="Compile tests">
+        <mkdir dir="${test.output.dir}"/>
+        <javac srcdir="${src.test.dir}" destdir="${test.output.dir}" includeantruntime="false">
+            <classpath refid="module.classpath" />
+        </javac>
+    </target>
+
+    <target name="run.module.LoC.tests" depends="compile.module.LoC">
+        <echo>Running tests</echo>
+        <junit printsummary="on" haltonfailure="yes" fork="true">
+            <classpath refid="module.classpath" />
+            <test name="ru.nsu.ccfit.boltava.AllTests" />
+            <formatter type="plain" usefile="false"/>
+        </junit>
+    </target>
+
+    <target name="module.LoC.build.jar">
+        <mkdir dir="${jar.output.dir}" />
+        <manifestclasspath property="manifest.classpath" jarfile="${jar.output.dir}/${jar.output.name}">
+            <classpath refid="module.production.classpath" />
+        </manifestclasspath>
+        <jar basedir="${main.output.dir}" destfile="${jar.output.dir}/${jar.output.name}">
+            <manifest>
+                <attribute name="Main-Class" value="${manifest.mainclass.name}"/>
+                <attribute name="Class-Path" value="${manifest.classpath}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- General targets -->
+
+    <target name="clean" description="cleanup all">
+        <delete dir="${main.output.dir}"/>
+        <delete dir="${test.output.dir}"/>
+    </target>
+
+    <target name="build.modules" depends="clean, compile.module.LoC, run.module.LoC.tests, module.LoC.build.jar" description="build all modules"/>
+
+    <target name="all" depends="build.modules" description="build all"/>
+
+</project>
