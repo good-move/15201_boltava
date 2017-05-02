@@ -5,12 +5,12 @@ public class Car {
     public String id;
     private final Engine mEngine;
     private final Body mBody;
-    private final Accessory[] mAccessories;
+    private final Accessory mAccessory;
 
-    public Car(Engine engine, Body body, Accessory[] accessories) {
+    public Car(Engine engine, Body body, Accessory accessory) {
         mEngine = engine;
         mBody = body;
-        mAccessories = accessories;
+        mAccessory = accessory;
     }
 
 }
