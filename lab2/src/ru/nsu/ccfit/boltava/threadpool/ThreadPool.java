@@ -1,13 +1,11 @@
-package ru.nsu.ccfit.boltava;
+package ru.nsu.ccfit.boltava.threadpool;
 
 
 public class ThreadPool {
 
-    private BlockingQueue<Runnable> mTaskQueue;
+    private BlockingQueue<Task> mTaskQueue;
     private Thread[] mWorkers;
     private int mActiveWorkersCount = 0;
-
-    private final Object lock = new Object();
 
     public ThreadPool(int queueSize, int workersCount) {
         mTaskQueue = new BlockingQueue<>(queueSize);
@@ -19,7 +17,7 @@ public class ThreadPool {
         }
     }
 
-    public void feed(Runnable task) throws InterruptedException {
+    public void feed(Task task) throws InterruptedException {
         mTaskQueue.enqueue(task);
     }
 
@@ -41,9 +39,9 @@ public class ThreadPool {
         public void run() {
             try {
                 while (true) {
-                    Runnable task = mTaskQueue.dequeue();
+                    Task task = mTaskQueue.dequeue();
                     incrementTaskCounter();
-                    task.run();
+                    task.execute();
                     decrementTaskCounter();
                 }
             } catch (InterruptedException e) {

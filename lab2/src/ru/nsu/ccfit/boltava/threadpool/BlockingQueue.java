@@ -1,20 +1,20 @@
-package ru.nsu.ccfit.boltava;
+package ru.nsu.ccfit.boltava.threadpool;
 
 import java.util.ArrayList;
 
 public class BlockingQueue<ItemType> {
 
-    private final long mSize;
+    private final long mMaxSize;
     private ArrayList<ItemType> mQueue = new ArrayList<>();
     private final Object lock = new Object();
 
-    public BlockingQueue(long size) {
-        mSize = size;
+    public BlockingQueue(long maxSize) {
+        mMaxSize = maxSize;
     }
 
     public void enqueue(ItemType element) throws InterruptedException {
         synchronized (lock) {
-            while (mQueue.size() == mSize) {
+            while (mQueue.size() == mMaxSize) {
                 lock.wait();
             }
             mQueue.add(element);
@@ -32,6 +32,10 @@ public class BlockingQueue<ItemType> {
             lock.notifyAll();
             return item;
         }
+    }
+
+    public synchronized long getSize() {
+        return mQueue.size();
     }
 
 }
