@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.threadpool;
+package ru.nsu.ccfit.boltava;
 
 import java.util.ArrayList;
 

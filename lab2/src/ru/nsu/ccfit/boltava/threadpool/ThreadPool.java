@@ -1,6 +1,8 @@
 package ru.nsu.ccfit.boltava.threadpool;
 
 
+import ru.nsu.ccfit.boltava.BlockingQueue;
+
 public class ThreadPool {
 
     private BlockingQueue<Task> mTaskQueue;

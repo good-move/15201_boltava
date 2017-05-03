@@ -1,6 +1,6 @@
-package ru.nsu.ccfit.boltava.warehouse;
+package ru.nsu.ccfit.boltava.storage;
 
-import ru.nsu.ccfit.boltava.threadpool.BlockingQueue;
+import ru.nsu.ccfit.boltava.BlockingQueue;
 
 public class Storage<ItemType> {
 
