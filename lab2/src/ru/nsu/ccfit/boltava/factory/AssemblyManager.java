@@ -17,8 +17,8 @@ public class AssemblyManager implements ISubscriber {
         carStorageManager.subscribe(this);
     }
 
-    public void addTaskInstruction(CarDescription carDescription) {
-        carDescription.getCarSerial();
+    public void addCarDescription(CarDescription carDescription) {
+        mCarDescriptions.put(carDescription.getCarSerial(), carDescription);
     }
 
     @Override
