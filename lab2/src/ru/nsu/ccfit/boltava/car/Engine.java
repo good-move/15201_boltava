@@ -4,10 +4,6 @@ public class Engine extends Component {
 
     private static final IDGenerator mIDGenerator = new IDGenerator(Engine.class.getName());
 
-    public Engine() {
-        super("", mIDGenerator.getId());
-    }
-
     public Engine(String serial) {
         super(serial, mIDGenerator.getId());
     }
