@@ -1,6 +1,6 @@
 package ru.nsu.ccfit.boltava.threadpool;
 
-public interface Task extends Runnable {
+public interface ITask extends Runnable {
 
     String getName();
     void execute();

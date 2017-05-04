@@ -5,7 +5,7 @@ import ru.nsu.ccfit.boltava.BlockingQueue;
 
 public class ThreadPool {
 
-    private BlockingQueue<Task> mTaskQueue;
+    private BlockingQueue<ITask> mTaskQueue;
     private Thread[] mWorkers;
     private int mActiveWorkersCount = 0;
 
@@ -19,8 +19,8 @@ public class ThreadPool {
         }
     }
 
-    public void feed(Task task) throws InterruptedException {
-        mTaskQueue.enqueue(task);
+    public void feed(ITask ITask) throws InterruptedException {
+        mTaskQueue.enqueue(ITask);
     }
 
     private synchronized void incrementTaskCounter() {
@@ -41,9 +41,9 @@ public class ThreadPool {
         public void run() {
             try {
                 while (true) {
-                    Task task = mTaskQueue.dequeue();
+                    ITask ITask = mTaskQueue.dequeue();
                     incrementTaskCounter();
-                    task.execute();
+                    ITask.execute();
                     decrementTaskCounter();
                 }
             } catch (InterruptedException e) {

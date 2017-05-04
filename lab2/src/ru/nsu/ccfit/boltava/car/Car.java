@@ -15,4 +15,9 @@ public class Car {
         mId = mIDGenerator.getId();
     }
 
+
+    public long getId() {
+        return mId;
+    }
+
 }
