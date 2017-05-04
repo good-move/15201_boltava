@@ -49,10 +49,10 @@ public class Assembly {
         @Override
         public void execute() {
             try {
-                Engine engine = mEngineStorageManager.get(mEngineSerial);
-                Body body = mBodyStorageManager.get(mBodySerial);
-                Accessory accessory = mAccessoryStorageManager.get(mAccessorySerial);
-                mCarStorageManager.put(new Car(engine, body, accessory), mCarSerial);
+                Engine engine = mEngineStorageManager.getStorage(mEngineSerial).get();
+                Body body = mBodyStorageManager.getStorage(mBodySerial).get();
+                Accessory accessory = mAccessoryStorageManager.getStorage(mAccessorySerial).get();
+                mCarStorageManager.getStorage(mCarSerial).put(new Car(engine, body, accessory));
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

@@ -17,12 +17,8 @@ public class StorageManager<ItemType> implements IObservable {
         }
     }
 
-    public ItemType get(String engineSerial) throws InterruptedException {
-        return mItemStorageMap.get(engineSerial).get();
-    }
-
-    public void put(ItemType item, String serial) throws InterruptedException {
-        mItemStorageMap.get(serial).put(item);
+    public Storage<ItemType> getStorage(String engineSerial) throws InterruptedException {
+        return mItemStorageMap.get(engineSerial);
     }
 
     @Override

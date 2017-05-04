@@ -23,7 +23,7 @@ public class Dealer extends SimpleRepeatable implements Runnable {
     public void run() {
         try {
             while(true) {
-                Car car = mCarStorageManager.get(mCarSerial);
+                Car car = mCarStorageManager.getStorage(mCarSerial).get();
                 System.out.println("Got a new car! ID: " + car.getId());
                 synchronized (this) {
                     wait(getInterval());
