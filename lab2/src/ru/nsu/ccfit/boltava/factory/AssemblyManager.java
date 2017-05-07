@@ -1,18 +1,17 @@
 package ru.nsu.ccfit.boltava.factory;
 
-import ru.nsu.ccfit.boltava.ISubscriber;
-import ru.nsu.ccfit.boltava.car.CarDescription;
 import ru.nsu.ccfit.boltava.car.Car;
-import ru.nsu.ccfit.boltava.storage.StorageManager;
+import ru.nsu.ccfit.boltava.car.CarDescription;
+import ru.nsu.ccfit.boltava.storage.CarStorageManager;
 
 import java.util.HashMap;
 
-public class AssemblyManager implements ISubscriber {
+public class AssemblyManager implements ICarPurchasedListener {
 
     private final Assembly mAssembly;
     private HashMap<String, CarDescription> mCarDescriptions = new HashMap<>();
 
-    AssemblyManager(StorageManager<Car> carStorageManager, Assembly assembly) {
+    AssemblyManager(CarStorageManager carStorageManager, Assembly assembly) {
         mAssembly = assembly;
         carStorageManager.subscribe(this);
     }
@@ -21,13 +20,9 @@ public class AssemblyManager implements ISubscriber {
         mCarDescriptions.put(carDescription.getCarSerial(), carDescription);
     }
 
-    @Override
-    public void update() {}
-
-
-    public void update(String carSerial) {
+    public void onCarPurchased(Car car) {
         try {
-            mAssembly.createCar(mCarDescriptions.get(carSerial));
+            mAssembly.createCar(mCarDescriptions.get(car.getSerial()));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

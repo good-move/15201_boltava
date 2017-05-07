@@ -52,8 +52,7 @@ public class Assembly {
                 Engine engine = mEngineStorageManager.getStorage(mEngineSerial).get();
                 Body body = mBodyStorageManager.getStorage(mBodySerial).get();
                 Accessory accessory = mAccessoryStorageManager.getStorage(mAccessorySerial).get();
-                mCarStorageManager.getStorage(mCarSerial).put(new Car(engine, body, accessory));
-
+                mCarStorageManager.getStorage(mCarSerial).put(new Car(mCarSerial, engine, body, accessory));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

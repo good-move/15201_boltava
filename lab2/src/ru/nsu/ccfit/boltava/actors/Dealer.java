@@ -1,20 +1,20 @@
 package ru.nsu.ccfit.boltava.actors;
 
 import ru.nsu.ccfit.boltava.car.Car;
-import ru.nsu.ccfit.boltava.storage.StorageManager;
+import ru.nsu.ccfit.boltava.storage.CarStorageManager;
 
 public class Dealer extends SimpleRepeatable implements Runnable {
 
-    private final StorageManager<Car> mCarStorageManager;
+    private final CarStorageManager mCarStorageManager;
     private final String mCarSerial;
 
-    public Dealer(StorageManager<Car> storageManager, String carSerial) {
-        mCarStorageManager = storageManager;
+    public Dealer(CarStorageManager carStorageManager, String carSerial) {
+        mCarStorageManager = carStorageManager;
         mCarSerial = carSerial;
     }
 
-    public Dealer(StorageManager<Car> storageManager, String carSerial, int interval) {
-        mCarStorageManager = storageManager;
+    public Dealer(CarStorageManager carStorageManager, String carSerial, int interval) {
+        mCarStorageManager = carStorageManager;
         mCarSerial = carSerial;
         setInterval(interval);
     }
@@ -24,7 +24,8 @@ public class Dealer extends SimpleRepeatable implements Runnable {
         try {
             while(true) {
                 Car car = mCarStorageManager.getStorage(mCarSerial).get();
-                System.out.println("Got a new car! ID: " + car.getId());
+                mCarStorageManager.checkOut(car);
+                System.out.println("Got a new car! ID: " + car.getId() + "serial: " + car.getSerial());
                 synchronized (this) {
                     wait(getInterval());
                 }
