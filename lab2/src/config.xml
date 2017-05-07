@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+
+    <factory>
+        <storage resource="body" size="10"/>
+        <storage resource="engine" size="20"/>
+        <storage resource="accessory" size="15"/>
+        <storage resource="car" size="30"/>
+        <workers count="10"/>
+    </factory>
+
+    <suppliers>
+        <engine_suppliers>
+            <supplier component_serial="e2e1" />
+            <supplier component_serial="e2e2" />
+            <supplier component_serial="e2e3" />
+            <supplier component_serial="e2e4" />
+        </engine_suppliers>
+        <body_suppliers>
+            <supplier component_serial="e2e5" />
+            <supplier component_serial="e2e6" />
+            <supplier component_serial="e2e7" />
+            <supplier component_serial="e2e8" />
+        </body_suppliers>
+        <accessory_suppliers>
+            <supplier component_serial="1" />
+            <supplier component_serial="2" />
+            <supplier component_serial="3" />
+            <supplier component_serial="4" />
+        </accessory_suppliers>
+    </suppliers>
+
+    <dealers>
+        <dealer car_serial="121" />
+        <dealer car_serial="122" />
+    </dealers>
+
+    <cars>
+        <car serial="121" make="Audi" model="a7">
+            <engine serial="e2e1"/>
+            <body serial="e2e6"/>
+            <accessory serial="1"/>
+            <accessory serial="2"/>
+        </car>
+        <car serial="122" make="BMW" model="m5">
+            <engine serial="e2e2"/>
+            <body serial="e2e5"/>
+            <accessory serial="1"/>
+            <accessory serial="3"/>
+        </car>
+    </cars>
+
+</config>
