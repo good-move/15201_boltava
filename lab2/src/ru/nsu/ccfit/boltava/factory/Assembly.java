@@ -13,23 +13,27 @@ public class Assembly {
     private final StorageManager<Body> mBodyStorageManager;
     private final StorageManager<Accessory> mAccessoryStorageManager;
     private final StorageManager<Car> mCarStorageManager;
-    private final AssemblyLines mWorkers;
+    private final AssemblyLines mAssemblyLines;
 
     public Assembly(StorageManager<Engine> eStorageManager,
                     StorageManager<Body> bStorageManager,
                     StorageManager<Accessory> aStorageManager,
-                    StorageManager<Car> cStorage,
+                    StorageManager<Car> cStorageManager,
                     int taskQueueSize,
                     int workersCount) {
         mEngineStorageManager = eStorageManager;
         mBodyStorageManager = bStorageManager;
         mAccessoryStorageManager = aStorageManager;
-        mCarStorageManager = cStorage;
-        mWorkers = new AssemblyLines(taskQueueSize, workersCount);
+        mCarStorageManager = cStorageManager;
+        mAssemblyLines = new AssemblyLines(taskQueueSize, workersCount);
     }
 
     public void createCar(CarDescription carDescription) throws InterruptedException {
-        mWorkers.addTask(new AssembleCarTask(carDescription));
+        mAssemblyLines.addTask(new AssembleCarTask(carDescription));
+    }
+
+    public void shutDown() {
+        mAssemblyLines.shutDown();
     }
 
     private class AssembleCarTask implements ITask {

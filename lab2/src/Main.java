@@ -1,13 +1,14 @@
 import org.xml.sax.SAXException;
 import ru.nsu.ccfit.boltava.ConfigParser;
 import ru.nsu.ccfit.boltava.EnvironmentConfiguration;
+import ru.nsu.ccfit.boltava.FactoryManager;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         ConfigParser parser = new ConfigParser();
         String xmlFile = "./src/config.xml";
@@ -19,19 +20,13 @@ public class Main {
             System.out.println(ec.getEngineSuppliersInfo());
             System.out.println(ec.getBodySuppliersInfo());
             System.out.println(ec.getAccessorySuppliersInfo());
-
-            // create car dealers for each ordered car serial (new threads)
-            // create car storage for each car in car description
-            // for each id in component suppliers info:
-            //      create component storage
-            //      create supplier
-            // create storage mangers for each storage component
-
-
-
+            FactoryManager factoryManager = new FactoryManager(ec);
+            factoryManager.launchFactory();
+//            factoryManager.stopFactory();
         } catch (SAXException | IOException | ParserConfigurationException e) {
             e.printStackTrace();
         }
 
     }
+
 }

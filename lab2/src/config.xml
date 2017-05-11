@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<config schemaLocation="config.xsd">
+<config>
 
     <factory>
         <storage resource="body" size="3"/>
         <storage resource="engine" size="20"/>
         <storage resource="accessory" size="15"/>
         <storage resource="car" size="30"/>
-        <workers count="10"/>
+        <workers count="5"/>
     </factory>
 
     <suppliers>
@@ -34,6 +34,7 @@
     <dealers>
         <dealer car_serial="121" count="5"/>
         <dealer car_serial="122" count="4" />
+        <dealer car_serial="123" count="1" />
     </dealers>
 
     <cars>

@@ -5,20 +5,19 @@ import ru.nsu.ccfit.boltava.ISubscriber;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class StorageManager<ItemType> implements IObservable {
 
     private HashMap<String, Storage<ItemType>> mItemStorageMap = new HashMap<>();
     private HashSet<ISubscriber> mSubscribers = new HashSet<>();
 
-    public StorageManager(String[] itemModels, int maxStorageSize) {
-        for (String model : itemModels) {
-            mItemStorageMap.put(model, new Storage<>(maxStorageSize));
-        }
+    public StorageManager(List<String> itemSerials, int maxStorageSize) {
+        itemSerials.forEach(serial -> mItemStorageMap.put(serial, new Storage<>(maxStorageSize)));
     }
 
-    public Storage<ItemType> getStorage(String engineSerial) throws InterruptedException {
-        return mItemStorageMap.get(engineSerial);
+    public Storage<ItemType> getStorage(String componentSerial) throws InterruptedException {
+        return mItemStorageMap.get(componentSerial);
     }
 
     @Override

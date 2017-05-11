@@ -1,17 +1,17 @@
-package ru.nsu.ccfit.boltava.car;
+package ru.nsu.ccfit.boltava;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-class IDGenerator {
+public class IDGenerator {
 
     private AtomicLong mCurrentId = new AtomicLong(0);
     private final String mTarget;
 
-    IDGenerator(String host) {
+    public IDGenerator(String host) {
         mTarget = host;
     }
 
-    long getId() {
+    public long getId() {
         if (mCurrentId.get() - 1 == Long.MAX_VALUE) {
             throw new RuntimeException("Ran out of ids for " + mTarget);
         }

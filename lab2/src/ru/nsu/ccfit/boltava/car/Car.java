@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.car;
 
+import ru.nsu.ccfit.boltava.IDGenerator;
+
 public class Car {
 
     private static final IDGenerator mIDGenerator = new IDGenerator(Car.class.getName());

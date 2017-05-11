@@ -3,7 +3,7 @@ package ru.nsu.ccfit.boltava.factory;
 
 import ru.nsu.ccfit.boltava.BlockingQueue;
 
-public class AssemblyLines {
+class AssemblyLines {
 
     private BlockingQueue<ITask> mTaskQueue;
     private Thread[] mWorkers;
@@ -14,7 +14,8 @@ public class AssemblyLines {
         mWorkers = new Thread[workersCount];
 
         for (int i = 0; i < workersCount; ++i) {
-            mWorkers[i] = new Thread(new Worker());
+            mWorkers[i] = new Thread(new Worker("Assembly Worker " + i));
+            mWorkers[i].setName("Assembly Worker " + i);
             mWorkers[i].start();
         }
     }
@@ -22,6 +23,13 @@ public class AssemblyLines {
     public void addTask(ITask ITask) throws InterruptedException {
         mTaskQueue.enqueue(ITask);
     }
+
+    public void shutDown() {
+        for (Thread thread : mWorkers) {
+            thread.interrupt();
+        }
+    }
+
 
     private synchronized void incrementTaskCounter() {
         mActiveWorkersCount++;
@@ -37,17 +45,24 @@ public class AssemblyLines {
 
     private class Worker implements Runnable {
 
+        private final String mName;
+
+        Worker(String name) {
+            mName = name;
+        }
+
         @Override
         public void run() {
             try {
                 while (true) {
+                    System.out.println(this.getClass().getSimpleName() + ": hard working");
                     ITask ITask = mTaskQueue.dequeue();
                     incrementTaskCounter();
                     ITask.execute();
                     decrementTaskCounter();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println(mName + ": I've been interrupted");
             }
         }
 

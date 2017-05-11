@@ -3,13 +3,14 @@ package ru.nsu.ccfit.boltava.storage;
 import ru.nsu.ccfit.boltava.car.Car;
 import ru.nsu.ccfit.boltava.factory.ICarPurchasedListener;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class CarStorageManager extends StorageManager<Car> {
 
-    private ArrayList<ICarPurchasedListener> mCarPurchasedListeners = new ArrayList<>();
+    private HashSet<ICarPurchasedListener> mCarPurchasedListeners = new HashSet<>();
 
-    public CarStorageManager(String[] carModels, int maxStorageSize) {
+    public CarStorageManager(List<String> carModels, int maxStorageSize) {
         super(carModels, maxStorageSize);
     }
 
@@ -17,8 +18,12 @@ public class CarStorageManager extends StorageManager<Car> {
         mCarPurchasedListeners.forEach(listener -> listener.onCarPurchased(car));
     }
 
-    public void subscribe(ICarPurchasedListener listener) {
+    public void addCarPurchasedListener(ICarPurchasedListener listener) {
         mCarPurchasedListeners.add(listener);
+    }
+
+    public void removeCarPurchasedListener(ICarPurchasedListener listener) {
+        mCarPurchasedListeners.remove(listener);
     }
 
 

@@ -34,7 +34,7 @@ public class BlockingQueue<ItemType> {
         }
     }
 
-    public synchronized long getSize() {
+    public long getSize() {
         return mQueue.size();
     }
 
