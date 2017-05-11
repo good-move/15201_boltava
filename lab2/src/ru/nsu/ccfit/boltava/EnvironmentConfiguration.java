@@ -6,59 +6,59 @@ import java.util.HashMap;
 
 public class EnvironmentConfiguration {
 
-    private HashMap<String, CarDescription> mCarDescriptions;
-    private FactoryInfo mFactoryInfo;
-    private String[] mCarSerials;
-    private String[] mSuppliedEngineSerials;
-    private String[] mSuppliedBodySerials;
-    private String[] mSuppliedAccessorySerials;
+    private HashMap<String, CarDescription> carDescriptions;
+    private FactoryInfo factoryInfo;
+    private HashMap<String, Integer> orderedCarSerials;
+    private HashMap<String, Integer> engineSuppliersInfo;
+    private HashMap<String, Integer> bodySuppliersInfo;
+    private HashMap<String, Integer> accessorySuppliersInfo;
 
     public HashMap<String, CarDescription> getCarDescriptions() {
-        return mCarDescriptions;
+        return carDescriptions;
     }
 
     public void setCarDescriptions(HashMap<String, CarDescription> carDescriptions) {
-        this.mCarDescriptions = carDescriptions;
+        this.carDescriptions = carDescriptions;
     }
 
     public FactoryInfo getFactoryInfo() {
-        return mFactoryInfo;
+        return factoryInfo;
     }
 
     public void setFactoryInfo(FactoryInfo factoryInfo) {
-        this.mFactoryInfo = factoryInfo;
+        this.factoryInfo = factoryInfo;
     }
 
-    public String[] getCarSerials() {
-        return mCarSerials;
+    public HashMap<String, Integer> getOrderedCarSerials() {
+        return orderedCarSerials;
     }
 
-    public void setCarSerials(String[] carSerials) {
-        this.mCarSerials = carSerials;
+    public void setOrderedCarSerials(HashMap<String, Integer> orderedCarSerials) {
+        this.orderedCarSerials = orderedCarSerials;
     }
 
-    public String[] getSuppliedEngineSerials() {
-        return mSuppliedEngineSerials;
+    public HashMap<String, Integer> getEngineSuppliersInfo() {
+        return engineSuppliersInfo;
     }
 
-    public void setSuppliedEngineSerials(String[] suppliedEngineSerials) {
-        this.mSuppliedEngineSerials = suppliedEngineSerials;
+    public void setEngineSuppliersInfo(HashMap<String, Integer> engineSuppliersInfo) {
+        this.engineSuppliersInfo = engineSuppliersInfo;
     }
 
-    public String[] getSuppliedBodySerials() {
-        return mSuppliedBodySerials;
+    public HashMap<String, Integer> getBodySuppliersInfo() {
+        return bodySuppliersInfo;
     }
 
-    public void setSuppliedBodySerials(String[] suppliedBodySerials) {
-        this.mSuppliedBodySerials = suppliedBodySerials;
+    public void setBodySuppliersInfo(HashMap<String, Integer> bodySuppliersInfo) {
+        this.bodySuppliersInfo = bodySuppliersInfo;
     }
 
-    public String[] getSuppliedAccessorySerials() {
-        return mSuppliedAccessorySerials;
+    public HashMap<String, Integer> getAccessorySuppliersInfo() {
+        return accessorySuppliersInfo;
     }
 
-    public void setSuppliedAccessorySerials(String[] suppliedAccessorySerials) {
-        this.mSuppliedAccessorySerials = suppliedAccessorySerials;
+    public void setAccessorySuppliersInfo(HashMap<String, Integer> accessorySuppliersInfo) {
+        this.accessorySuppliersInfo = accessorySuppliersInfo;
     }
 
     public static class FactoryInfo {
@@ -69,6 +69,8 @@ public class EnvironmentConfiguration {
         int mBodyStorageSize;
         int mAccessoryStorageSize;
 
+
+        public FactoryInfo() {}
 
         public FactoryInfo(int workersCount,
                            int carStorageSize,
@@ -103,6 +105,25 @@ public class EnvironmentConfiguration {
             return mAccessoryStorageSize;
         }
 
+        public void setWorkersCount(int mWorkersCount) {
+            this.mWorkersCount = mWorkersCount;
+        }
+
+        public void setCarStorageSize(int mCarStorageSize) {
+            this.mCarStorageSize = mCarStorageSize;
+        }
+
+        public void setEngineStorageSize(int mEngineStorageSize) {
+            this.mEngineStorageSize = mEngineStorageSize;
+        }
+
+        public void setBodyStorageSize(int mBodyStorageSize) {
+            this.mBodyStorageSize = mBodyStorageSize;
+        }
+
+        public void setAccessoryStorageSize(int mAccessoryStorageSize) {
+            this.mAccessoryStorageSize = mAccessoryStorageSize;
+        }
     }
 
 }

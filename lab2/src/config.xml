@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<config>
+<?xml version="1.0" encoding="utf-8"?>
+
+<config schemaLocation="config.xsd">
 
     <factory>
-        <storage resource="body" size="10"/>
+        <storage resource="body" size="3"/>
         <storage resource="engine" size="20"/>
         <storage resource="accessory" size="15"/>
         <storage resource="car" size="30"/>
@@ -11,28 +12,28 @@
 
     <suppliers>
         <engine_suppliers>
-            <supplier component_serial="e2e1" />
-            <supplier component_serial="e2e2" />
-            <supplier component_serial="e2e3" />
-            <supplier component_serial="e2e4" />
+            <supplier component_serial="e2e1" count="2" />
+            <supplier component_serial="e2e2" count="4" />
+            <supplier component_serial="e2e3" count="5" />
+            <supplier component_serial="e2e4" count="10" />
         </engine_suppliers>
         <body_suppliers>
-            <supplier component_serial="e2e5" />
-            <supplier component_serial="e2e6" />
-            <supplier component_serial="e2e7" />
-            <supplier component_serial="e2e8" />
+            <supplier component_serial="e2e5" count="2" />
+            <supplier component_serial="e2e6" count="2" />
+            <supplier component_serial="e2e7" count="2" />
+            <supplier component_serial="e2e8" count="2" />
         </body_suppliers>
         <accessory_suppliers>
-            <supplier component_serial="1" />
-            <supplier component_serial="2" />
-            <supplier component_serial="3" />
-            <supplier component_serial="4" />
+            <supplier component_serial="1" count="2" />
+            <supplier component_serial="2" count="2" />
+            <supplier component_serial="3" count="2" />
+            <supplier component_serial="4" count="2" />
         </accessory_suppliers>
     </suppliers>
 
     <dealers>
-        <dealer car_serial="121" />
-        <dealer car_serial="122" />
+        <dealer car_serial="121" count="5"/>
+        <dealer car_serial="122" count="4" />
     </dealers>
 
     <cars>

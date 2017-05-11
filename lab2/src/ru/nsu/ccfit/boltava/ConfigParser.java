@@ -2,50 +2,59 @@ package ru.nsu.ccfit.boltava;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import ru.nsu.ccfit.boltava.car.CarDescription;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class ConfigParser {
 
     private Document mDocument;
 
-    public EnvironmentConfiguration parse(String filename) throws ParserConfigurationException, IOException, SAXException {
+    public EnvironmentConfiguration parse(String xmlFile, String xsdFile)
+            throws ParserConfigurationException, IOException, SAXException {
+//        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+//        Schema schema = schemaFactory.newSchema(new File(""));
+
+
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setValidating(true);
+//        factory.setSchema(schema);
+//        factory.setValidating(true);
         factory.setIgnoringElementContentWhitespace(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.parse(new File(filename));
+        mDocument = builder.parse(new File(xmlFile));
 
         HashMap<String, CarDescription> carDescriptions = getCarDescriptions();
-        String[] carSerials = getDealerCarSerials();
-        String[] suppliedBodySerials = getSuppliedBodySerials();
-        String[] suppliedEngineSerials = getSuppliedEngineSerials();
-        String[] suppliedAccessorySerials = getSuppliedAccessorySerials();
+        HashMap<String, Integer> carSerials = getDealerCarSerials();
+        HashMap<String, Integer> suppliedBodySerials = getBodySuppliersInfo();
+        HashMap<String, Integer> suppliedEngineSerials = getEngineSuppliersInfo();
+        HashMap<String, Integer> suppliedAccessorySerials = getAccessorySuppliersInfo();
         EnvironmentConfiguration.FactoryInfo finfo = getFactoryInfo();
 
         EnvironmentConfiguration ec = new EnvironmentConfiguration();
 
         ec.setCarDescriptions(carDescriptions);
-        ec.setCarSerials(carSerials);
+        ec.setOrderedCarSerials(carSerials);
         ec.setFactoryInfo(finfo);
-        ec.setSuppliedEngineSerials(suppliedEngineSerials);
-        ec.setSuppliedBodySerials(suppliedBodySerials);
-        ec.setSuppliedAccessorySerials(suppliedAccessorySerials);
+        ec.setEngineSuppliersInfo(suppliedEngineSerials);
+        ec.setBodySuppliersInfo(suppliedBodySerials);
+        ec.setAccessorySuppliersInfo(suppliedAccessorySerials);
 
         return ec;
     }
 
-    private String[] getDealerCarSerials() {
-        HashSet<String> carSerials = new HashSet<>();
+    private HashMap<String, Integer> getDealerCarSerials() {
+        HashMap<String, Integer> orderedCarsSerials = new HashMap<>();
 
         NodeList dealers = mDocument
                 .getElementsByTagName("dealers")
@@ -53,12 +62,16 @@ public class ConfigParser {
                 .getChildNodes();
 
         for (int i = 0; i < dealers.getLength(); ++i) {
+            if (dealers.item(i).getNodeType() != Node.ELEMENT_NODE) continue;
             Element dealer = (Element) dealers.item(i);
             String carSerial = dealer.getAttribute("car_serial");
-            carSerials.add(carSerial);
+            Integer dealersCount = Integer.parseInt(dealer.getAttribute("count"));
+            if (orderedCarsSerials.put(carSerial, dealersCount) != null) {
+                System.out.println("Multiple occurrence of dealers of serial " + carSerial);
+            }
         }
 
-        return carSerials.toArray(new String[0]);
+        return orderedCarsSerials;
     }
 
     private HashMap<String, CarDescription> getCarDescriptions() {
@@ -70,6 +83,7 @@ public class ConfigParser {
                 .getChildNodes();
 
         for (int i = 0; i < cars.getLength(); ++i) {
+            if (cars.item(i).getNodeType() != Node.ELEMENT_NODE) continue;
             Element car = (Element) cars.item(i);
             Element engine =  (Element) car.getElementsByTagName("engine").item(0);
             Element body =  (Element) car.getElementsByTagName("body").item(0);
@@ -87,34 +101,36 @@ public class ConfigParser {
         return carDescriptions;
     }
 
-    private String[] getSuppliedEngineSerials() {
-        return getComponentSerials("engine_suppliers");
+    private HashMap<String, Integer> getEngineSuppliersInfo() {
+        return getComponentSuppliersInfo("engine_suppliers");
     }
 
-    private String[] getSuppliedBodySerials() {
-        return getComponentSerials("body_suppliers");
+    private HashMap<String, Integer> getBodySuppliersInfo() {
+        return getComponentSuppliersInfo("body_suppliers");
     }
 
-    private String[] getSuppliedAccessorySerials() {
-        return getComponentSerials("accessory_suppliers");
+    private HashMap<String, Integer> getAccessorySuppliersInfo() {
+        return getComponentSuppliersInfo("accessory_suppliers");
     }
 
-    private String[] getComponentSerials(String supplierType) {
-        Element suppliers = (Element) mDocument.getElementsByTagName("suppliers");
+    private HashMap<String, Integer> getComponentSuppliersInfo(String supplierType) {
+        Element suppliers = (Element) mDocument.getElementsByTagName("suppliers").item(0);
         NodeList componentSuppliers = suppliers.
                 getElementsByTagName(supplierType)
                 .item(0)
                 .getChildNodes();
 
-        HashSet<String> serials = new HashSet<>();
+        HashMap<String, Integer> suppliersInfo = new HashMap<>();
 
         for (int i = 0; i < componentSuppliers.getLength(); ++i) {
+            if (componentSuppliers.item(i).getNodeType() != Node.ELEMENT_NODE) continue;
             Element componentSupplier = (Element) componentSuppliers.item(i);
             String componentSerial = componentSupplier.getAttribute("component_serial");
-            serials.add(componentSerial);
+            Integer suppliersCount = Integer.parseInt(componentSupplier.getAttribute("count"));
+            suppliersInfo.put(componentSerial, suppliersCount);
         }
 
-        return serials.toArray(new String[0]);
+        return suppliersInfo;
     }
 
     private EnvironmentConfiguration.FactoryInfo getFactoryInfo() {
@@ -123,39 +139,29 @@ public class ConfigParser {
                 .item(0)
                 .getChildNodes();
 
-        int carStorageSize = 0;
-        int engineStorageSize = 0;
-        int bodyStorageSize = 0;
-        int accessoryStorageSize = 0;
-        int workersCount = 0;
-
-
+        EnvironmentConfiguration.FactoryInfo fi = new EnvironmentConfiguration.FactoryInfo();
 
         for (int i = 0; i < factoryProperties.getLength(); ++i) {
+            if (factoryProperties.item(i).getNodeType() != Node.ELEMENT_NODE) continue;
             Element property = (Element) factoryProperties.item(i);
             if (property.getTagName().equals("storage")) {
                 String resource = property.getAttribute("resource");
                 int size = Integer.parseInt(property.getAttribute("size"));
 
                 switch (resource) {
-                    case "car": carStorageSize = size; break;
-                    case "engine": engineStorageSize = size; break;
-                    case "body": bodyStorageSize = size; break;
-                    case "accessory": accessoryStorageSize = size; break;
-                    case "default": throw new RuntimeException("Unknown resource: " + resource);
+                    case "car": fi.setCarStorageSize(size); break;
+                    case "engine": fi.setEngineStorageSize(size); break;
+                    case "body": fi.setBodyStorageSize(size); break;
+                    case "accessory": fi.setAccessoryStorageSize(size); break;
+                    default: throw new RuntimeException("Unknown resource: " + resource);
                 }
 
             } else if (property.getTagName().equals("workers")) {
-                workersCount = Integer.parseInt(property.getAttribute("count"));
+                fi.setWorkersCount(Integer.parseInt(property.getAttribute("count")));
             }
         }
 
-        return new EnvironmentConfiguration.FactoryInfo(
-                carStorageSize,
-                engineStorageSize,
-                bodyStorageSize,
-                accessoryStorageSize,
-                workersCount);
+        return fi;
     }
 
 }
