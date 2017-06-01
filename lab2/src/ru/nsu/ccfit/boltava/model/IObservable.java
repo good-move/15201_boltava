@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava;
+package ru.nsu.ccfit.boltava.model;
 
 public interface IObservable {
 

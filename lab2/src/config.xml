@@ -12,28 +12,28 @@
 
     <suppliers>
         <engine_suppliers>
-            <supplier component_serial="e2e1" count="2" />
-            <supplier component_serial="e2e2" count="4" />
-            <supplier component_serial="e2e3" count="5" />
-            <supplier component_serial="e2e4" count="10" />
+            <supplier component_serial="e2e1" count="1" />
+            <supplier component_serial="e2e2" count="1" />
+            <supplier component_serial="e2e3" count="1" />
+            <supplier component_serial="e2e4" count="1" />
         </engine_suppliers>
         <body_suppliers>
-            <supplier component_serial="e2e5" count="2" />
-            <supplier component_serial="e2e6" count="2" />
-            <supplier component_serial="e2e7" count="2" />
-            <supplier component_serial="e2e8" count="2" />
+            <supplier component_serial="e2e5" count="1" />
+            <supplier component_serial="e2e6" count="1" />
+            <supplier component_serial="e2e7" count="1" />
+            <supplier component_serial="e2e8" count="1" />
         </body_suppliers>
         <accessory_suppliers>
             <supplier component_serial="1" count="2" />
-            <supplier component_serial="2" count="2" />
-            <supplier component_serial="3" count="2" />
-            <supplier component_serial="4" count="2" />
+            <supplier component_serial="2" count="1" />
+            <supplier component_serial="3" count="1" />
+            <supplier component_serial="4" count="1" />
         </accessory_suppliers>
     </suppliers>
 
     <dealers>
-        <dealer car_serial="121" count="5"/>
-        <dealer car_serial="122" count="4" />
+        <dealer car_serial="121" count="1"/>
+        <dealer car_serial="122" count="1" />
         <dealer car_serial="123" count="1" />
     </dealers>
 

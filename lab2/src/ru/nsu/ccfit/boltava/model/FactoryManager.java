@@ -1,15 +1,15 @@
-package ru.nsu.ccfit.boltava;
+package ru.nsu.ccfit.boltava.model;
 
-import ru.nsu.ccfit.boltava.actors.Dealer;
-import ru.nsu.ccfit.boltava.actors.Supplier;
-import ru.nsu.ccfit.boltava.car.Accessory;
-import ru.nsu.ccfit.boltava.car.Body;
-import ru.nsu.ccfit.boltava.car.Component;
-import ru.nsu.ccfit.boltava.car.Engine;
-import ru.nsu.ccfit.boltava.factory.Assembly;
-import ru.nsu.ccfit.boltava.factory.AssemblyManager;
-import ru.nsu.ccfit.boltava.storage.CarStorageManager;
-import ru.nsu.ccfit.boltava.storage.StorageManager;
+import ru.nsu.ccfit.boltava.model.actors.Dealer;
+import ru.nsu.ccfit.boltava.model.actors.Supplier;
+import ru.nsu.ccfit.boltava.model.car.Accessory;
+import ru.nsu.ccfit.boltava.model.car.Body;
+import ru.nsu.ccfit.boltava.model.car.Component;
+import ru.nsu.ccfit.boltava.model.car.Engine;
+import ru.nsu.ccfit.boltava.model.factory.Assembly;
+import ru.nsu.ccfit.boltava.model.factory.AssemblyManager;
+import ru.nsu.ccfit.boltava.model.storage.CarStorageManager;
+import ru.nsu.ccfit.boltava.model.storage.StorageManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,12 +79,12 @@ public class FactoryManager {
         System.out.println("Dealers");
 
         HashMap<String, Integer> dealersInfo = ec.getOrderedCarSerials();
-        for (String carSerial: dealersInfo.keySet()) {
+        dealersInfo.keySet().forEach(carSerial -> {
             for (int i = 0; i < dealersInfo.get(carSerial); ++i ) {
                 mDealers.add(new Dealer(mCarStorageManager, carSerial));
                 mInitialOrders.add(carSerial);
             }
-        }
+        });
 
 
     }
@@ -96,15 +96,15 @@ public class FactoryManager {
         mBodySuppliers.forEach(supplier -> supplier.getThread().start());
         mAccessorySuppliers.forEach(supplier -> supplier.getThread().start());
         mDealers.forEach(dealer -> dealer.getThread().start());
-        mAssemblyManager.setInitialOrders(mInitialOrders);
     }
 
     public void stopFactory() {
         mAssembly.shutDown();
-        mEngineSuppliers.forEach(supplier -> supplier.getThread().start());
-        mBodySuppliers.forEach(supplier -> supplier.getThread().start());
-        mAccessorySuppliers.forEach(supplier -> supplier.getThread().start());
-        mDealers.forEach(dealer -> dealer.getThread().start());
+        mEngineSuppliers.forEach(supplier -> supplier.getThread().interrupt());
+        mBodySuppliers.forEach(supplier -> supplier.getThread().interrupt());
+        mAccessorySuppliers.forEach(supplier -> supplier.getThread().interrupt());
+        mDealers.forEach(dealer -> dealer.getThread().interrupt());
+        isRunning = false;
     }
 
     private <ItemType extends Component> void callSuppliers(
@@ -112,12 +112,12 @@ public class FactoryManager {
             HashMap<String, Integer> suppliersInfo,
             Class<ItemType> itemClass,
             StorageManager<ItemType> storageManager) {
-
-        for (String componentSerial : suppliersInfo.keySet()) {
+        suppliersInfo.keySet().forEach(componentSerial -> {
             for (int i = 0; i < suppliersInfo.get(componentSerial); i++) {
                 suppliers.add(new Supplier<>(storageManager, itemClass, componentSerial));
             }
-        }
+
+        });
     }
 
 }

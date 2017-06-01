@@ -1,6 +1,6 @@
-package ru.nsu.ccfit.boltava.car;
+package ru.nsu.ccfit.boltava.model.car;
 
-import ru.nsu.ccfit.boltava.IDGenerator;
+import ru.nsu.ccfit.boltava.model.IDGenerator;
 
 public class Car {
 

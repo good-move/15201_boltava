@@ -1,6 +1,6 @@
-package ru.nsu.ccfit.boltava;
+package ru.nsu.ccfit.boltava.model;
 
-import ru.nsu.ccfit.boltava.car.CarDescription;
+import ru.nsu.ccfit.boltava.model.car.CarDescription;
 
 import java.util.HashMap;
 

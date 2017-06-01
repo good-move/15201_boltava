@@ -1,9 +1,10 @@
-package ru.nsu.ccfit.boltava.actors;
+package ru.nsu.ccfit.boltava.model.actors;
 
-import ru.nsu.ccfit.boltava.IDGenerator;
-import ru.nsu.ccfit.boltava.car.Car;
-import ru.nsu.ccfit.boltava.storage.CarStorageManager;
-import ru.nsu.ccfit.boltava.storage.Storage;
+import ru.nsu.ccfit.boltava.model.IDGenerator;
+import ru.nsu.ccfit.boltava.model.car.Car;
+import ru.nsu.ccfit.boltava.model.factory.AssemblyManager;
+import ru.nsu.ccfit.boltava.model.storage.CarStorageManager;
+import ru.nsu.ccfit.boltava.model.storage.Storage;
 
 public class Dealer extends SimpleRepeatable {
 
@@ -39,7 +40,7 @@ public class Dealer extends SimpleRepeatable {
                 while (true) {
                     Storage<Car> carStorage = mCarStorageManager.getStorage(mCarSerial);
                     if (carStorage == null) {
-                        System.err.println(String.format("Storage with cars %s is unavailable", mCarSerial));
+                        System.err.println(String.format("Storage with cars %s doesn't exist", mCarSerial));
                         break;
                     }
                     Car car = carStorage.get();
@@ -50,7 +51,7 @@ public class Dealer extends SimpleRepeatable {
                     }
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Interrupted dealer of cars with serial " + mCarSerial);
             }
         }
 

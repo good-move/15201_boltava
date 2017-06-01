@@ -1,8 +1,8 @@
-package ru.nsu.ccfit.boltava.actors;
+package ru.nsu.ccfit.boltava.model.actors;
 
-import ru.nsu.ccfit.boltava.IDGenerator;
-import ru.nsu.ccfit.boltava.car.Component;
-import ru.nsu.ccfit.boltava.storage.StorageManager;
+import ru.nsu.ccfit.boltava.model.IDGenerator;
+import ru.nsu.ccfit.boltava.model.car.Component;
+import ru.nsu.ccfit.boltava.model.storage.StorageManager;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -54,7 +54,7 @@ public class Supplier<ItemType extends Component> extends SimpleRepeatable {
                     }
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Interrupted supplier of " + mItemClass.getSimpleName() + " with serial " + mItemSerial);
             } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
                 e.printStackTrace();
             }

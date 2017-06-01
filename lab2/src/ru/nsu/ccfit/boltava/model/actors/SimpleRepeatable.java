@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.actors;
+package ru.nsu.ccfit.boltava.model.actors;
 
 public class SimpleRepeatable implements IRepeatable {
 

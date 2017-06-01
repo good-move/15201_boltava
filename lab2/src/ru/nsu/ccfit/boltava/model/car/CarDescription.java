@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.car;
+package ru.nsu.ccfit.boltava.model.car;
 
 public class CarDescription {
 

@@ -1,7 +1,7 @@
-package ru.nsu.ccfit.boltava.factory;
+package ru.nsu.ccfit.boltava.model.factory;
 
 
-import ru.nsu.ccfit.boltava.BlockingQueue;
+import ru.nsu.ccfit.boltava.model.BlockingQueue;
 
 class AssemblyLines {
 
@@ -39,7 +39,7 @@ class AssemblyLines {
         mActiveWorkersCount--;
     }
 
-    public int getActiveWorkersCount() {
+    public synchronized int getActiveWorkersCount() {
         return mActiveWorkersCount;
     }
 

@@ -1,8 +1,7 @@
-package ru.nsu.ccfit.boltava.factory;
+package ru.nsu.ccfit.boltava.model.factory;
 
-import ru.nsu.ccfit.boltava.car.Car;
-import ru.nsu.ccfit.boltava.car.CarDescription;
-import ru.nsu.ccfit.boltava.storage.CarStorageManager;
+import ru.nsu.ccfit.boltava.model.car.Car;
+import ru.nsu.ccfit.boltava.model.car.CarDescription;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +14,11 @@ public class AssemblyManager implements ICarPurchasedListener {
     public AssemblyManager(Assembly assembly, HashMap<String, CarDescription> carDescriptions) {
         mAssembly = assembly;
         mCarDescriptions = carDescriptions;
+        setInitialOrders();
     }
 
-    public void setInitialOrders(List<String> carSerials) {
-        carSerials.forEach(this::assignTask);
+    public void setInitialOrders() {
+        mCarDescriptions.keySet().forEach(this::assignTask);
     }
 
     public void onCarPurchased(Car car) {
@@ -39,6 +39,14 @@ public class AssemblyManager implements ICarPurchasedListener {
                 e.printStackTrace();
             }
         }
+    }
+
+    public class UnknownCarException extends Exception {
+
+        public UnknownCarException(String msg) {
+            super(msg);
+        }
+
     }
 
 }

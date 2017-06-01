@@ -1,18 +1,15 @@
-package ru.nsu.ccfit.boltava;
+package ru.nsu.ccfit.boltava.model;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import ru.nsu.ccfit.boltava.car.CarDescription;
+import ru.nsu.ccfit.boltava.model.car.CarDescription;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

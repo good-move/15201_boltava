@@ -1,10 +1,6 @@
-package ru.nsu.ccfit.boltava.storage;
+package ru.nsu.ccfit.boltava.model.storage;
 
-import ru.nsu.ccfit.boltava.BlockingQueue;
-import ru.nsu.ccfit.boltava.IObservable;
-import ru.nsu.ccfit.boltava.ISubscriber;
-
-import java.util.HashSet;
+import ru.nsu.ccfit.boltava.model.BlockingQueue;
 
 public class Storage<ItemType> {
 

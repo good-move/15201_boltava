@@ -1,7 +1,8 @@
-package ru.nsu.ccfit.boltava.storage;
+package ru.nsu.ccfit.boltava.model.storage;
 
-import ru.nsu.ccfit.boltava.car.Car;
-import ru.nsu.ccfit.boltava.factory.ICarPurchasedListener;
+import ru.nsu.ccfit.boltava.model.car.Car;
+import ru.nsu.ccfit.boltava.model.factory.AssemblyManager;
+import ru.nsu.ccfit.boltava.model.factory.ICarPurchasedListener;
 
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +26,5 @@ public class CarStorageManager extends StorageManager<Car> {
     public void removeCarPurchasedListener(ICarPurchasedListener listener) {
         mCarPurchasedListeners.remove(listener);
     }
-
 
 }

@@ -1,7 +1,7 @@
-package ru.nsu.ccfit.boltava.storage;
+package ru.nsu.ccfit.boltava.model.storage;
 
-import ru.nsu.ccfit.boltava.IObservable;
-import ru.nsu.ccfit.boltava.ISubscriber;
+import ru.nsu.ccfit.boltava.model.IObservable;
+import ru.nsu.ccfit.boltava.model.ISubscriber;
 
 import java.util.HashMap;
 import java.util.HashSet;

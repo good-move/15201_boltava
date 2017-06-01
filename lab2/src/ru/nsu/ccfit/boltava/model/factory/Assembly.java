@@ -1,11 +1,11 @@
-package ru.nsu.ccfit.boltava.factory;
+package ru.nsu.ccfit.boltava.model.factory;
 
-import ru.nsu.ccfit.boltava.car.CarDescription;
-import ru.nsu.ccfit.boltava.car.Accessory;
-import ru.nsu.ccfit.boltava.car.Body;
-import ru.nsu.ccfit.boltava.car.Car;
-import ru.nsu.ccfit.boltava.car.Engine;
-import ru.nsu.ccfit.boltava.storage.StorageManager;
+import ru.nsu.ccfit.boltava.model.car.CarDescription;
+import ru.nsu.ccfit.boltava.model.car.Accessory;
+import ru.nsu.ccfit.boltava.model.car.Body;
+import ru.nsu.ccfit.boltava.model.car.Car;
+import ru.nsu.ccfit.boltava.model.car.Engine;
+import ru.nsu.ccfit.boltava.model.storage.StorageManager;
 
 public class Assembly {
 
@@ -51,16 +51,11 @@ public class Assembly {
         }
 
         @Override
-        public void execute() {
-            try {
-                Engine engine = mEngineStorageManager.getStorage(mEngineSerial).get();
-                Body body = mBodyStorageManager.getStorage(mBodySerial).get();
-                Accessory accessory = mAccessoryStorageManager.getStorage(mAccessorySerial).get();
-                mCarStorageManager.getStorage(mCarSerial).put(new Car(mCarSerial, engine, body, accessory));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+        public void execute() throws InterruptedException {
+            Engine engine = mEngineStorageManager.getStorage(mEngineSerial).get();
+            Body body = mBodyStorageManager.getStorage(mBodySerial).get();
+            Accessory accessory = mAccessoryStorageManager.getStorage(mAccessorySerial).get();
+            mCarStorageManager.getStorage(mCarSerial).put(new Car(mCarSerial, engine, body, accessory));
         }
 
     }
