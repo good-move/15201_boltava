@@ -14,9 +14,8 @@ public class Main {
         if (true) {
             ConfigParser parser = new ConfigParser();
             String xmlFile = "./src/config.xml";
-            String xsdFile = "./src/config.xsd";
             try {
-                EnvironmentConfiguration ec = parser.parse(xmlFile, xsdFile);
+                EnvironmentConfiguration ec = parser.parse(xmlFile);
 
                 System.out.println(ec.getOrderedCarSerials());
                 System.out.println(ec.getEngineSuppliersInfo());

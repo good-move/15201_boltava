@@ -18,15 +18,10 @@ public class ConfigParser {
 
     private Document mDocument;
 
-    public EnvironmentConfiguration parse(String xmlFile, String xsdFile)
+    public EnvironmentConfiguration parse(String xmlFile)
             throws ParserConfigurationException, IOException, SAXException {
-//        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-//        Schema schema = schemaFactory.newSchema(new File(""));
-
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//        factory.setSchema(schema);
-//        factory.setValidating(true);
         factory.setIgnoringElementContentWhitespace(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
         mDocument = builder.parse(new File(xmlFile));
