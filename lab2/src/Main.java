@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 
-        if (true) {
+        if (false) {
             ConfigParser parser = new ConfigParser();
             String xmlFile = "./src/config.xml";
             try {
@@ -28,9 +28,10 @@ public class Main {
             } catch (SAXException | IOException | ParserConfigurationException e) {
                 e.printStackTrace();
             }
+        } else {
+            Window w = new Window();
         }
 
-//        Window w = new Window();
 
     }
 

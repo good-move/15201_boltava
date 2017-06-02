@@ -41,11 +41,6 @@ public class LabeledSliderWithTextField extends JComponent {
         mOnValueChangedListeners.remove(listener);
     }
 
-    private void onValueChanged(int value) {
-        mOnValueChangedListeners.forEach(listener -> listener.onValueChanged(value));
-    }
-
-
     private void onTimeoutValueChanged() {
         String timeoutString = mTextField.getText().trim();
         if (isTimeoutFormatValid(timeoutString)) {
@@ -53,7 +48,7 @@ public class LabeledSliderWithTextField extends JComponent {
             Integer timeout = Integer.parseInt(timeoutString);
             if (timeout >= mSlider.getMinimum() && timeout <= mSlider.getMaximum()) {
                 mSlider.setValue(timeout);
-                onValueChanged(timeout);
+                mOnValueChangedListeners.forEach(listener -> listener.onValueChanged(timeout));
             } else {
                 mTextField.setBackground(Color.red);
             }

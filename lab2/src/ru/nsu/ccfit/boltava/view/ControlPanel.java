@@ -4,7 +4,6 @@ import javax.swing.*;
 
 public class ControlPanel extends JComponent {
 
-
     private LabeledSliderWithTextField mDealersTimeoutControl;
     private LabeledSliderWithTextField mBodySupplierTimeoutControl;
     private LabeledSliderWithTextField mEngineSupplierTimeoutControl;
@@ -25,7 +24,5 @@ public class ControlPanel extends JComponent {
         mAccessorySupplierTimeoutControl = new LabeledSliderWithTextField(
                 "Accessory", MIN_TIMEOUT, MAX_TIMEOUT, SPACING);
     }
-
-
 
 }
