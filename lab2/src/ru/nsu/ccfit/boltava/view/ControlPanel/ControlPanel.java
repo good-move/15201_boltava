@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.view;
+package ru.nsu.ccfit.boltava.view.ControlPanel;
 
 import ru.nsu.ccfit.boltava.model.FactoryManager;
 
@@ -11,12 +11,14 @@ public class ControlPanel extends JComponent {
     private LabeledSliderWithTextField mEngineSupplierTimeoutControl;
     private LabeledSliderWithTextField mAccessorySupplierTimeoutControl;
     private JPanel mPanel;
+    private JLabel mTitle;
 
     private static int MIN_TIMEOUT = 1;
     private static int MAX_TIMEOUT = 10000;
     private static int SPACING = 10;
 
     public ControlPanel(FactoryManager factoryManager) {
+        mTitle.setText("Timeout Control Panel");
         factoryManager.getDealers().forEach(dealer -> mDealersTimeoutControl.addOnValueChangedListener(dealer));
         factoryManager.getEngineSuppliers().forEach(supplier -> mEngineSupplierTimeoutControl.addOnValueChangedListener(supplier));
         factoryManager.getBodySuppliers().forEach(supplier -> mBodySupplierTimeoutControl.addOnValueChangedListener(supplier));

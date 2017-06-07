@@ -1,6 +1,8 @@
 package ru.nsu.ccfit.boltava.view;
 
 import ru.nsu.ccfit.boltava.model.FactoryManager;
+import ru.nsu.ccfit.boltava.view.ControlPanel.ControlPanel;
+import ru.nsu.ccfit.boltava.view.ProductionStatistics.ProductionStatisticsPanel;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -8,11 +10,11 @@ import java.awt.event.WindowEvent;
 
 public class MainWindow extends JFrame {
 
-    private JPanel mRootPanel;
     private ControlPanel mControlPanel;
-    private JLabel mControlPanelTitle;
-    private CarSalesPanel mWorkflowStats;
     private FactoryManager mFactoryManager;
+    private JPanel mPanel;
+    private CarSalesPanel mCarSalesPanel;
+    private ProductionStatisticsPanel mProductionStatsPanel;
 
 
     public MainWindow(FactoryManager factoryManager) {
@@ -20,9 +22,8 @@ public class MainWindow extends JFrame {
 
         mFactoryManager = factoryManager;
 
-
         this.$$$setupUI$$$();
-        this.setContentPane(mRootPanel);
+        this.setContentPane(mPanel);
         this.setResizable(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -35,8 +36,6 @@ public class MainWindow extends JFrame {
             }
         });
 
-        mControlPanelTitle.setText("Timeout Control Panel");
-
         this.setVisible(true);
         mFactoryManager.launchFactory();
     }
@@ -45,14 +44,16 @@ public class MainWindow extends JFrame {
         mControlPanel = new ControlPanel(mFactoryManager);
         String[] rows = mFactoryManager.getCarSerials();
 
-        mWorkflowStats = new CarSalesPanel(rows);
-        mFactoryManager.getCarStorageManager().addCarPurchasedListener(mWorkflowStats);
+        mCarSalesPanel = new CarSalesPanel(rows);
+        mFactoryManager.getCarStorageManager().addCarPurchasedListener(mCarSalesPanel);
+
+        mProductionStatsPanel = new ProductionStatisticsPanel(mFactoryManager);
     }
 
     private void $$$setupUI$$$() {
         createUIComponents();
 
-        mRootPanel = new JPanel();
+        mPanel = new JPanel();
 
     }
 

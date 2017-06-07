@@ -145,4 +145,16 @@ public class FactoryManager {
         return mCarStorageManager;
     }
 
+    public StorageManager<Engine> getEngineStorageManager() {
+        return mEngineStorageManager;
+    }
+
+    public StorageManager<Body> getBodyStorageManager() {
+        return mBodyStorageManager;
+    }
+
+    public StorageManager<Accessory> getAccessoryStorageManager() {
+        return mAccessoryStorageManager;
+    }
+
 }

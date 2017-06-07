@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.nsu.ccfit.boltava.view.MainWindow">
-  <grid id="27dc6" binding="mRootPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="mPanel" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="614" height="385"/>
+      <xy x="20" y="20" width="500" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <nested-form id="2d5c8" form-file="ru/nsu/ccfit/boltava/view/ControlPanel.form" binding="mControlPanel" custom-create="true">
+      <nested-form id="185fb" form-file="ru/nsu/ccfit/boltava/view/ControlPanel/ControlPanel.form" binding="mControlPanel" custom-create="true">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <minimum-size width="400" height="-1"/>
-          </grid>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </nested-form>
-      <component id="23a10" class="javax.swing.JLabel" binding="mControlPanelTitle">
+      <nested-form id="33bd" form-file="ru/nsu/ccfit/boltava/view/CarSalesPanel.form" binding="mCarSalesPanel" custom-create="true">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties>
-          <horizontalAlignment value="0"/>
-          <text value="Label"/>
-        </properties>
+      </nested-form>
+      <nested-form id="aff1" form-file="ru/nsu/ccfit/boltava/view/ProductionStatistics/ProductionStatisticsPanel.form" binding="mProductionStatsPanel" custom-create="true">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </nested-form>
+      <component id="87c27" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
       </component>
-      <nested-form id="8824a" form-file="ru/nsu/ccfit/boltava/view/CarSalesPanel.form" binding="mWorkflowStats" custom-create="true">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
-      </nested-form>
     </children>
   </grid>
 </form>
