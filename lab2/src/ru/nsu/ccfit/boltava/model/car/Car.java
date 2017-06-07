@@ -2,10 +2,9 @@ package ru.nsu.ccfit.boltava.model.car;
 
 import ru.nsu.ccfit.boltava.model.IDGenerator;
 
-public class Car {
+public class Car extends Component {
 
     private static final IDGenerator mIDGenerator = new IDGenerator(Car.class.getName());
-    private final long mId;
     private final String mSerial;
 //    private final String mName;
     private final Engine mEngine;
@@ -13,16 +12,15 @@ public class Car {
     private final Accessory mAccessory;
 
     public Car(String serial, Engine engine, Body body, Accessory accessory) {
+        super(serial, mIDGenerator.getId());
         mSerial = serial;
         mEngine = engine;
         mBody = body;
         mAccessory = accessory;
-        mId = mIDGenerator.getId();
     }
 
-
     public long getId() {
-        return mId;
+        return super.getId();
     }
 
     public String getSerial() {

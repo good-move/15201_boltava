@@ -60,7 +60,7 @@ public class FactoryManager {
                 factoryInfo.getWorkersCount());
 
         mAssemblyManager = new AssemblyManager(mAssembly, ec.getCarDescriptions());
-        mCarStorageManager.addCarPurchasedListener(mAssemblyManager);
+        mCarStorageManager.attachAssemblyManager(mAssemblyManager);
 
         callSuppliers(
                 mEngineSuppliers,
@@ -78,8 +78,6 @@ public class FactoryManager {
                 Accessory.class,
                 mAccessoryStorageManager);
 
-        System.out.println("Dealers");
-
         HashMap<String, Integer> dealersInfo = ec.getOrderedCarSerials();
         dealersInfo.keySet().forEach(carSerial -> {
             for (int i = 0; i < dealersInfo.get(carSerial); ++i ) {
@@ -87,7 +85,6 @@ public class FactoryManager {
                 mInitialOrders.add(carSerial);
             }
         });
-
     }
 
     public void launchFactory() {
@@ -100,6 +97,7 @@ public class FactoryManager {
     }
 
     public void stopFactory() {
+        mCarStorageManager.detachAssemblyManager();
         mAssembly.shutDown();
         mEngineSuppliers.forEach(supplier -> supplier.getThread().interrupt());
         mBodySuppliers.forEach(supplier -> supplier.getThread().interrupt());
@@ -155,6 +153,14 @@ public class FactoryManager {
 
     public StorageManager<Accessory> getAccessoryStorageManager() {
         return mAccessoryStorageManager;
+    }
+
+    public AssemblyManager getAssemblyManager() {
+        return mAssemblyManager;
+    }
+
+    public EnvironmentConfiguration getEnvironmentConfiguration() {
+        return mEnvironmentConfig;
     }
 
 }

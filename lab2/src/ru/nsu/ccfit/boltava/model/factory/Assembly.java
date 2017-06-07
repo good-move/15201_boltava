@@ -6,6 +6,7 @@ import ru.nsu.ccfit.boltava.model.car.Body;
 import ru.nsu.ccfit.boltava.model.car.Car;
 import ru.nsu.ccfit.boltava.model.car.Engine;
 import ru.nsu.ccfit.boltava.model.storage.StorageManager;
+import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
 public class Assembly {
 
@@ -34,6 +35,10 @@ public class Assembly {
 
     public void shutDown() {
         mAssemblyLines.shutDown();
+    }
+
+    public void addTaskQueueSizeListener(IOnValueChangedListener listener) {
+        mAssemblyLines.addTaskQueueSizeListener(listener);
     }
 
     private class AssembleCarTask implements ITask {

@@ -2,12 +2,12 @@ package ru.nsu.ccfit.boltava.model.factory;
 
 
 import ru.nsu.ccfit.boltava.model.BlockingQueue;
+import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
 class AssemblyLines {
 
     private BlockingQueue<ITask> mTaskQueue;
     private Thread[] mWorkers;
-    private int mActiveWorkersCount = 0;
 
     public AssemblyLines(int taskQueueSize, int workersCount) {
         mTaskQueue = new BlockingQueue<>(taskQueueSize);
@@ -30,17 +30,8 @@ class AssemblyLines {
         }
     }
 
-
-    private synchronized void incrementTaskCounter() {
-        mActiveWorkersCount++;
-    }
-
-    private synchronized void decrementTaskCounter() {
-        mActiveWorkersCount--;
-    }
-
-    public synchronized int getActiveWorkersCount() {
-        return mActiveWorkersCount;
+    public void addTaskQueueSizeListener(IOnValueChangedListener listener) {
+        mTaskQueue.addOnValueChangedListener(listener);
     }
 
     private class Worker implements Runnable {
@@ -56,10 +47,8 @@ class AssemblyLines {
             try {
                 while (true) {
                     System.out.println(this.getClass().getSimpleName() + ": hard working");
-                    ITask ITask = mTaskQueue.dequeue();
-                    incrementTaskCounter();
-                    ITask.execute();
-                    decrementTaskCounter();
+                    ITask task = mTaskQueue.dequeue();
+                    task.execute();
                 }
             } catch (InterruptedException e) {
                 System.out.println(mName + ": I've been interrupted");

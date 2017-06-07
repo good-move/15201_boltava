@@ -12,13 +12,15 @@ public class ProductionStatisticsPanel extends JComponent {
     private ProductionInfoRow mAccessoriesSuppliedLabel;
     private JPanel mPanel;
     private JLabel mTitle;
+    private ProductionInfoRow mPendingTasksLabel;
 
     public ProductionStatisticsPanel(FactoryManager factoryManager) {
         mTitle.setText("Supplement Statistics");
-        factoryManager.getCarStorageManager().addOnValueChangedListener(mCarsProducedInfoLabel);
-        factoryManager.getBodyStorageManager().addOnValueChangedListener(mBodiesSuppliedLabel);
-        factoryManager.getEngineStorageManager().addOnValueChangedListener(mEnginesSuppliedLabel);
-        factoryManager.getAccessoryStorageManager().addOnValueChangedListener(mAccessoriesSuppliedLabel);
+        factoryManager.getCarStorageManager().addOnItemPutListener(mCarsProducedInfoLabel);
+        factoryManager.getBodyStorageManager().addOnItemPutListener(mBodiesSuppliedLabel);
+        factoryManager.getEngineStorageManager().addOnItemPutListener(mEnginesSuppliedLabel);
+        factoryManager.getAccessoryStorageManager().addOnItemPutListener(mAccessoriesSuppliedLabel);
+        factoryManager.getAssemblyManager().addTaskQueueSizeListener(mPendingTasksLabel);
     }
 
     private void createUIComponents() {
@@ -26,6 +28,7 @@ public class ProductionStatisticsPanel extends JComponent {
         mEnginesSuppliedLabel = new ProductionInfoRow("Engines", "0");
         mBodiesSuppliedLabel = new ProductionInfoRow("Bodies", "0");
         mAccessoriesSuppliedLabel = new ProductionInfoRow("Accessories", "0");
+        mPendingTasksLabel = new ProductionInfoRow("Pending Tasks", "0");
     }
 
 }

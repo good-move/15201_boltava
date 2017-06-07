@@ -1,5 +1,6 @@
 package ru.nsu.ccfit.boltava.view;
 
+import ru.nsu.ccfit.boltava.model.EnvironmentConfiguration;
 import ru.nsu.ccfit.boltava.model.FactoryManager;
 import ru.nsu.ccfit.boltava.view.ControlPanel.ControlPanel;
 import ru.nsu.ccfit.boltava.view.ProductionStatistics.ProductionStatisticsPanel;
@@ -13,8 +14,12 @@ public class MainWindow extends JFrame {
     private ControlPanel mControlPanel;
     private FactoryManager mFactoryManager;
     private JPanel mPanel;
-    private CarSalesPanel mCarSalesPanel;
+    private TableDataPanel mCarSalesPanel;
     private ProductionStatisticsPanel mProductionStatsPanel;
+    private TableDataPanel mEngineStorageLoadPanel;
+    private TableDataPanel mAccessoryStorageLoadPanel;
+    private TableDataPanel mBodyStorageLoadPanel;
+    private JLabel mStorageLoadLabel;
 
 
     public MainWindow(FactoryManager factoryManager) {
@@ -36,6 +41,8 @@ public class MainWindow extends JFrame {
             }
         });
 
+        mStorageLoadLabel.setText("Storage Load Info");
+
         this.setVisible(true);
         mFactoryManager.launchFactory();
     }
@@ -44,11 +51,22 @@ public class MainWindow extends JFrame {
         mControlPanel = new ControlPanel(mFactoryManager);
         String[] rows = mFactoryManager.getCarSerials();
 
-        mCarSalesPanel = new CarSalesPanel(rows);
-        mFactoryManager.getCarStorageManager().addCarPurchasedListener(mCarSalesPanel);
+        mCarSalesPanel = new TableDataPanel("Car Sales", new String[]{"Car", "Items Sold"} ,rows);
+        mFactoryManager.getCarStorageManager().addCarItemSalesListener(mCarSalesPanel);
 
         mProductionStatsPanel = new ProductionStatisticsPanel(mFactoryManager);
+
+        EnvironmentConfiguration ec = mFactoryManager.getEnvironmentConfiguration();
+        String[] header = new String[] { "Serial", "Items" };
+        mBodyStorageLoadPanel = new TableDataPanel("Body", header, ec.getBodySuppliersInfo().keySet().toArray(new String[0]));
+        mEngineStorageLoadPanel = new TableDataPanel("Engine", header, ec.getEngineSuppliersInfo().keySet().toArray(new String[0]));
+        mAccessoryStorageLoadPanel = new TableDataPanel("Accessory", header, ec.getAccessorySuppliersInfo().keySet().toArray(new String[0]));
+
+        mFactoryManager.getBodyStorageManager().addStorageLoadObserver(mBodyStorageLoadPanel);
+        mFactoryManager.getEngineStorageManager().addStorageLoadObserver(mEngineStorageLoadPanel);
+        mFactoryManager.getAccessoryStorageManager().addStorageLoadObserver(mAccessoryStorageLoadPanel);
     }
+
 
     private void $$$setupUI$$$() {
         createUIComponents();

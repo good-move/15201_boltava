@@ -1,42 +1,42 @@
 package ru.nsu.ccfit.boltava.view;
 
 import ru.nsu.ccfit.boltava.model.car.Car;
-import ru.nsu.ccfit.boltava.model.factory.ICarPurchasedListener;
+import ru.nsu.ccfit.boltava.model.storage.IOnValueChangedForKeyListener;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CarSalesPanel extends JComponent implements ICarPurchasedListener {
+public class TableDataPanel extends JComponent implements IOnValueChangedForKeyListener<String, Integer> {
 
     private JTable mTable;
     private JScrollPane mScrollPane;
     private JPanel mPanel;
+    private JLabel mTitle;
 
     private CarSalesTableModel mTableModel;
 
-    public CarSalesPanel(String[] carNames) {
-        mTableModel = new CarSalesTableModel(carNames);
+    public TableDataPanel(String title, String[] columnNames, String[] carNames) {
+        mTitle.setText(title);
+        mTableModel = new CarSalesTableModel(carNames, columnNames);
         mTable.setModel(mTableModel);
     }
 
     @Override
-    public void onCarPurchased(Car car) {}
-
-    @Override
-    public void onCarPurchased(Car car, Integer salesCount) {
-        mTableModel.setValueForCar(car.getSerial(), salesCount);
+    public void onValueChangedForKey(String s, Integer integer) {
+        mTableModel.setValueForCar(s, integer);
     }
 
     private class CarSalesTableModel extends AbstractTableModel {
 
         private ArrayList<Row> mTableData = new ArrayList<>();
         private HashMap<String, Row> mDataMap = new HashMap<>();
-        private final String[] mColumnNames = { "Car", "Items Sold" };
+        private String[] mColumnNames = { "Car", "Items Sold" };
         private int COLUMN_COUNT  = 2;
 
-        CarSalesTableModel(String[] carNames) {
+        CarSalesTableModel(String[] carNames, String[] columnNames) {
+            mColumnNames = columnNames;
             for (String name : carNames) {
                 Row row = new Row(name, 0);
                 mTableData.add(row);

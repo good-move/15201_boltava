@@ -40,6 +40,10 @@ public class Supplier<ItemType extends Component> extends SimpleRepeatable imple
         return mThread;
     }
 
+    public String getItemSerial() {
+        return mItemSerial;
+    }
+
     @Override
     public void onValueChanged(Integer newInterval) {
         setInterval(newInterval);

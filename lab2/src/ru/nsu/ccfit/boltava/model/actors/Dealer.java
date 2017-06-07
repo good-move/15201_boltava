@@ -49,6 +49,9 @@ public class Dealer extends SimpleRepeatable implements IOnValueChangedListener<
                         System.err.println(String.format("Storage with cars %s doesn't exist", mCarSerial));
                         break;
                     }
+                    if (carStorage.isEmpty()) {
+                        mCarStorageManager.orderCar(mCarSerial);
+                    }
                     Car car = carStorage.get();
                     mCarStorageManager.checkOut(car);
                     System.out.println(String.format("Got a new car! ID: %d, serial: %s", car.getId(), car.getSerial()));

@@ -2,11 +2,12 @@ package ru.nsu.ccfit.boltava.model.factory;
 
 import ru.nsu.ccfit.boltava.model.car.Car;
 import ru.nsu.ccfit.boltava.model.car.CarDescription;
+import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class AssemblyManager implements ICarPurchasedListener {
+public class AssemblyManager {
 
     private final Assembly mAssembly;
     private HashMap<String, CarDescription> mCarDescriptions = new HashMap<>();
@@ -14,26 +15,21 @@ public class AssemblyManager implements ICarPurchasedListener {
     public AssemblyManager(Assembly assembly, HashMap<String, CarDescription> carDescriptions) {
         mAssembly = assembly;
         mCarDescriptions = carDescriptions;
-        setInitialOrders();
     }
 
-    public void setInitialOrders() {
-        mCarDescriptions.keySet().forEach(this::assignTask);
+    public void orderCar(String carSerial) throws IllegalArgumentException {
+        assignTask(carSerial);
     }
 
-    @Override
-    public void onCarPurchased(Car car) {
-        assignTask(car.getSerial());
+    public void addTaskQueueSizeListener(IOnValueChangedListener listener) {
+        mAssembly.addTaskQueueSizeListener(listener);
     }
-
-    @Override
-    public void onCarPurchased(Car car, Integer sales) {}
 
     private void assignTask(String carSerial)  {
         System.out.println(this.getClass().getSimpleName() + ": creating car");
         CarDescription carDescription  = mCarDescriptions.get(carSerial);
         if (carDescription == null) {
-            String template = "%s: don't know how to create car with serial %s";
+            String template = "%s: Car with serial %s is not available for production";
             System.out.println(String.format(template, this.getClass().getSimpleName(), carSerial));
         }
         else {
