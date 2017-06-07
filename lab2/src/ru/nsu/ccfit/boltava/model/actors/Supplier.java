@@ -3,10 +3,11 @@ package ru.nsu.ccfit.boltava.model.actors;
 import ru.nsu.ccfit.boltava.model.IDGenerator;
 import ru.nsu.ccfit.boltava.model.car.Component;
 import ru.nsu.ccfit.boltava.model.storage.StorageManager;
+import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class Supplier<ItemType extends Component> extends SimpleRepeatable {
+public class Supplier<ItemType extends Component> extends SimpleRepeatable implements IOnValueChangedListener<Integer> {
 
     private static final IDGenerator mIDGenerator = new IDGenerator("Suppliers");
     private final Class<ItemType> mItemClass;
@@ -37,6 +38,11 @@ public class Supplier<ItemType extends Component> extends SimpleRepeatable {
 
     public Thread getThread() {
         return mThread;
+    }
+
+    @Override
+    public void onValueChanged(Integer newInterval) {
+        setInterval(newInterval);
     }
 
 

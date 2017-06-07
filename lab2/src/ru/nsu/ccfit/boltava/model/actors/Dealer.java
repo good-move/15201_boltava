@@ -5,8 +5,9 @@ import ru.nsu.ccfit.boltava.model.car.Car;
 import ru.nsu.ccfit.boltava.model.factory.AssemblyManager;
 import ru.nsu.ccfit.boltava.model.storage.CarStorageManager;
 import ru.nsu.ccfit.boltava.model.storage.Storage;
+import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
-public class Dealer extends SimpleRepeatable {
+public class Dealer extends SimpleRepeatable implements IOnValueChangedListener<Integer> {
 
     private static final IDGenerator mIDGenerator = new IDGenerator("Dealer");
 
@@ -29,6 +30,11 @@ public class Dealer extends SimpleRepeatable {
 
     public Thread getThread() {
         return mThread;
+    }
+
+    @Override
+    public void onValueChanged(Integer newInterval) {
+        setInterval(newInterval);
     }
 
 

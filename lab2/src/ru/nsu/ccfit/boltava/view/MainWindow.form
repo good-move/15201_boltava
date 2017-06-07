@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.nsu.ccfit.boltava.view.Window">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.nsu.ccfit.boltava.view.MainWindow">
   <grid id="27dc6" binding="mRootPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <nested-form id="2d5c8" form-file="ru/nsu/ccfit/boltava/view/ControlPanel.form" binding="mControlPanel">
+      <nested-form id="2d5c8" form-file="ru/nsu/ccfit/boltava/view/ControlPanel.form" binding="mControlPanel" custom-create="true">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <minimum-size width="400" height="-1"/>
@@ -24,7 +24,7 @@
           <text value="Label"/>
         </properties>
       </component>
-      <nested-form id="8824a" form-file="ru/nsu/ccfit/boltava/view/WorkflowStatsPanel.form" binding="mWorkflowStats" custom-create="true">
+      <nested-form id="8824a" form-file="ru/nsu/ccfit/boltava/view/CarSalesPanel.form" binding="mWorkflowStats" custom-create="true">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>

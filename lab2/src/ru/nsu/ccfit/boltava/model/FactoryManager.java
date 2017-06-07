@@ -27,11 +27,13 @@ public class FactoryManager {
     private ArrayList<Supplier<Accessory>> mAccessorySuppliers = new ArrayList<>();
     private ArrayList<Dealer> mDealers = new ArrayList<>();
     private ArrayList<String> mInitialOrders = new ArrayList<>();
+    private EnvironmentConfiguration mEnvironmentConfig;
 
     private boolean isRunning = false;
 
     public FactoryManager(EnvironmentConfiguration ec) {
         EnvironmentConfiguration.FactoryInfo factoryInfo = ec.getFactoryInfo();
+        mEnvironmentConfig = ec;
 
         mCarStorageManager = new CarStorageManager(
                 new ArrayList<>(ec.getCarDescriptions().keySet()),
@@ -86,7 +88,6 @@ public class FactoryManager {
             }
         });
 
-
     }
 
     public void launchFactory() {
@@ -118,6 +119,30 @@ public class FactoryManager {
             }
 
         });
+    }
+
+    public ArrayList<Supplier<Engine>> getEngineSuppliers() {
+        return mEngineSuppliers;
+    }
+
+    public ArrayList<Supplier<Body>> getBodySuppliers() {
+        return mBodySuppliers;
+    }
+
+    public ArrayList<Supplier<Accessory>> getAccessorySuppliers() {
+        return mAccessorySuppliers;
+    }
+
+    public ArrayList<Dealer> getDealers() {
+        return mDealers;
+    }
+
+    public String[] getCarSerials() {
+        return mEnvironmentConfig.getCarDescriptions().keySet().toArray(new String[0]);
+    }
+
+    public CarStorageManager getCarStorageManager() {
+        return mCarStorageManager;
     }
 
 }

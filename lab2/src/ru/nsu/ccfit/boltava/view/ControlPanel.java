@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.view;
 
+import ru.nsu.ccfit.boltava.model.FactoryManager;
+
 import javax.swing.*;
 
 public class ControlPanel extends JComponent {
@@ -13,6 +15,13 @@ public class ControlPanel extends JComponent {
     private static int MIN_TIMEOUT = 1;
     private static int MAX_TIMEOUT = 10000;
     private static int SPACING = 10;
+
+    public ControlPanel(FactoryManager factoryManager) {
+        factoryManager.getDealers().forEach(dealer -> mDealersTimeoutControl.addOnValueChangedListener(dealer));
+        factoryManager.getEngineSuppliers().forEach(supplier -> mEngineSupplierTimeoutControl.addOnValueChangedListener(supplier));
+        factoryManager.getBodySuppliers().forEach(supplier -> mBodySupplierTimeoutControl.addOnValueChangedListener(supplier));
+        factoryManager.getAccessorySuppliers().forEach(supplier -> mAccessorySupplierTimeoutControl.addOnValueChangedListener(supplier));
+    }
 
     private void createUIComponents() {
         mDealersTimeoutControl = new LabeledSliderWithTextField(

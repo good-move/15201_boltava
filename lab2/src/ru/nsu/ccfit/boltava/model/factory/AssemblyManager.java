@@ -21,9 +21,13 @@ public class AssemblyManager implements ICarPurchasedListener {
         mCarDescriptions.keySet().forEach(this::assignTask);
     }
 
+    @Override
     public void onCarPurchased(Car car) {
         assignTask(car.getSerial());
     }
+
+    @Override
+    public void onCarPurchased(Car car, Integer sales) {}
 
     private void assignTask(String carSerial)  {
         System.out.println(this.getClass().getSimpleName() + ": creating car");
@@ -39,14 +43,6 @@ public class AssemblyManager implements ICarPurchasedListener {
                 e.printStackTrace();
             }
         }
-    }
-
-    public class UnknownCarException extends Exception {
-
-        public UnknownCarException(String msg) {
-            super(msg);
-        }
-
     }
 
 }

@@ -5,5 +5,6 @@ import ru.nsu.ccfit.boltava.model.car.Car;
 public interface ICarPurchasedListener {
 
     void onCarPurchased(Car car);
+    void onCarPurchased(Car car, Integer sales);
 
 }

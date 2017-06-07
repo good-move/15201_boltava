@@ -7,6 +7,7 @@ public class Car {
     private static final IDGenerator mIDGenerator = new IDGenerator(Car.class.getName());
     private final long mId;
     private final String mSerial;
+//    private final String mName;
     private final Engine mEngine;
     private final Body mBody;
     private final Accessory mAccessory;
@@ -27,5 +28,9 @@ public class Car {
     public String getSerial() {
         return mSerial;
     }
+
+//    public String toString() {
+//        return String.format("%s (%s)", mName, mSerial);
+//    }
 
 }
