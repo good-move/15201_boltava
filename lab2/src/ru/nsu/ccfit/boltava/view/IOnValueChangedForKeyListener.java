@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.model.storage;
+package ru.nsu.ccfit.boltava.view;
 
 import java.awt.*;
 

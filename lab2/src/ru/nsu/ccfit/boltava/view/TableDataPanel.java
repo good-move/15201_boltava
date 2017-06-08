@@ -1,8 +1,5 @@
 package ru.nsu.ccfit.boltava.view;
 
-import ru.nsu.ccfit.boltava.model.car.Car;
-import ru.nsu.ccfit.boltava.model.storage.IOnValueChangedForKeyListener;
-
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

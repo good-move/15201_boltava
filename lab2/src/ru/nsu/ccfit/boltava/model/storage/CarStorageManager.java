@@ -2,8 +2,8 @@ package ru.nsu.ccfit.boltava.model.storage;
 
 import ru.nsu.ccfit.boltava.model.car.Car;
 import ru.nsu.ccfit.boltava.model.factory.AssemblyManager;
+import ru.nsu.ccfit.boltava.view.IOnValueChangedForKeyListener;
 
-import java.beans.IntrospectionException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

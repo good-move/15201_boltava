@@ -6,6 +6,8 @@ import ru.nsu.ccfit.boltava.view.ControlPanel.ControlPanel;
 import ru.nsu.ccfit.boltava.view.ProductionStatistics.ProductionStatisticsPanel;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -19,6 +21,7 @@ public class MainWindow extends JFrame {
     private TableDataPanel mEngineStorageLoadPanel;
     private TableDataPanel mAccessoryStorageLoadPanel;
     private TableDataPanel mBodyStorageLoadPanel;
+    private JButton mPowerButton;
     private JLabel mStorageLoadLabel;
 
 
@@ -41,10 +44,17 @@ public class MainWindow extends JFrame {
             }
         });
 
-        mStorageLoadLabel.setText("Storage Load Info");
+//        mStorageLoadLabel.setText("Storage Load Info");
 
         this.setVisible(true);
         mFactoryManager.launchFactory();
+
+//        mPowerButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent actionEvent) {
+//
+//            }
+//        });
     }
 
     private void createUIComponents() {
@@ -58,9 +68,9 @@ public class MainWindow extends JFrame {
 
         EnvironmentConfiguration ec = mFactoryManager.getEnvironmentConfiguration();
         String[] header = new String[] { "Serial", "Items" };
-        mBodyStorageLoadPanel = new TableDataPanel("Body", header, ec.getBodySuppliersInfo().keySet().toArray(new String[0]));
-        mEngineStorageLoadPanel = new TableDataPanel("Engine", header, ec.getEngineSuppliersInfo().keySet().toArray(new String[0]));
-        mAccessoryStorageLoadPanel = new TableDataPanel("Accessory", header, ec.getAccessorySuppliersInfo().keySet().toArray(new String[0]));
+        mBodyStorageLoadPanel = new TableDataPanel("Body Storage", header, ec.getBodySuppliersInfo().keySet().toArray(new String[0]));
+        mEngineStorageLoadPanel = new TableDataPanel("Engine Storage", header, ec.getEngineSuppliersInfo().keySet().toArray(new String[0]));
+        mAccessoryStorageLoadPanel = new TableDataPanel("Accessory Storage", header, ec.getAccessorySuppliersInfo().keySet().toArray(new String[0]));
 
         mFactoryManager.getBodyStorageManager().addStorageLoadObserver(mBodyStorageLoadPanel);
         mFactoryManager.getEngineStorageManager().addStorageLoadObserver(mEngineStorageLoadPanel);

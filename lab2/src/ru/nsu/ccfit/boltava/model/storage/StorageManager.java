@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.boltava.model.storage;
 
 import ru.nsu.ccfit.boltava.model.car.Component;
-import ru.nsu.ccfit.boltava.model.factory.AssemblyManager;
+import ru.nsu.ccfit.boltava.view.IOnValueChangedForKeyListener;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
 import java.util.*;
