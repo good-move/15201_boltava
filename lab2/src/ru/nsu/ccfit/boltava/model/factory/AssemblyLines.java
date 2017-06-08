@@ -28,6 +28,7 @@ class AssemblyLines {
         for (Thread thread : mWorkers) {
             thread.interrupt();
         }
+        mTaskQueue.clear();
     }
 
     public void addTaskQueueSizeListener(IOnValueChangedListener listener) {

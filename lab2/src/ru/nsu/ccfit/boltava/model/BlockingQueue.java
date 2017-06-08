@@ -39,6 +39,10 @@ public class BlockingQueue<ItemType> {
         }
     }
 
+    public void clear() {
+        mQueue.clear();
+    }
+
     public int getSize() {
         return mQueue.size();
     }

@@ -1,11 +1,9 @@
 package ru.nsu.ccfit.boltava.model.factory;
 
-import ru.nsu.ccfit.boltava.model.car.Car;
 import ru.nsu.ccfit.boltava.model.car.CarDescription;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class AssemblyManager {
 
@@ -36,7 +34,7 @@ public class AssemblyManager {
             try {
                 mAssembly.createCar(carDescription);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+
             }
         }
     }

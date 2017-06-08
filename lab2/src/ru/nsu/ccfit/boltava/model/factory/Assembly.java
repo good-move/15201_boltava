@@ -1,10 +1,6 @@
 package ru.nsu.ccfit.boltava.model.factory;
 
-import ru.nsu.ccfit.boltava.model.car.CarDescription;
-import ru.nsu.ccfit.boltava.model.car.Accessory;
-import ru.nsu.ccfit.boltava.model.car.Body;
-import ru.nsu.ccfit.boltava.model.car.Car;
-import ru.nsu.ccfit.boltava.model.car.Engine;
+import ru.nsu.ccfit.boltava.model.car.*;
 import ru.nsu.ccfit.boltava.model.storage.StorageManager;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 

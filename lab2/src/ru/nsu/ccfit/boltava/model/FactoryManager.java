@@ -26,7 +26,6 @@ public class FactoryManager {
     private ArrayList<Supplier<Body>> mBodySuppliers = new ArrayList<>();
     private ArrayList<Supplier<Accessory>> mAccessorySuppliers = new ArrayList<>();
     private ArrayList<Dealer> mDealers = new ArrayList<>();
-    private ArrayList<String> mInitialOrders = new ArrayList<>();
     private EnvironmentConfiguration mEnvironmentConfig;
 
     private boolean isRunning = false;
@@ -57,34 +56,37 @@ public class FactoryManager {
                 mAccessoryStorageManager,
                 mCarStorageManager,
                 10,
-                factoryInfo.getWorkersCount());
+                mEnvironmentConfig.getFactoryInfo().getWorkersCount());
 
-        mAssemblyManager = new AssemblyManager(mAssembly, ec.getCarDescriptions());
+        mAssemblyManager = new AssemblyManager(mAssembly, mEnvironmentConfig.getCarDescriptions());
         mCarStorageManager.attachAssemblyManager(mAssemblyManager);
 
         callSuppliers(
                 mEngineSuppliers,
-                ec.getEngineSuppliersInfo(),
+                mEnvironmentConfig.getEngineSuppliersInfo(),
                 Engine.class,
                 mEngineStorageManager);
         callSuppliers(
                 mBodySuppliers,
-                ec.getBodySuppliersInfo(),
+                mEnvironmentConfig.getBodySuppliersInfo(),
                 Body.class,
                 mBodyStorageManager);
         callSuppliers(
                 mAccessorySuppliers,
-                ec.getAccessorySuppliersInfo(),
+                mEnvironmentConfig.getAccessorySuppliersInfo(),
                 Accessory.class,
                 mAccessoryStorageManager);
 
-        HashMap<String, Integer> dealersInfo = ec.getOrderedCarSerials();
+        HashMap<String, Integer> dealersInfo = mEnvironmentConfig.getOrderedCarSerials();
         dealersInfo.keySet().forEach(carSerial -> {
             for (int i = 0; i < dealersInfo.get(carSerial); ++i ) {
                 mDealers.add(new Dealer(mCarStorageManager, carSerial));
-                mInitialOrders.add(carSerial);
             }
         });
+    }
+
+    public boolean isFactoryLaunched() {
+        return isRunning;
     }
 
     public void launchFactory() {
@@ -97,13 +99,13 @@ public class FactoryManager {
     }
 
     public void stopFactory() {
-        mCarStorageManager.detachAssemblyManager();
+        isRunning = false;
         mAssembly.shutDown();
+        mCarStorageManager.detachAssemblyManager();
         mEngineSuppliers.forEach(supplier -> supplier.getThread().interrupt());
         mBodySuppliers.forEach(supplier -> supplier.getThread().interrupt());
         mAccessorySuppliers.forEach(supplier -> supplier.getThread().interrupt());
         mDealers.forEach(dealer -> dealer.getThread().interrupt());
-        isRunning = false;
     }
 
     private <ItemType extends Component> void callSuppliers(

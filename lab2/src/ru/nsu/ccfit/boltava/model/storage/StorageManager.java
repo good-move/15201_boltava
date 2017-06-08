@@ -4,7 +4,9 @@ import ru.nsu.ccfit.boltava.model.car.Component;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedForKeyListener;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class StorageManager<ItemType extends Component> implements IOnItemPutListener, Storage.IOnSizeChangedListener {
 

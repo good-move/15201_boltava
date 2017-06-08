@@ -2,7 +2,6 @@ package ru.nsu.ccfit.boltava.model.actors;
 
 import ru.nsu.ccfit.boltava.model.IDGenerator;
 import ru.nsu.ccfit.boltava.model.car.Car;
-import ru.nsu.ccfit.boltava.model.factory.AssemblyManager;
 import ru.nsu.ccfit.boltava.model.storage.CarStorageManager;
 import ru.nsu.ccfit.boltava.model.storage.Storage;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;

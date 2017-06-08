@@ -6,12 +6,14 @@ import ru.nsu.ccfit.boltava.view.ControlPanel.ControlPanel;
 import ru.nsu.ccfit.boltava.view.ProductionStatistics.ProductionStatisticsPanel;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class MainWindow extends JFrame {
+
+    private final static String TOGGLE_FACTORY_POWER_ACTION = "toggle_factory_power_action";
+    private final static String START_LABEL = "Start";
+    private final static String STOP_LABEL = "Stop";
 
     private ControlPanel mControlPanel;
     private FactoryManager mFactoryManager;
@@ -22,7 +24,6 @@ public class MainWindow extends JFrame {
     private TableDataPanel mAccessoryStorageLoadPanel;
     private TableDataPanel mBodyStorageLoadPanel;
     private JButton mPowerButton;
-    private JLabel mStorageLoadLabel;
 
 
     public MainWindow(FactoryManager factoryManager) {
@@ -44,17 +45,17 @@ public class MainWindow extends JFrame {
             }
         });
 
-//        mStorageLoadLabel.setText("Storage Load Info");
-
         this.setVisible(true);
-        mFactoryManager.launchFactory();
 
-//        mPowerButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent actionEvent) {
-//
-//            }
-//        });
+        mPowerButton.setText(START_LABEL);
+        mPowerButton.setActionCommand(TOGGLE_FACTORY_POWER_ACTION);
+        mPowerButton.addActionListener(actionEvent -> {
+            switch (actionEvent.getActionCommand()) {
+                case TOGGLE_FACTORY_POWER_ACTION:
+                    handleOnToggleFactoryAction();
+                default:
+            }
+        });
     }
 
     private void createUIComponents() {
@@ -83,6 +84,16 @@ public class MainWindow extends JFrame {
 
         mPanel = new JPanel();
 
+    }
+
+    private void handleOnToggleFactoryAction() {
+        if (!mFactoryManager.isFactoryLaunched()) {
+            mPowerButton.setText(STOP_LABEL);
+            mFactoryManager.launchFactory();
+        } else {
+            mPowerButton.setEnabled(false);
+            mFactoryManager.stopFactory();
+        }
     }
 
 }
