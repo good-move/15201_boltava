@@ -94,7 +94,6 @@
 
   <!-- Register Custom Compiler Taskdefs -->
 
-
   <property name="javac2.home" value="${basedir}/lib" />
 
   <path id="javac2.classpath">
@@ -177,7 +176,7 @@
         <include name="**/*.class"/>
       </patternset>
     </unjar>
-    <javac2 destdir="${lab2.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" fork="true" executable="${module.jdk.bin.lab2}/javac">
+    <javac2 destdir="${lab2.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" fork="true">
       <compilerarg line="${compiler.args.lab2}"/>
       <bootclasspath refid="lab2.module.bootclasspath"/>
       <classpath refid="lab2.module.production.classpath"/>
@@ -202,7 +201,6 @@
     <jar basedir="${lab2.output.dir}" destfile="${lab2.jar.output.dir}/${lab2.jar.output.name}">
       <manifest>
         <attribute name="Main-Class" value="ru.nsu.ccfit.boltava.Main"/>
-        <!--<attribute name="Class-Path" value="${manifest.classpath}"/>-->
       </manifest>
     </jar>
   </target>
