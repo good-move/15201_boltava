@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.model.storage;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import ru.nsu.ccfit.boltava.model.car.Car;
 import ru.nsu.ccfit.boltava.model.factory.AssemblyManager;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedForKeyListener;
@@ -9,6 +11,9 @@ import java.util.HashSet;
 import java.util.List;
 
 public class CarStorageManager extends StorageManager<Car> {
+
+    private static Logger rootLogger = LogManager.getLogger(CarStorageManager.class.getName());
+    private static Logger carSalesLogger = LogManager.getLogger("CarSalesLogger");
 
     private HashSet<IOnValueChangedForKeyListener<String, Integer>> mCarItemSalesListeners = new HashSet<>();
     private HashMap<String, Integer> mCarSalesStats = new HashMap<>();
@@ -38,9 +43,11 @@ public class CarStorageManager extends StorageManager<Car> {
     }
 
     public void checkOut(Car car) {
-        Integer sales = mCarSalesStats.get(car.getSerial());
-        sales++;
-        mCarSalesStats.put(car.getSerial(), sales);
+        carSalesLogger.trace(String.format("Sold a car! ID: %d, serial: %s", car.getId(), car.getSerial()));
+
+        Integer carsSold = mCarSalesStats.get(car.getSerial());
+        carsSold++;
+        mCarSalesStats.put(car.getSerial(), carsSold);
         mCarItemSalesListeners.forEach(listener -> listener.onValueChangedForKey(car.getSerial(), mCarSalesStats.get(car.getSerial())));
         // blocking call: should be invoked last
         mAssemblyManager.orderCar(car.getSerial());

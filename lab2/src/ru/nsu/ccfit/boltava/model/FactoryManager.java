@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.model;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import ru.nsu.ccfit.boltava.model.actors.Dealer;
 import ru.nsu.ccfit.boltava.model.actors.Supplier;
 import ru.nsu.ccfit.boltava.model.car.Accessory;
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FactoryManager {
+
+    private static Logger logger = LogManager.getLogger(FactoryManager.class.getName());
 
     private CarStorageManager mCarStorageManager;
     private StorageManager<Engine> mEngineStorageManager;
@@ -91,6 +95,9 @@ public class FactoryManager {
 
     public void launchFactory() {
         if (isRunning) throw new RuntimeException("Factory is already running");
+
+        logger.info("Launching factory");
+
         isRunning = true;
         mEngineSuppliers.forEach(supplier -> supplier.getThread().start());
         mBodySuppliers.forEach(supplier -> supplier.getThread().start());
@@ -99,6 +106,8 @@ public class FactoryManager {
     }
 
     public void stopFactory() {
+        logger.info("Stopping factory");
+
         isRunning = false;
         mAssembly.shutDown();
         mCarStorageManager.detachAssemblyManager();

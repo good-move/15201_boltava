@@ -5,6 +5,7 @@ import ru.nsu.ccfit.boltava.view.MainWindow;
 public class Launcher {
 
     public Launcher(String xmlConfigFilePath) throws InterruptedException {
+
         try {
             EnvironmentConfiguration ec = new ConfigParser().parse(xmlConfigFilePath);
             FactoryManager factoryManager = new FactoryManager(ec);
@@ -12,6 +13,7 @@ public class Launcher {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
     }
 
 }

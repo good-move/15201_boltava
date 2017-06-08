@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.model.actors;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import ru.nsu.ccfit.boltava.model.IDGenerator;
 import ru.nsu.ccfit.boltava.model.car.Component;
 import ru.nsu.ccfit.boltava.model.storage.StorageManager;
@@ -10,6 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 public class Supplier<ItemType extends Component> extends SimpleRepeatable implements IOnValueChangedListener<Integer> {
 
     private static final IDGenerator mIDGenerator = new IDGenerator("Suppliers");
+    private static Logger logger = LogManager.getLogger(Supplier.class.getName());
+
     private final Class<ItemType> mItemClass;
     private final StorageManager<ItemType> mStorageManager;
     private final String mItemSerial;
@@ -49,7 +53,6 @@ public class Supplier<ItemType extends Component> extends SimpleRepeatable imple
         setInterval(newInterval);
     }
 
-
     public class SupplierRunnable implements Runnable {
 
         @Override
@@ -57,14 +60,13 @@ public class Supplier<ItemType extends Component> extends SimpleRepeatable imple
             try {
                 while (true) {
                     ItemType item = mItemClass.getConstructor(String.class).newInstance(mItemSerial);
-                    System.out.println(this.getClass().getSimpleName() + ". Item ID: " + item.getId());
                     mStorageManager.getStorage(mItemSerial).put(item);
                     synchronized (this) {
                         wait(getInterval());
                     }
                 }
             } catch (InterruptedException e) {
-                System.err.println("Interrupted supplier of " + mItemClass.getSimpleName() + " with serial " + mItemSerial);
+                logger.info("Interrupted supplier of " + mItemClass.getSimpleName() + " with serial " + mItemSerial);
             } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
                 e.printStackTrace();
             }

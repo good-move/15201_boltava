@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.model;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -15,6 +17,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class ConfigParser {
+
+    private static Logger logger = LogManager.getLogger(ConfigParser.class.getName());
 
     private Document mDocument;
 
@@ -59,7 +63,7 @@ public class ConfigParser {
             String carSerial = dealer.getAttribute("car_serial");
             Integer dealersCount = Integer.parseInt(dealer.getAttribute("count"));
             if (orderedCarsSerials.put(carSerial, dealersCount) != null) {
-                System.out.println("Multiple occurrence of dealers of serial " + carSerial);
+                logger.warn("Multiple occurrence of dealers of serial " + carSerial);
             }
         }
 

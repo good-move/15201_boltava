@@ -6,8 +6,6 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         Launcher launcher = new Launcher("./src/config.xml");
-
-        System.out.println("Launched");
     }
 
 

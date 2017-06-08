@@ -1,11 +1,14 @@
 package ru.nsu.ccfit.boltava.model.factory;
 
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import ru.nsu.ccfit.boltava.model.BlockingQueue;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
 class AssemblyLines {
 
+    private static Logger logger = LogManager.getLogger(AssemblyLines.class.getName());
     private BlockingQueue<ITask> mTaskQueue;
     private Thread[] mWorkers;
 
@@ -47,12 +50,11 @@ class AssemblyLines {
         public void run() {
             try {
                 while (!Thread.interrupted()) {
-                    System.out.println(this.getClass().getSimpleName() + ": hard working");
                     ITask task = mTaskQueue.dequeue();
                     task.execute();
                 }
             } catch (InterruptedException e) {
-                System.out.println(mName + ": I've been interrupted");
+                logger.info(mName + ": I've been interrupted");
             }
         }
 

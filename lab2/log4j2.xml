@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="CarSalesAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%thread - %msg%n" />
+        </Console>
+        <File name="WorkflowAppender" fileName="logs/log.log">
+            <PatternLayout>
+                <MarkerPatternSelector defaultPattern="%-5level [%thread]: %C M - %msg%n">
+                    <PatternMatch key="HEADER" pattern="******************** %msg ********************n"/>
+                </MarkerPatternSelector>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info" >
+            <AppenderRef ref="WorkflowAppender" />
+        </Root>
+        <Logger name="CarSalesLogger" level="trace">
+            <AppenderRef ref="CarSalesAppender" />
+        </Logger>
+    </Loggers>
+</Configuration>
