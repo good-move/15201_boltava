@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.model.car;
 
+import org.jetbrains.annotations.NotNull;
+
 public class CarDescription {
 
     private final String mCarSerial;
@@ -7,10 +9,11 @@ public class CarDescription {
     private final String mBodySerial;
     private final String mAccessorySerial;
 
-    public CarDescription(String carSerial,
-                          String engineSerial,
-                          String bodySerial,
-                          String accessorySerial) {
+
+    public CarDescription(@NotNull String carSerial,
+                          @NotNull String engineSerial,
+                          @NotNull String bodySerial,
+                          @NotNull String accessorySerial) {
         mCarSerial = carSerial;
         mEngineSerial = engineSerial;
         mBodySerial = bodySerial;

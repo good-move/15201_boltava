@@ -1,17 +1,22 @@
 package ru.nsu.ccfit.boltava.model;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import ru.nsu.ccfit.boltava.model.car.CarDescription;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,13 +27,39 @@ public class ConfigParser {
 
     private Document mDocument;
 
-    public EnvironmentConfiguration parse(String xmlFile)
+    public EnvironmentConfiguration parse(String xmlFilePath, String xsdFilePath)
             throws ParserConfigurationException, IOException, SAXException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setIgnoringElementContentWhitespace(true);
+        factory.setNamespaceAware(true);
+
+        Schema schema = SchemaFactory
+                            .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+                            .newSchema(new File(xsdFilePath));
+        factory.setSchema(schema);
+
         DocumentBuilder builder = factory.newDocumentBuilder();
-        mDocument = builder.parse(new File(xmlFile));
+
+        builder.setErrorHandler(new ErrorHandler() {
+            @Override
+            public void warning(SAXParseException e) throws SAXException {
+                throw new SAXException(String.format("[Warning] %s:%d:%d:%s",xmlFilePath, e.getLineNumber(), e.getColumnNumber(), e.getMessage()));
+            }
+
+            @Override
+            public void error(SAXParseException e) throws SAXException {
+                throw new SAXException(String.format("[Error] %s:%d:%d:%s",xmlFilePath, e.getLineNumber(), e.getColumnNumber(), e.getMessage()));
+            }
+
+            @Override
+            public void fatalError(SAXParseException e) throws SAXException {
+                throw new SAXException(String.format("[Fatal Error] %s:%d:%d:%s",xmlFilePath, e.getLineNumber(), e.getColumnNumber(), e.getMessage()));
+            }
+        });
+
+        mDocument = builder.parse(new File(xmlFilePath));
+
 
         HashMap<String, CarDescription> carDescriptions = getCarDescriptions();
         HashMap<String, Integer> carSerials = getDealerCarSerials();
@@ -81,6 +112,7 @@ public class ConfigParser {
         for (int i = 0; i < cars.getLength(); ++i) {
             if (cars.item(i).getNodeType() != Node.ELEMENT_NODE) continue;
             Element car = (Element) cars.item(i);
+
             Element engine =  (Element) car.getElementsByTagName("engine").item(0);
             Element body =  (Element) car.getElementsByTagName("body").item(0);
             Element accessory =  (Element) car.getElementsByTagName("accessory").item(0);

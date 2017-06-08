@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.boltava.model.factory;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.car.CarDescription;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 

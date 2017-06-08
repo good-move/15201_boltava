@@ -90,6 +90,7 @@
     <fileset dir="${basedir}/lib">
       <patternset refid="library.patterns"/>
     </fileset>
+    <pathelement location="${basedir}" />
   </path>
 
   <!-- Register Custom Compiler Taskdefs -->
@@ -105,7 +106,6 @@
 
   <target name="register.custom.compilers">
     <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
-    <!--<taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>-->
   </target>
   
   <!-- Modules -->
@@ -198,9 +198,13 @@
 
   <target name="module.CarFactory.build.jar">
     <mkdir dir="." />
+    <manifestclasspath property="manifest.classpath" jarfile="${lab2.jar.output.dir}/${lab2.jar.output.name}">
+      <classpath refid="library.lib.classpath"/>
+    </manifestclasspath>
     <jar basedir="${lab2.output.dir}" destfile="${lab2.jar.output.dir}/${lab2.jar.output.name}">
       <manifest>
         <attribute name="Main-Class" value="ru.nsu.ccfit.boltava.Main"/>
+        <attribute name="Class-Path" value="${manifest.classpath}"/>
       </manifest>
     </jar>
   </target>

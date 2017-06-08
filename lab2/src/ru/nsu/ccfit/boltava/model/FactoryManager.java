@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.boltava.model;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.actors.Dealer;
 import ru.nsu.ccfit.boltava.model.actors.Supplier;
 import ru.nsu.ccfit.boltava.model.car.Accessory;
@@ -109,12 +109,12 @@ public class FactoryManager {
         logger.info("Stopping factory");
 
         isRunning = false;
-        mAssembly.shutDown();
-        mCarStorageManager.detachAssemblyManager();
         mEngineSuppliers.forEach(supplier -> supplier.getThread().interrupt());
         mBodySuppliers.forEach(supplier -> supplier.getThread().interrupt());
         mAccessorySuppliers.forEach(supplier -> supplier.getThread().interrupt());
         mDealers.forEach(dealer -> dealer.getThread().interrupt());
+        mCarStorageManager.detachAssemblyManager();
+        mAssembly.shutDown();
     }
 
     private <ItemType extends Component> void callSuppliers(

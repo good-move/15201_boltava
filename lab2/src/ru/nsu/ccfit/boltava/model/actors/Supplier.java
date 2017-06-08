@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.boltava.model.actors;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.IDGenerator;
 import ru.nsu.ccfit.boltava.model.car.Component;
 import ru.nsu.ccfit.boltava.model.storage.StorageManager;
