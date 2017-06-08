@@ -11,12 +11,12 @@ import java.util.List;
 public class CarStorageManager extends StorageManager<Car> {
 
     private HashSet<IOnValueChangedForKeyListener<String, Integer>> mCarItemSalesListeners = new HashSet<>();
-    private HashMap<String, Integer> mCarSales = new HashMap<>();
+    private HashMap<String, Integer> mCarSalesStats = new HashMap<>();
     private AssemblyManager mAssemblyManager;
 
     public CarStorageManager(List<String> carModels, int maxStorageSize) {
         super(carModels, maxStorageSize);
-        carModels.forEach(model -> mCarSales.put(model,0));
+        carModels.forEach(model -> mCarSalesStats.put(model,0));
     }
 
     public void attachAssemblyManager(AssemblyManager assemblyManager) {
@@ -38,12 +38,12 @@ public class CarStorageManager extends StorageManager<Car> {
     }
 
     public void checkOut(Car car) {
-        mAssemblyManager.orderCar(car.getSerial());
-
-        Integer sales = mCarSales.get(car.getSerial());
+        Integer sales = mCarSalesStats.get(car.getSerial());
         sales++;
-        mCarSales.put(car.getSerial(), sales);
-        mCarItemSalesListeners.forEach(listener -> listener.onValueChangedForKey(car.getSerial(), mCarSales.get(car.getSerial())));
+        mCarSalesStats.put(car.getSerial(), sales);
+        mCarItemSalesListeners.forEach(listener -> listener.onValueChangedForKey(car.getSerial(), mCarSalesStats.get(car.getSerial())));
+        // blocking call: should be invoked last
+        mAssemblyManager.orderCar(car.getSerial());
     }
 
     public void addCarItemSalesListener(IOnValueChangedForKeyListener<String, Integer> listener) {

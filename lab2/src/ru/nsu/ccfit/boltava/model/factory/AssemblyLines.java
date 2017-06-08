@@ -9,7 +9,7 @@ class AssemblyLines {
     private BlockingQueue<ITask> mTaskQueue;
     private Thread[] mWorkers;
 
-    public AssemblyLines(int taskQueueSize, int workersCount) {
+    AssemblyLines(int taskQueueSize, int workersCount) {
         mTaskQueue = new BlockingQueue<>(taskQueueSize);
         mWorkers = new Thread[workersCount];
 
@@ -20,18 +20,18 @@ class AssemblyLines {
         }
     }
 
-    public void addTask(ITask ITask) throws InterruptedException {
+    void addTask(ITask ITask) throws InterruptedException {
         mTaskQueue.enqueue(ITask);
     }
 
-    public void shutDown() {
+    void shutDown() {
         for (Thread thread : mWorkers) {
             thread.interrupt();
         }
         mTaskQueue.clear();
     }
 
-    public void addTaskQueueSizeListener(IOnValueChangedListener listener) {
+    void addTaskQueueSizeListener(IOnValueChangedListener<Integer> listener) {
         mTaskQueue.addOnValueChangedListener(listener);
     }
 
@@ -46,7 +46,7 @@ class AssemblyLines {
         @Override
         public void run() {
             try {
-                while (true) {
+                while (!Thread.interrupted()) {
                     System.out.println(this.getClass().getSimpleName() + ": hard working");
                     ITask task = mTaskQueue.dequeue();
                     task.execute();

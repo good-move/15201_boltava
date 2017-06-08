@@ -19,7 +19,7 @@ public class AssemblyManager {
         assignTask(carSerial);
     }
 
-    public void addTaskQueueSizeListener(IOnValueChangedListener listener) {
+    public void addTaskQueueSizeListener(IOnValueChangedListener<Integer> listener) {
         mAssembly.addTaskQueueSizeListener(listener);
     }
 

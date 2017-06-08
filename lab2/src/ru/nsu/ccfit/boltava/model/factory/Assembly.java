@@ -33,7 +33,7 @@ public class Assembly {
         mAssemblyLines.shutDown();
     }
 
-    public void addTaskQueueSizeListener(IOnValueChangedListener listener) {
+    public void addTaskQueueSizeListener(IOnValueChangedListener<Integer> listener) {
         mAssemblyLines.addTaskQueueSizeListener(listener);
     }
 
