@@ -37,7 +37,7 @@ public class Supplier<ItemType extends Component> extends SimpleRepeatable imple
         setInterval(interval);
         mThread = new Thread(new SupplierRunnable());
         mThread.setName(String.format("Supplier. ID: %d, Component type: %s, Component serial: %s",
-                mID, mItemClass, mItemSerial));
+                mID, mItemClass.getSimpleName(), mItemSerial));
     }
 
     public Thread getThread() {
@@ -61,14 +61,19 @@ public class Supplier<ItemType extends Component> extends SimpleRepeatable imple
                 while (true) {
                     ItemType item = mItemClass.getConstructor(String.class).newInstance(mItemSerial);
                     mStorageManager.getStorage(mItemSerial).put(item);
-                    synchronized (this) {
-                        wait(getInterval());
-                    }
+                    waitInterval();
                 }
             } catch (InterruptedException e) {
-                logger.info("Interrupted supplier of " + mItemClass.getSimpleName() + " with serial " + mItemSerial);
-            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-                e.printStackTrace();
+            } catch (IllegalAccessException |
+                    InstantiationException |
+                    NoSuchMethodException |
+                    InvocationTargetException e) {
+                System.err.println(e.getMessage());
+            } catch (StorageManager.NoSuchStorageException e) {
+                System.err.println(e.getMessage());
+                logger.error(String.format("Storage %s<%s> doesn't exist", mItemClass.getSimpleName(), getItemSerial()));
+            } finally {
+                logger.info("Supplier of " + mItemClass.getSimpleName() + " with serial " + mItemSerial + " finished work");
             }
         }
 

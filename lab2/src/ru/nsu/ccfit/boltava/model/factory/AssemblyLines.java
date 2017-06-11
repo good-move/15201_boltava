@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.BlockingQueue;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 
+import java.util.Arrays;
+
 class AssemblyLines {
 
     private static Logger logger = LogManager.getLogger(AssemblyLines.class.getName());
@@ -19,7 +21,6 @@ class AssemblyLines {
         for (int i = 0; i < workersCount; ++i) {
             mWorkers[i] = new Thread(new Worker("Assembly Worker " + i));
             mWorkers[i].setName("Assembly Worker " + i);
-            mWorkers[i].start();
         }
     }
 
@@ -27,10 +28,12 @@ class AssemblyLines {
         mTaskQueue.enqueue(ITask);
     }
 
+    void startUp() {
+        Arrays.stream(mWorkers).forEach(Thread::start);
+    }
+
     void shutDown() {
-        for (Thread thread : mWorkers) {
-            thread.interrupt();
-        }
+        Arrays.stream(mWorkers).forEach(Thread::interrupt);
         mTaskQueue.clear();
     }
 

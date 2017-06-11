@@ -27,28 +27,35 @@ public class BlockingQueue<ItemType> {
     };
 
     public ItemType dequeue() throws InterruptedException {
+        ItemType item = null;
         synchronized (lock) {
             while (mQueue.isEmpty()) {
                 lock.wait();
             }
-            ItemType item = mQueue.get(0);
+            item = mQueue.get(0);
             mQueue.remove(0);
             queueSizeChanged();
             lock.notifyAll();
-            return item;
         }
+        return item;
     }
 
     public void clear() {
-        mQueue.clear();
+        synchronized (lock) {
+            mQueue.clear();
+        }
     }
 
     public int getSize() {
-        return mQueue.size();
+        synchronized (lock) {
+            return mQueue.size();
+        }
     }
 
     public void addOnValueChangedListener(IOnValueChangedListener<Integer> listener) {
-        mOnValueChangedListeners.add(listener);
+        synchronized (lock) {
+            mOnValueChangedListeners.add(listener);
+        }
     }
 
     private void queueSizeChanged() {

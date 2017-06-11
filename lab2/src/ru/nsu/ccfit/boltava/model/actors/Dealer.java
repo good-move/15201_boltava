@@ -6,6 +6,7 @@ import ru.nsu.ccfit.boltava.model.IDGenerator;
 import ru.nsu.ccfit.boltava.model.car.Car;
 import ru.nsu.ccfit.boltava.model.storage.CarStorageManager;
 import ru.nsu.ccfit.boltava.model.storage.Storage;
+import ru.nsu.ccfit.boltava.model.storage.StorageManager;
 import ru.nsu.ccfit.boltava.view.IOnValueChangedListener;
 public class Dealer extends SimpleRepeatable implements IOnValueChangedListener<Integer> {
 
@@ -46,21 +47,18 @@ public class Dealer extends SimpleRepeatable implements IOnValueChangedListener<
             try {
                 while (true) {
                     Storage<Car> carStorage = mCarStorageManager.getStorage(mCarSerial);
-                    if (carStorage == null) {
-                        logger.warn(String.format("Storage with cars %s doesn't exist", mCarSerial));
-                        break;
-                    }
                     if (carStorage.isEmpty()) {
                         mCarStorageManager.orderCar(mCarSerial);
                     }
                     Car car = carStorage.get();
                     mCarStorageManager.checkOut(car);
-                    synchronized (this) {
-                        wait(getInterval());
-                    }
+                    waitInterval();
                 }
-            } catch (InterruptedException e) {
-                logger.info("Interrupted dealer of cars with serial " + mCarSerial);
+            } catch (InterruptedException e) {}
+            catch (StorageManager.NoSuchStorageException e) {
+                logger.error(String.format("Storage Car<%s> doesn't exist", mCarSerial));
+            } finally {
+                logger.info("Dealer of cars with serial " + mCarSerial + " finished work");
             }
         }
 

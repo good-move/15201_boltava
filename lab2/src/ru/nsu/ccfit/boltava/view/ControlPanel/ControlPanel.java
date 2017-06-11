@@ -13,7 +13,7 @@ public class ControlPanel extends JComponent {
     private JPanel mPanel;
     private JLabel mTitle;
 
-    private static int MIN_TIMEOUT = 1;
+    private static int MIN_TIMEOUT = 0;
     private static int MAX_TIMEOUT = 10000;
     private static int SPACING = 10;
 

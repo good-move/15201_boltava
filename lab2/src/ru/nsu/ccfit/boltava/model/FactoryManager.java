@@ -103,9 +103,12 @@ public class FactoryManager {
         mBodySuppliers.forEach(supplier -> supplier.getThread().start());
         mAccessorySuppliers.forEach(supplier -> supplier.getThread().start());
         mDealers.forEach(dealer -> dealer.getThread().start());
+        mAssembly.startUp();
     }
 
     public void stopFactory() {
+        if (!isRunning) return;
+
         logger.info("Stopping factory");
 
         isRunning = false;
@@ -113,7 +116,6 @@ public class FactoryManager {
         mBodySuppliers.forEach(supplier -> supplier.getThread().interrupt());
         mAccessorySuppliers.forEach(supplier -> supplier.getThread().interrupt());
         mDealers.forEach(dealer -> dealer.getThread().interrupt());
-        mCarStorageManager.detachAssemblyManager();
         mAssembly.shutDown();
     }
 

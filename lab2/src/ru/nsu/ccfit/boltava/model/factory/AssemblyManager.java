@@ -19,7 +19,7 @@ public class AssemblyManager {
         mCarDescriptions = carDescriptions;
     }
 
-    public void orderCar(String carSerial) throws IllegalArgumentException {
+    public void orderCar(String carSerial) throws IllegalArgumentException, InterruptedException {
         assignTask(carSerial);
     }
 
@@ -27,19 +27,15 @@ public class AssemblyManager {
         mAssembly.addTaskQueueSizeListener(listener);
     }
 
-    private void assignTask(String carSerial)  {
+    private void assignTask(String carSerial) throws InterruptedException {
         CarDescription carDescription  = mCarDescriptions.get(carSerial);
         if (carDescription == null) {
             String template = "%s: Car with serial %s is not available for production";
             logger.warn(String.format(template, this.getClass().getSimpleName(), carSerial));
         }
         else {
-            try {
-                logger.info(this.getClass().getSimpleName() + ": creating car");
-                mAssembly.createCar(carDescription);
-            } catch (InterruptedException e) {
-
-            }
+            logger.info(this.getClass().getSimpleName() + ": creating car");
+            mAssembly.createCar(carDescription);
         }
     }
 

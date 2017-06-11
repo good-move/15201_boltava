@@ -24,8 +24,13 @@ public class StorageManager<ItemType extends Component> implements IOnItemPutLis
         });
     }
 
-    public Storage<ItemType> getStorage(String componentSerial) throws InterruptedException {
-        return mItemStorageMap.get(componentSerial);
+    public Storage<ItemType> getStorage(String componentSerial) throws InterruptedException, NoSuchStorageException {
+        Storage<ItemType> storage = mItemStorageMap.get(componentSerial);
+        if (storage == null) {
+            throw new NoSuchStorageException(String.format("No storage for component with serial %s", componentSerial));
+        }
+
+        return storage;
     }
 
     public void addStorageLoadObserver(IOnValueChangedForKeyListener<String, Integer> listener) {
@@ -44,7 +49,7 @@ public class StorageManager<ItemType extends Component> implements IOnItemPutLis
         mOnItemPutListeners.remove(listener);
     }
 
-    private void incrementItemsSupplied() {
+    private synchronized void incrementItemsSupplied() {
         mItemsSupplied++;
     }
 
@@ -72,6 +77,16 @@ public class StorageManager<ItemType extends Component> implements IOnItemPutLis
         }
 
         mStorageLoadObservers.forEach(observer -> observer.onValueChangedForKey(serial, storage.getSize()));
+    }
+
+    public static class NoSuchStorageException extends Exception {
+
+        public NoSuchStorageException(){}
+
+        public NoSuchStorageException(String msg) {
+            super(msg);
+        }
+
     }
 
 }

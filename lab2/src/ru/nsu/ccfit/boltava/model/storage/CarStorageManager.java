@@ -12,19 +12,19 @@ import java.util.List;
 
 public class CarStorageManager extends StorageManager<Car> {
 
-    private static Logger rootLogger = LogManager.getLogger(CarStorageManager.class.getName());
-    private static Logger carSalesLogger = LogManager.getLogger("CarSalesLogger");
-
     private HashSet<IOnValueChangedForKeyListener<String, Integer>> mCarItemSalesListeners = new HashSet<>();
     private HashMap<String, Integer> mCarSalesStats = new HashMap<>();
     private AssemblyManager mAssemblyManager;
+
+    private static final String CAR_SALES_LOGGER = "CarSalesLogger";
+    private static final Logger carSalesLogger = LogManager.getLogger(CAR_SALES_LOGGER);
 
     public CarStorageManager(List<String> carModels, int maxStorageSize) {
         super(carModels, maxStorageSize);
         carModels.forEach(model -> mCarSalesStats.put(model,0));
     }
 
-    public void attachAssemblyManager(AssemblyManager assemblyManager) {
+    public synchronized void attachAssemblyManager(AssemblyManager assemblyManager) {
         if (assemblyManager == null)
             throw new IllegalArgumentException("Assembly Manager can't be null");
 
@@ -34,16 +34,12 @@ public class CarStorageManager extends StorageManager<Car> {
         mAssemblyManager = assemblyManager;
     }
 
-    public void detachAssemblyManager() {
-        mAssemblyManager = null;
-    }
-
-    public void orderCar(String carSerial) throws IllegalArgumentException {
+    public void orderCar(String carSerial) throws IllegalArgumentException, InterruptedException {
         mAssemblyManager.orderCar(carSerial);
     }
 
-    public void checkOut(Car car) {
-        carSalesLogger.trace(String.format("Sold a car! ID: %d, serial: %s", car.getId(), car.getSerial()));
+    public void checkOut(Car car) throws InterruptedException {
+        carSalesLogger.trace(String.format("Bought a car! ID: %d, serial: %s", car.getId(), car.getSerial()));
 
         Integer carsSold = mCarSalesStats.get(car.getSerial());
         carsSold++;
