@@ -1,5 +1,6 @@
 package ru.nsu.ccfit.boltava.model.message;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,7 +18,7 @@ public class ObjectSocketMessageStream implements ISocketMessageStream {
     }
 
     @Override
-    public Message read() throws IOException, ClassNotFoundException {
+    public Message read() throws IOException, ClassNotFoundException, EOFException {
         System.out.println("Reading object");
         return (Message) in.readObject();
     }

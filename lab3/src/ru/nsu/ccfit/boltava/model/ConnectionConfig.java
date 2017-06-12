@@ -8,7 +8,6 @@ public class ConnectionConfig {
     private String mHost;
     private int mPort;
     private ISocketMessageStream.MessageStreamType mStreamType;
-    private IMessageHandler mMessageHandler;
 
     public ISocketMessageStream.MessageStreamType getStreamType() {
         return mStreamType;
@@ -48,14 +47,6 @@ public class ConnectionConfig {
 
     public void setPort(int mPort) {
         this.mPort = mPort;
-    }
-
-    public IMessageHandler getMessageHandler() {
-        return mMessageHandler;
-    }
-
-    public void setMessageHandler(IMessageHandler mMessageHandler) {
-        this.mMessageHandler = mMessageHandler;
     }
 
 }

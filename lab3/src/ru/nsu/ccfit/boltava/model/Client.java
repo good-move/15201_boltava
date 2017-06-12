@@ -17,15 +17,14 @@ public class Client {
             config.setHost(props.getProperty("host"));
             config.setPort(Integer.parseInt(props.getProperty("port")));
             config.setStreamType(props.getProperty("mode"));
-            config.setMessageHandler(new ClientMessageHandler());
 
-            Connection connection = new Connection(config);
+            Connection connection = new Connection(config, new ClientMessageHandler());
             connection.listen();
         } catch (IOException e) {
             e.printStackTrace();
 //            System.err.println(e.getMessage());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
         } catch (Exception e) {
 //            System.err.println(e.getMessage());
             e.printStackTrace();

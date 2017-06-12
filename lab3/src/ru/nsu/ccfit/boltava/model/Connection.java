@@ -16,23 +16,56 @@ public class Connection {
     private Thread mReceiverThread;
     private LinkedBlockingQueue<Message> mSendMsgQueue = new LinkedBlockingQueue<>();
     private LinkedBlockingQueue<Message> mReceiveMsgQueue = new LinkedBlockingQueue<>();
-    private Socket mSocket;
+    private final Socket mSocket;
     private IMessageHandler mMsgHandler;
     private ISocketMessageStream mStream;
+    private boolean isListening = false;
 
-    public Connection(ConnectionConfig connectionConfig) throws IOException {
+    public Connection(Socket socket, IMessageHandler handler, ISocketMessageStream.MessageStreamType type) throws IOException {
+        mSocket = socket;
+        mMsgHandler = handler;
+        mStream = SocketMessageStreamFactory.get(type, mSocket);
+    }
+
+    public Connection(ConnectionConfig connectionConfig, IMessageHandler handler) throws IOException {
         mSocket = new Socket(connectionConfig.getHost(), connectionConfig.getPort());
-        mMsgHandler = connectionConfig.getMessageHandler();
-
         mStream = SocketMessageStreamFactory.get(connectionConfig.getStreamType(), mSocket);
+        mMsgHandler = handler;
+    }
 
+    public void sendMessage(Message msg) throws InterruptedException {
+        mSendMsgQueue.put(msg);
+    }
+
+    public void disconnect() {
+        try {
+            mSocket.close();
+            mReceiverThread.interrupt();
+            mSenderThread.interrupt();
+            // on connection closed listener
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void listen() {
+        if (isListening) throw new IllegalStateException("Connection is already established");
+        createStreams();
+        mSenderThread.start();
+        mReceiverThread.start();
+        isListening = true;
+    }
+
+    private void createStreams() {
         mSenderThread = new Thread(() -> {
             try {
                 while (!Thread.interrupted()) {
                     mStream.write(mSendMsgQueue.take());
                 }
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                System.err.println("Interrupted");
             } finally {
                 disconnect();
             }
@@ -45,32 +78,12 @@ public class Connection {
                     msg.handle(mMsgHandler);
                 }
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+
             } finally {
                 disconnect();
             }
         }, "Receiver Thread");
 
-    }
-
-    public void sendMessage(Message msg) throws InterruptedException {
-        mSendMsgQueue.put(msg);
-    }
-
-    public void disconnect() {
-        try {
-            mSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void listen() throws InterruptedException {
-        mSenderThread.start();
-        mReceiverThread.start();
-        mSenderThread.join();
-        mReceiverThread.join();
-        disconnect();
     }
 
 }
