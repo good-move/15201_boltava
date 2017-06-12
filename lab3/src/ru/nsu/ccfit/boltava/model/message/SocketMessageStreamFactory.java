@@ -9,7 +9,7 @@ public class SocketMessageStreamFactory {
         switch (type) {
             case OBJ: return new ObjectSocketMessageStream(socket);
             case XML:return new XMLSocketMessageStream(socket);
-            default: throw new RuntimeException("");
+            default: throw new RuntimeException("Unknown stream type");
         }
     }
 

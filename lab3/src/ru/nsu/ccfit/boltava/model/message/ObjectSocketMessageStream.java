@@ -11,17 +11,21 @@ public class ObjectSocketMessageStream implements ISocketMessageStream {
     private ObjectOutputStream out;
 
     public ObjectSocketMessageStream(Socket socket) throws IOException {
-        in = new ObjectInputStream(socket.getInputStream());
         out = new ObjectOutputStream(socket.getOutputStream());
+        out.flush();
+        in = new ObjectInputStream(socket.getInputStream());
     }
 
     @Override
     public Message read() throws IOException, ClassNotFoundException {
+        System.out.println("Reading object");
         return (Message) in.readObject();
     }
 
     @Override
     public void write(Message msg) throws IOException {
+        System.out.println("Writing object");
+
         out.writeObject(msg);
     }
 

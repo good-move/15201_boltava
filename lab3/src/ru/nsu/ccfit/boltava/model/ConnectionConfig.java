@@ -3,11 +3,12 @@ package ru.nsu.ccfit.boltava.model;
 import ru.nsu.ccfit.boltava.model.message.IMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.ISocketMessageStream;
 
-public class ConnectionConfig<T> {
+public class ConnectionConfig {
 
     private String mHost;
     private int mPort;
     private ISocketMessageStream.MessageStreamType mStreamType;
+    private IMessageHandler mMessageHandler;
 
     public ISocketMessageStream.MessageStreamType getStreamType() {
         return mStreamType;
@@ -17,7 +18,21 @@ public class ConnectionConfig<T> {
         this.mStreamType = mStreamType;
     }
 
-    private IMessageHandler mMessageHandler;
+    public void setStreamType(String streamType) {
+        if (streamType == null) {
+            String msg = "Stream Type can't be null";
+            throw new IllegalArgumentException(msg);
+        }
+
+        switch (streamType) {
+            case "XML": mStreamType = ISocketMessageStream.MessageStreamType.XML;
+                break;
+            case "OBJ": mStreamType = ISocketMessageStream.MessageStreamType.OBJ;
+                break;
+            default: throw new RuntimeException("Unknown stream type: " + streamType);
+        }
+
+    }
 
     public String getHost() {
         return mHost;

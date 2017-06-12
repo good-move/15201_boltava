@@ -23,4 +23,9 @@ public class ErrorResponse extends Response {
         messageHandler.handle(this);
     }
 
+    @Override
+    public String toString() {
+        return String.format("[Error] Code: %d. Msg: %s", mErrorCode, mErrorMessage);
+    }
+
 }

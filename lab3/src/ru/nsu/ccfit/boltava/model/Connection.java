@@ -18,29 +18,30 @@ public class Connection {
     private LinkedBlockingQueue<Message> mReceiveMsgQueue = new LinkedBlockingQueue<>();
     private Socket mSocket;
     private IMessageHandler mMsgHandler;
+    private ISocketMessageStream mStream;
 
     public Connection(ConnectionConfig connectionConfig) throws IOException {
         mSocket = new Socket(connectionConfig.getHost(), connectionConfig.getPort());
         mMsgHandler = connectionConfig.getMessageHandler();
 
-        ISocketMessageStream msgStream = SocketMessageStreamFactory.get(connectionConfig.getStreamType(), mSocket);
+        mStream = SocketMessageStreamFactory.get(connectionConfig.getStreamType(), mSocket);
 
         mSenderThread = new Thread(() -> {
             try {
-                while (true) {
-                    msgStream.write(mSendMsgQueue.take());
+                while (!Thread.interrupted()) {
+                    mStream.write(mSendMsgQueue.take());
                 }
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             } finally {
                 disconnect();
             }
-        });
+        }, "Sender Thread");
 
         mReceiverThread = new Thread(() -> {
             try {
-                while (true) {
-                    Message msg = msgStream.read();
+                while (!Thread.interrupted()) {
+                    Message msg = mStream.read();
                     msg.handle(mMsgHandler);
                 }
             } catch (IOException | ClassNotFoundException e) {
@@ -48,7 +49,7 @@ public class Connection {
             } finally {
                 disconnect();
             }
-        });
+        }, "Receiver Thread");
 
     }
 
@@ -62,6 +63,14 @@ public class Connection {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void listen() throws InterruptedException {
+        mSenderThread.start();
+        mReceiverThread.start();
+        mSenderThread.join();
+        mReceiverThread.join();
+        disconnect();
     }
 
 }
