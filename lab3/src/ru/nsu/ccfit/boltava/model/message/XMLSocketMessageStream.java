@@ -11,7 +11,7 @@ public class XMLSocketMessageStream implements ISocketMessageStream {
     }
 
     @Override
-    public void write(Message msg) throws IOException, ClassNotFoundException {
+    public void write(Message msg) throws IOException {
 
     }
 

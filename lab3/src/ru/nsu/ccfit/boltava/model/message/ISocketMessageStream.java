@@ -1,6 +1,7 @@
 package ru.nsu.ccfit.boltava.model.message;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public interface ISocketMessageStream {
 
@@ -9,7 +10,7 @@ public interface ISocketMessageStream {
 
     enum MessageStreamType {
         XML,
-        Object
+        OBJ
     }
 
 }

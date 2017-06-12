@@ -21,7 +21,7 @@ public class ObjectSocketMessageStream implements ISocketMessageStream {
     }
 
     @Override
-    public void write(Message msg) throws IOException, ClassNotFoundException {
+    public void write(Message msg) throws IOException {
         out.writeObject(msg);
     }
 
