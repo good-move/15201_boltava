@@ -1,22 +1,26 @@
 package ru.nsu.ccfit.boltava.model.server;
 
-import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
+import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
 import ru.nsu.ccfit.boltava.model.net.IServerSocketMessageStream;
 import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream;
 import ru.nsu.ccfit.boltava.model.net.ServerMessageStreamFactory;
-import ru.nsu.ccfit.boltava.model.server.IServerMessageHandler;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class ServerMediator {
 
-    private int mID;
+    private static AtomicLong ID_GENERATOR = new AtomicLong(0);
+
+    private long mID = ID_GENERATOR.incrementAndGet();
+    private User mUser;
     private boolean isListening = false;
     private Socket mSocket;
+    private ChatMember mChatMember;
 
     private Thread mSenderThread;
     private Thread mReceiverThread;
@@ -27,10 +31,12 @@ public class ServerMediator {
 
     public ServerMediator(Socket socket,
                           IServerMessageHandler handler,
-                          ISocketMessageStream.MessageStreamType type) throws IOException {
+                          ISocketMessageStream.MessageStreamType type,
+                          ChatMember member) throws IOException {
         mSocket = socket;
         mMsgHandler = handler;
         mStream = ServerMessageStreamFactory.get(type, mSocket);
+        mChatMember = member;
 
         mSenderThread = new Thread(() -> {
             try {
@@ -56,6 +62,8 @@ public class ServerMediator {
                 }
             } catch (IOException | ClassNotFoundException e) {
 
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             } finally {
                 disconnect();
             }

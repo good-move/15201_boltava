@@ -5,8 +5,8 @@ import ru.nsu.ccfit.boltava.model.message.Response;
 
 public class ErrorResponse extends Response {
 
-    private final int mErrorCode;
-    private final String mErrorMessage;
+    protected final int mErrorCode;
+    protected final String mErrorMessage;
 
     public ErrorResponse(String msg, int code) {
         mErrorCode = code;

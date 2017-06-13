@@ -4,16 +4,21 @@ import ru.nsu.ccfit.boltava.model.server.IServerMessageHandler;
 
 public abstract class Request extends Message {
 
-    private final String mSender;
+    private String id;
+    private final String username;
 
     public Request(String username) {
-        mSender = username;
+        this.username = username;
     }
 
     public String getUsername() {
-        return mSender;
+        return username;
     }
 
-    public abstract void handle(IServerMessageHandler handler);
+    public String getId() {
+        return id;
+    }
+
+    public abstract void handle(IServerMessageHandler handler) throws InterruptedException;
 
 }
