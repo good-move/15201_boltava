@@ -1,4 +1,6 @@
-package ru.nsu.ccfit.boltava.model.message;
+package ru.nsu.ccfit.boltava.model.net;
+
+import ru.nsu.ccfit.boltava.model.message.Message;
 
 import java.io.EOFException;
 import java.io.IOException;

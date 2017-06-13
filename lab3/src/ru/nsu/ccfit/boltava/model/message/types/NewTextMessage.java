@@ -1,4 +1,7 @@
-package ru.nsu.ccfit.boltava.model.message;
+package ru.nsu.ccfit.boltava.model.message.types;
+
+import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
+import ru.nsu.ccfit.boltava.model.message.Notification;
 
 public class NewTextMessage extends Notification {
 
@@ -19,7 +22,7 @@ public class NewTextMessage extends Notification {
     }
 
     @Override
-    public void handle(IMessageHandler messageHandler) {
+    public void handle(IClientMessageHandler messageHandler) {
         messageHandler.handle(this);
     }
 

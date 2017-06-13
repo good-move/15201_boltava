@@ -1,7 +1,6 @@
-package ru.nsu.ccfit.boltava.model;
+package ru.nsu.ccfit.boltava.model.net;
 
-import ru.nsu.ccfit.boltava.model.message.IMessageHandler;
-import ru.nsu.ccfit.boltava.model.message.ISocketMessageStream;
+import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream;
 
 public class ConnectionConfig {
 

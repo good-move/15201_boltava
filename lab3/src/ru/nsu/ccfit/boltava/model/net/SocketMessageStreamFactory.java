@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.model.message;
+package ru.nsu.ccfit.boltava.model.net;
 
 import java.io.IOException;
 import java.net.Socket;

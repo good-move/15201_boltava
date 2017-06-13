@@ -1,6 +1,6 @@
 package ru.nsu.ccfit.boltava.model.chat;
 
-import ru.nsu.ccfit.boltava.model.Connection;
+import ru.nsu.ccfit.boltava.model.net.Connection;
 
 import java.util.HashSet;
 

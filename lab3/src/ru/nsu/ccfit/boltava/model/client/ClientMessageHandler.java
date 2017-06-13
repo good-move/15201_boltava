@@ -1,11 +1,9 @@
-package ru.nsu.ccfit.boltava.model.message;
+package ru.nsu.ccfit.boltava.model.client;
 
-public class ClientMessageHandler implements IMessageHandler {
+import ru.nsu.ccfit.boltava.model.message.*;
+import ru.nsu.ccfit.boltava.model.message.types.*;
 
-    @Override
-    public void handle(Message msg) {
-
-    }
+public class ClientMessageHandler implements IClientMessageHandler {
 
     @Override
     public void handle(ErrorResponse msg) {
@@ -35,6 +33,11 @@ public class ClientMessageHandler implements IMessageHandler {
     @Override
     public void handle(UpdateUserList msg) {
 
+    }
+
+    @Override
+    public void handle(Message msg) {
+        System.err.println("Super generic is called");
     }
 
 }

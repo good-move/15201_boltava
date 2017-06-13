@@ -1,8 +1,7 @@
-package ru.nsu.ccfit.boltava.model;
+package ru.nsu.ccfit.boltava.model.server;
 
 import ru.nsu.ccfit.boltava.model.chat.ChatMember;
-import ru.nsu.ccfit.boltava.model.message.IMessageHandler;
-import ru.nsu.ccfit.boltava.model.message.ISocketMessageStream.MessageStreamType;
+import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream.MessageStreamType;
 import ru.nsu.ccfit.boltava.model.message.Message;
 
 import java.io.*;
@@ -16,17 +15,17 @@ public class Server {
 
     private HashSet<ChatMember> mChatMembers = new HashSet<>();
     private LinkedBlockingQueue<Message> msgQueue = new LinkedBlockingQueue<>();
-    private IMessageHandler mMsgHandler;
+    private IServerMessageHandler mMsgHandler;
     private Thread mXMLListener;
     private Thread mObjectListener;
 
-//    TODO
-//    create object socket listener
-//    create xml socket listener
-//
+    public Server(IServerMessageHandler handler) {
+         mMsgHandler = handler;
+    }
+
     public static void main(String[] args) {
         try {
-            Server server = new Server();
+            Server server = new Server(new ServerMessageHandler());
             server.createClientListeners();
             server.start();
         } catch (IOException e) {
@@ -34,13 +33,10 @@ public class Server {
         } catch (NumberFormatException e) {
             System.err.println("[Error] Invalid port number format: " + e.getMessage());
         }
-
-
     }
 
     private void createClientListeners() throws IOException, NumberFormatException {
         try (FileInputStream is = new FileInputStream("server.properties")) {
-            Server server = new Server();
             Properties props = new Properties();
             props.load(is);
 
@@ -78,7 +74,6 @@ public class Server {
                 while (!Thread.interrupted()) {
                     Socket socket = serverSocket.accept();
                     mChatMembers.add(new ChatMember(socket, mMsgHandler, streamType));
-
                     System.out.println("Client connected: " + socket.getInetAddress());
                 }
             } catch (IOException e) {

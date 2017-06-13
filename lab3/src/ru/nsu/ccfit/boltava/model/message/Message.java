@@ -1,12 +1,11 @@
 package ru.nsu.ccfit.boltava.model.message;
 
-public abstract class Message {
+import java.io.Serializable;
 
-    public abstract void handle(IMessageHandler messageHandler);
+public abstract class Message implements Serializable {
 
-    public enum Status {
-        Success,
-        Error
+    public void handle(IMessageHandler handler) {
+        handler.handle(this);
     }
 
 }

@@ -1,8 +1,10 @@
 package ru.nsu.ccfit.boltava.model.message;
 
 
+import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
+
 public abstract class Response extends Message {
 
-    private Message.Status mStatus;
+    public abstract void handle(IClientMessageHandler handler);
 
 }

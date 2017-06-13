@@ -1,15 +1,14 @@
-package ru.nsu.ccfit.boltava.model;
+package ru.nsu.ccfit.boltava.model.net;
 
 import ru.nsu.ccfit.boltava.model.message.IMessageHandler;
-import ru.nsu.ccfit.boltava.model.message.ISocketMessageStream;
+import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream.MessageStreamType;
 import ru.nsu.ccfit.boltava.model.message.Message;
-import ru.nsu.ccfit.boltava.model.message.SocketMessageStreamFactory;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Connection {
+public class Connection<IHandler extends IMessageHandler> {
 
     private int mID;
     private Thread mSenderThread;
@@ -17,17 +16,17 @@ public class Connection {
     private LinkedBlockingQueue<Message> mSendMsgQueue = new LinkedBlockingQueue<>();
     private LinkedBlockingQueue<Message> mReceiveMsgQueue = new LinkedBlockingQueue<>();
     private final Socket mSocket;
-    private IMessageHandler mMsgHandler;
+    private IHandler mMsgHandler;
     private ISocketMessageStream mStream;
     private boolean isListening = false;
 
-    public Connection(Socket socket, IMessageHandler handler, ISocketMessageStream.MessageStreamType type) throws IOException {
+    public Connection(Socket socket, IHandler handler, MessageStreamType type) throws IOException {
         mSocket = socket;
         mMsgHandler = handler;
         mStream = SocketMessageStreamFactory.get(type, mSocket);
     }
 
-    public Connection(ConnectionConfig connectionConfig, IMessageHandler handler) throws IOException {
+    public Connection(ConnectionConfig connectionConfig, IHandler handler) throws IOException {
         mSocket = new Socket(connectionConfig.getHost(), connectionConfig.getPort());
         mStream = SocketMessageStreamFactory.get(connectionConfig.getStreamType(), mSocket);
         mMsgHandler = handler;
@@ -75,6 +74,7 @@ public class Connection {
             try {
                 while (!Thread.interrupted()) {
                     Message msg = mStream.read();
+                    msg = msg.getClass().cast(msg);
                     msg.handle(mMsgHandler);
                 }
             } catch (IOException | ClassNotFoundException e) {

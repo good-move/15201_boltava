@@ -1,8 +1,8 @@
 package ru.nsu.ccfit.boltava.model.chat;
 
-import ru.nsu.ccfit.boltava.model.Connection;
-import ru.nsu.ccfit.boltava.model.message.IMessageHandler;
-import ru.nsu.ccfit.boltava.model.message.ISocketMessageStream.MessageStreamType;
+import ru.nsu.ccfit.boltava.model.net.Connection;
+import ru.nsu.ccfit.boltava.model.server.IServerMessageHandler;
+import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream.MessageStreamType;
 import ru.nsu.ccfit.boltava.model.message.Message;
 
 import java.io.IOException;
@@ -11,13 +11,13 @@ import java.net.Socket;
 public class ChatMember {
 
     private User mUser;
-    private Connection mConnection;
+    private Connection<IServerMessageHandler> mConnection;
     private Status mStatus;
 
     public ChatMember(Socket socket,
-                      IMessageHandler handler,
+                      IServerMessageHandler handler,
                       MessageStreamType type) throws IOException {
-        mConnection = new Connection(socket, handler, type);
+        mConnection = new Connection<>(socket, handler, type);
         mConnection.listen();
         mStatus = Status.Pending;
     }
