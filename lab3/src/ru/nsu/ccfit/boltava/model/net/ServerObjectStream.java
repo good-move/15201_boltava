@@ -1,32 +1,31 @@
 package ru.nsu.ccfit.boltava.model.net;
 
-import ru.nsu.ccfit.boltava.model.message.Message;
+import ru.nsu.ccfit.boltava.model.message.Request;
+import ru.nsu.ccfit.boltava.model.message.ServerMessage;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ObjectSocketMessageStream implements ISocketMessageStream {
+public class ServerObjectStream implements IServerSocketMessageStream {
 
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
-    public ObjectSocketMessageStream(Socket socket) throws IOException {
+    public ServerObjectStream(Socket socket) throws IOException {
         out = new ObjectOutputStream(socket.getOutputStream());
-        out.flush();
         in = new ObjectInputStream(socket.getInputStream());
     }
 
     @Override
-    public Message read() throws IOException, ClassNotFoundException, EOFException {
+    public Request read() throws IOException, ClassNotFoundException {
         System.out.println("Reading object");
-        return (Message) in.readObject();
+        return (Request) in.readObject();
     }
 
     @Override
-    public void write(Message msg) throws IOException {
+    public void write(ServerMessage msg) throws IOException {
         System.out.println("Writing object");
 
         out.writeObject(msg);

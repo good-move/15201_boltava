@@ -8,10 +8,9 @@ import ru.nsu.ccfit.boltava.model.message.types.SendTextMessage;
 
 public class ServerMessageHandler implements IServerMessageHandler {
 
-    @Override
-    public void handle(Request msg) {
-        System.err.println("Unknown request from " + msg.getUsername());
-    }
+    public ServerMessageHandler() {};
+
+    public ServerMessageHandler(Server server) {};
 
     @Override
     public void handle(Login msg) {
@@ -20,22 +19,17 @@ public class ServerMessageHandler implements IServerMessageHandler {
 
     @Override
     public void handle(Logout msg) {
-
+        System.out.println("Logout request from " + msg.getUsername());
     }
 
     @Override
     public void handle(SendTextMessage msg) {
-
+        System.out.println("New message is sent");
     }
 
     @Override
     public void handle(GetUserList msg) {
-
-    }
-
-    @Override
-    public void handle(Message msg) {
-        System.err.println("Super generic is called");
+        System.out.println("User list queried");
     }
 
 }

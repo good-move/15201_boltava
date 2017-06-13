@@ -4,8 +4,4 @@ import java.io.Serializable;
 
 public abstract class Message implements Serializable {
 
-    public void handle(IMessageHandler handler) {
-        handler.handle(this);
-    }
-
 }

@@ -1,7 +1,5 @@
 package ru.nsu.ccfit.boltava.model.client;
 
-import ru.nsu.ccfit.boltava.model.net.Connection;
-import ru.nsu.ccfit.boltava.model.net.ConnectionConfig;
 import ru.nsu.ccfit.boltava.model.message.types.Login;
 
 import java.io.FileInputStream;
@@ -20,12 +18,12 @@ public class Client {
             config.setPort(Integer.parseInt(props.getProperty("port")));
             config.setStreamType(props.getProperty("mode"));
 
-            Connection<ClientMessageHandler> connection = new Connection<>(config, new ClientMessageHandler());
+            ClientConnection connection = new ClientConnection(config, new ClientMessageHandler());
             connection.listen();
 
             connection.sendMessage(new Login("goodmove"));
-        } catch (IOException e) {
-            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
 //            System.err.println(e.getMessage());
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();

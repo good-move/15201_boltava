@@ -5,10 +5,10 @@ import ru.nsu.ccfit.boltava.model.message.Message;
 import java.io.IOException;
 import java.util.Arrays;
 
-public interface ISocketMessageStream {
+public interface ISocketMessageStream<InMessage extends Message, OutMessage extends Message> {
 
-    Message read() throws IOException, ClassNotFoundException;
-    void write(Message msg) throws IOException;
+    InMessage read() throws IOException, ClassNotFoundException;
+    void write(OutMessage msg) throws IOException;
 
     enum MessageStreamType {
         XML,

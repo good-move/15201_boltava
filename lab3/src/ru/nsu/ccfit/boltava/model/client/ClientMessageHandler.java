@@ -35,9 +35,4 @@ public class ClientMessageHandler implements IClientMessageHandler {
 
     }
 
-    @Override
-    public void handle(Message msg) {
-        System.err.println("Super generic is called");
-    }
-
 }

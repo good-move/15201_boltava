@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.model.net;
+package ru.nsu.ccfit.boltava.model.client;
 
 import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream;
 

@@ -9,7 +9,6 @@ import ru.nsu.ccfit.boltava.model.message.types.SendTextMessage;
 
 public interface IServerMessageHandler extends IMessageHandler {
 
-    void handle(Request msg);
     void handle(Login msg);
     void handle(Logout msg);
     void handle(SendTextMessage msg);
