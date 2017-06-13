@@ -23,14 +23,11 @@ public class ClientObjectStream implements IClientSocketMessageStream {
 
     @Override
     public ServerMessage read() throws IOException, ClassNotFoundException {
-        System.out.println("Reading object");
         return (ServerMessage) in.readObject();
     }
 
     @Override
     public void write(Request msg) throws IOException {
-        System.out.println("Writing object");
-
         out.writeObject(msg);
     }
 

@@ -20,14 +20,11 @@ public class ServerObjectStream implements IServerSocketMessageStream {
 
     @Override
     public Request read() throws IOException, ClassNotFoundException {
-        System.out.println("Reading object");
         return (Request) in.readObject();
     }
 
     @Override
     public void write(ServerMessage msg) throws IOException {
-        System.out.println("Writing object");
-
         out.writeObject(msg);
     }
 
