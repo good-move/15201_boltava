@@ -77,12 +77,14 @@ public class ServerMediator {
 
     public void disconnect() {
         try {
-            mSocket.close();
             mReceiverThread.interrupt();
             mSenderThread.interrupt();
+            mSocket.close();
             // on connection closed listener
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            mChatMember.disconnect();
         }
     }
 
