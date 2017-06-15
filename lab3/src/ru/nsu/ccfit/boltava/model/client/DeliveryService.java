@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class ClientConnection {
+public class DeliveryService {
 
     private boolean isListening = false;
     private IClientSocketMessageStream mStream;
@@ -17,7 +17,7 @@ public class ClientConnection {
     private IClientMessageHandler mMsgHandler;
     private LinkedBlockingQueue<Request> mSendMsgQueue = new LinkedBlockingQueue<>();
 
-    public ClientConnection(ConnectionConfig connectionConfig, IClientMessageHandler handler) throws IOException {
+    public DeliveryService(ConnectionConfig connectionConfig, IClientMessageHandler handler) throws IOException {
         mSocket = new Socket(connectionConfig.getHost(), connectionConfig.getPort());
         mStream = ClientMessageStreamFactory.get(connectionConfig.getStreamType(), mSocket);
         mMsgHandler = handler;
@@ -67,7 +67,7 @@ public class ClientConnection {
         }
     }
 
-    public void listen() {
+    public void start() {
         if (isListening) throw new IllegalStateException("Mediator is already established");
         mSenderThread.start();
         mReceiverThread.start();
