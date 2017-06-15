@@ -2,9 +2,9 @@ package ru.nsu.ccfit.boltava.model.server;
 
 import java.util.HashMap;
 
-import static ru.nsu.ccfit.boltava.model.server.Errors.ErrorName.*;
+import static ru.nsu.ccfit.boltava.model.server.ErrorBundle.ErrorName.*;
 
-abstract class Errors {
+abstract class ErrorBundle {
 
     public static HashMap<ErrorName, String> ErrorMessages = new HashMap<>();
     public static HashMap<ErrorName, Integer> ErrorCodes = new HashMap<>();
@@ -14,6 +14,10 @@ abstract class Errors {
         ErrorMessages.put(InvalidUsernameFormat, "Invalid username format");
         ErrorMessages.put(UsernameMismatch, "Registered username doesn't match message sender's username");
         ErrorMessages.put(SessionIdMismatch, "Given out session id doesn't match message sender's session id");
+        ErrorMessages.put(NullUsername, "Message contains no username");
+        ErrorMessages.put(NullSessionId, "Message contains no session id");
+        ErrorMessages.put(DoubleLogin, "Login request sent when already logged in");
+        ErrorMessages.put(LoginRequired, "Login required before any other request can be handled");
     }
 
     static {
@@ -28,7 +32,11 @@ abstract class Errors {
         UsernameIsTaken,
         InvalidUsernameFormat,
         UsernameMismatch,
-        SessionIdMismatch
+        SessionIdMismatch,
+        NullUsername,
+        NullSessionId,
+        DoubleLogin,
+        LoginRequired
     }
 
 }
