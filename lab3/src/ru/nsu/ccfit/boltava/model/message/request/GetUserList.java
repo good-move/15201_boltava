@@ -1,12 +1,11 @@
-package ru.nsu.ccfit.boltava.model.message.types;
+package ru.nsu.ccfit.boltava.model.message.request;
 
-import ru.nsu.ccfit.boltava.model.server.ChatMember;
 import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.server.IServerMessageHandler;
 
-public class Logout extends Request {
+public class GetUserList extends Request {
 
-    public Logout(String username) {
+    public GetUserList(String username) {
         super(username);
     }
 

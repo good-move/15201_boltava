@@ -1,12 +1,12 @@
-package ru.nsu.ccfit.boltava.model.message.types;
+package ru.nsu.ccfit.boltava.model.message.response;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.Response;
 
-public class LoginSuccess extends Response {
+public class SuccessResponse extends Response {
 
-    public LoginSuccess(String sessionId) {
-        this.sessionId = sessionId;
+    public SuccessResponse(String sessionId) {
+        super(sessionId);
     }
 
     @Override

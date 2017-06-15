@@ -1,17 +1,16 @@
-package ru.nsu.ccfit.boltava.model.message.types;
+package ru.nsu.ccfit.boltava.model.message.notification;
 
 import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.Notification;
 
-public class UpdateUserList extends Notification {
+public class UserLeftChat extends Notification {
 
     private User user;
-    private Action action;
 
-    public UpdateUserList(User user, Action action) {
+    public UserLeftChat(String sessionId, User user) {
+        super(sessionId);
         this.user = user;
-        this.action = action;
     }
 
     @Override
@@ -19,9 +18,8 @@ public class UpdateUserList extends Notification {
         messageHandler.handle(this);
     }
 
-    public enum Action {
-        Add,
-        Remove
+    public User getUser() {
+        return user;
     }
 
 }

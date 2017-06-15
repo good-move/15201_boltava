@@ -1,11 +1,11 @@
-package ru.nsu.ccfit.boltava.model.message.types;
+package ru.nsu.ccfit.boltava.model.message.response;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 
 public class LoginError extends ErrorResponse {
 
-    public LoginError(String msg, int code) {
-        super(msg, code);
+    public LoginError(String sessionId, String msg, int code) {
+        super(sessionId, msg, code);
     }
 
     @Override

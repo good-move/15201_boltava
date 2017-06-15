@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.model.message.types;
+package ru.nsu.ccfit.boltava.model.message.response;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.Response;
@@ -9,7 +9,8 @@ public class GetUserListSuccess extends Response {
 
     private List<String> onlineUsers;
 
-    public GetUserListSuccess(List<String> onlineUsers) {
+    public GetUserListSuccess(String sessionId, List<String> onlineUsers) {
+        super(sessionId);
         this.onlineUsers = onlineUsers;
     }
 

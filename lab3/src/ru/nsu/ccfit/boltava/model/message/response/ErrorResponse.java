@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.boltava.model.message.types;
+package ru.nsu.ccfit.boltava.model.message.response;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.Response;
@@ -8,7 +8,8 @@ public class ErrorResponse extends Response {
     protected final int mErrorCode;
     protected final String mErrorMessage;
 
-    public ErrorResponse(String msg, int code) {
+    public ErrorResponse(String sessionId, String msg, int code) {
+        super(sessionId);
         mErrorCode = code;
         mErrorMessage = msg;
     }

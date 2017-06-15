@@ -1,18 +1,19 @@
 package ru.nsu.ccfit.boltava.model.message;
 
+import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.server.IServerMessageHandler;
 
 public abstract class Request extends Message {
 
     private String id;
-    private final String username;
+    private final String sender;
 
-    public Request(String username) {
-        this.username = username;
+    public Request(String sender) {
+        this.sender = sender;
     }
 
-    public String getUsername() {
-        return username;
+    public String getSender() {
+        return sender;
     }
 
     public String getId() {
