@@ -13,4 +13,5 @@ public abstract class Message implements Serializable {
     public String getSessionId() {
         return sessionId;
     }
+
 }

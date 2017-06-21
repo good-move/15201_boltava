@@ -10,7 +10,7 @@ public class NewChatMessageNotification extends Notification {
     private ChatMessage content;
 
     public NewChatMessageNotification(String sessionId, ChatMessage content, String sender) {
-        super(sessionId);
+        this.sessionId = sessionId;
         this.content = content;
         this.sender = sender;
     }

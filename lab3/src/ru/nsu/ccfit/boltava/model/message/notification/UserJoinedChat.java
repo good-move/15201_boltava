@@ -6,11 +6,10 @@ import ru.nsu.ccfit.boltava.model.message.Notification;
 
 public class UserJoinedChat extends Notification {
 
-    private User user;
+    private String username;
 
-    public UserJoinedChat(String sessionId, User user) {
-        super(sessionId);
-        this.user = user;
+    public UserJoinedChat(String username) {
+        this.username = username;
     }
 
     @Override
@@ -18,8 +17,8 @@ public class UserJoinedChat extends Notification {
         messageHandler.handle(this);
     }
 
-    public User getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
 }
