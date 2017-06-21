@@ -1,7 +1,5 @@
 package ru.nsu.ccfit.boltava.view;
 
-import ru.nsu.ccfit.boltava.model.client.Client;
-
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

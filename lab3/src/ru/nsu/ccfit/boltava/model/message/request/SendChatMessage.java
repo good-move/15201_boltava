@@ -1,8 +1,7 @@
 package ru.nsu.ccfit.boltava.model.message.request;
 
-import ru.nsu.ccfit.boltava.model.chat.User;
-import ru.nsu.ccfit.boltava.model.message.message_content.ChatMessage;
 import ru.nsu.ccfit.boltava.model.message.Request;
+import ru.nsu.ccfit.boltava.model.message.message_content.ChatMessage;
 import ru.nsu.ccfit.boltava.model.server.IServerMessageHandler;
 
 public class SendChatMessage extends Request {

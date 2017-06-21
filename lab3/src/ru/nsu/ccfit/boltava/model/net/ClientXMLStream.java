@@ -1,6 +1,5 @@
 package ru.nsu.ccfit.boltava.model.net;
 
-import ru.nsu.ccfit.boltava.model.message.Message;
 import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
 

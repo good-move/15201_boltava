@@ -7,7 +7,6 @@ import ru.nsu.ccfit.boltava.model.message.notification.NewChatMessageNotificatio
 import ru.nsu.ccfit.boltava.model.message.notification.UserJoinedChat;
 import ru.nsu.ccfit.boltava.model.message.notification.UserLeftChat;
 import ru.nsu.ccfit.boltava.model.message.response.*;
-import ru.nsu.ccfit.boltava.view.IOnChatMessageReceivedListener;
 import ru.nsu.ccfit.boltava.view.IUserListObserver;
 
 import java.util.HashSet;

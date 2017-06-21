@@ -36,7 +36,7 @@ abstract class ErrorBundle {
         NullUsername,
         NullSessionId,
         DoubleLogin,
-        LoginRequired
+        LoginRequired,
     }
 
 }

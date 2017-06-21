@@ -1,7 +1,9 @@
 package ru.nsu.ccfit.boltava.model.client;
 
-import ru.nsu.ccfit.boltava.model.message.*;
-import ru.nsu.ccfit.boltava.model.net.*;
+import ru.nsu.ccfit.boltava.model.message.Request;
+import ru.nsu.ccfit.boltava.model.message.ServerMessage;
+import ru.nsu.ccfit.boltava.model.net.ClientMessageStreamFactory;
+import ru.nsu.ccfit.boltava.model.net.IClientSocketMessageStream;
 
 import java.io.IOException;
 import java.net.Socket;

@@ -6,10 +6,14 @@ import ru.nsu.ccfit.boltava.model.message.ServerMessage;
 import ru.nsu.ccfit.boltava.model.message.message_content.ChatMessage;
 import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream.MessageStreamType;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 

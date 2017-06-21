@@ -1,6 +1,5 @@
 package ru.nsu.ccfit.boltava.model.message.response;
 
-import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.Response;
 import ru.nsu.ccfit.boltava.model.message.message_content.ChatMessage;
