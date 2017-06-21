@@ -1,8 +1,12 @@
 package ru.nsu.ccfit.boltava.view;
 
+import ru.nsu.ccfit.boltava.model.client.Client;
+
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class LoginView extends JFrame implements IOnValueChangedListener<String> {
@@ -15,7 +19,7 @@ public class LoginView extends JFrame implements IOnValueChangedListener<String>
 
     private ArrayList<IOnLoginSubmitListener> listeners = new ArrayList<>();
 
-    public LoginView() {
+    public LoginView(Client client) {
         titleLabel.setText("GChat");
         errorLabel.setText("");
         loginBtn.setText("Log in");
@@ -29,6 +33,13 @@ public class LoginView extends JFrame implements IOnValueChangedListener<String>
                 if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
                     submitLogin();
                 }
+            }
+        });
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent windowEvent) {
+                client.loginViewClosed();
             }
         });
 
@@ -55,4 +66,5 @@ public class LoginView extends JFrame implements IOnValueChangedListener<String>
     public void onValueChanged(String value) {
         errorLabel.setText(value);
     }
+
 }

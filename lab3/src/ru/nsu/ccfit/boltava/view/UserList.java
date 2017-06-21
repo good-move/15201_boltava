@@ -8,31 +8,31 @@ import java.util.HashSet;
 
 public class UserList extends JComponent implements  IUserListObserver {
 
-    private HashSet<User> users;
+    private HashSet<String> usersnames;
     private JList<String> userListComponent;
     private DefaultListModel<String> model;
     private JPanel panel;
     private JScrollPane scrollPane;
 
-    UserList(ArrayList<User> users) {
-        this.users = new HashSet<>(users);
+    UserList(ArrayList<String> usernames) {
+        this.usersnames = new HashSet<>(usernames);
         model = new DefaultListModel<>();
-        users.forEach(user -> model.addElement(user.getUsername()));
+        this.usersnames.forEach(u -> model.addElement(u));
         userListComponent.setModel(model);
     }
 
     @Override
-    public void onUserJoined(User user) {
-        if (!users.contains(user)) {
-            users.add(user);
-            model.addElement(user.getUsername());
+    public void onUserJoined(String username) {
+        if (!usersnames.contains(username)) {
+            usersnames.add(username);
+            model.addElement(username);
         }
     }
 
     @Override
-    public void onUserLeft(User user) {
-        users.remove(user);
-        model.removeElement(user.getUsername());
+    public void onUserLeft(String username) {
+        usersnames.remove(username);
+        model.removeElement(username);
     }
 
 }
