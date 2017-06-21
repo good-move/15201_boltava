@@ -34,7 +34,7 @@ public class DeliveryService {
             } catch (InterruptedException e) {
                 System.err.println("Interrupted");
             } finally {
-                disconnect();
+                stop();
             }
         }, "Sender Thread");
 
@@ -48,7 +48,7 @@ public class DeliveryService {
             } catch (IOException | ClassNotFoundException e) {
 
             } finally {
-                disconnect();
+                stop();
             }
         }, "Receiver Thread");
 
@@ -58,7 +58,14 @@ public class DeliveryService {
         mSendMsgQueue.put(msg);
     }
 
-    public void disconnect() {
+    public void start() {
+        if (isListening) throw new IllegalStateException("Delivery Service is already running");
+        mSenderThread.start();
+        mReceiverThread.start();
+        isListening = true;
+    }
+
+    public void stop() {
         try {
             mSocket.close();
             mReceiverThread.interrupt();
@@ -67,13 +74,6 @@ public class DeliveryService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void start() {
-        if (isListening) throw new IllegalStateException("Mediator is already established");
-        mSenderThread.start();
-        mReceiverThread.start();
-        isListening = true;
     }
 
 }
