@@ -69,10 +69,9 @@ public class ServerMessageHandler implements IServerMessageHandler {
             member.sendMessage(response);
 
             Notification notification = new UserJoinedChat(
-                    member.getSessionId(),
-                    member.getUser()
+                    member.getUser().getUsername()
             );
-            server.enqueueMessage(notification);
+            server.broadcastMessageFrom(notification, member);
             return;
         }
 
@@ -82,7 +81,7 @@ public class ServerMessageHandler implements IServerMessageHandler {
     @Override
     public void handle(Logout msg) throws InterruptedException {
         logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), msg.getSender()));
-
+        member.close();
     }
 
     @Override
@@ -93,7 +92,7 @@ public class ServerMessageHandler implements IServerMessageHandler {
 
         if (serverMessage == null) {
             serverMessage = new NewChatMessageNotification(member.getSessionId(), msg.getContent(), msg.getSender());
-            server.enqueueMessage(serverMessage);
+            server.broadcastMessageFrom(serverMessage, member);
         } else {
             member.sendMessage(serverMessage);
         }

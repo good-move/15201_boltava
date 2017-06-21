@@ -1,11 +1,16 @@
 package ru.nsu.ccfit.boltava.model.server;
 
 import ru.nsu.ccfit.boltava.model.chat.User;
+import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
+import ru.nsu.ccfit.boltava.model.message.notification.UserLeftChat;
+import ru.nsu.ccfit.boltava.model.net.IServerSocketMessageStream;
 import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream.MessageStreamType;
+import ru.nsu.ccfit.boltava.model.net.ServerMessageStreamFactory;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ChatMember {
@@ -16,21 +21,61 @@ public class ChatMember {
     private User user;
     private String sessionId;
 
+    private Socket socket;
     private Server server;
-    private ServerMediator connection;
     private ServerMessageHandler messageHandler;
+    private IServerSocketMessageStream stream;
+
+    private Thread senderThread;
+    private Thread receiverThread;
+    private LinkedBlockingQueue<ServerMessage> messageQueue = new LinkedBlockingQueue<>();
+    private boolean isClosed;
 
     public ChatMember(Socket socket,
                       Server server,
                       MessageStreamType type) throws IOException {
+        this.socket = socket;
         this.server = server;
         messageHandler = new ServerMessageHandler(server, this);
-        connection = new ServerMediator(socket, messageHandler, type, this);
-        connection.listen();
+        stream = ServerMessageStreamFactory.get(type, socket);
+
+        senderThread = new Thread(() -> {
+            try {
+                while (!Thread.interrupted()) {
+                    stream.write(messageQueue.take());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                System.err.println("Interrupted");
+            } finally {
+                close();
+            }
+        }, "Sender Thread");
+
+
+        receiverThread = new Thread(() -> {
+            try {
+                while (!Thread.interrupted()) {
+                    Request msg = stream.read();
+                    msg.handle(messageHandler);
+                }
+            } catch (IOException | ClassNotFoundException e) {
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                close();
+            }
+        }, "Receiver Thread");
+
+        senderThread.start();
+        receiverThread.start();
+
     }
 
     public void sendMessage(ServerMessage msg) throws InterruptedException {
-        connection.sendMessage(msg);
+        messageQueue.put(msg);
     }
 
     public long getID() {
@@ -53,8 +98,19 @@ public class ChatMember {
         this.user = user;
     }
 
-    public void disconnect() {
-        server.removeChatMember(this);
+    void close() {
+        try {
+            if (!isClosed) {
+                isClosed = true;
+                socket.close();
+                server.broadcastMessageFrom(new UserLeftChat(getUser().getUsername()), this);
+                server.removeChatMember(this);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

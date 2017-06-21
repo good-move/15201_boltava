@@ -98,14 +98,29 @@ public class Server {
 
     void removeChatMember(ChatMember member) {
         synchronized (lock) {
-            reservedUserNames.remove(member.getUser().getUsername());
+            if (member.getUser() != null) {
+                reservedUserNames.remove(member.getUser().getUsername());
+            }
             chatMembers.remove(member);
+        }
+    }
+
+    void broadcastMessageFrom(ServerMessage msg, ChatMember member) throws InterruptedException {
+        logger.info("Broadcasting: " + msg.getClass().getSimpleName());
+
+        synchronized (lock) {
+            for (ChatMember m : chatMembers) {
+                if (member != null && !m.equals(member)) {
+                    m.sendMessage(msg);
+                }
+            }
         }
     }
 
     private void broadcastMessage(ServerMessage msg) throws InterruptedException {
         for (ChatMember m : chatMembers) {
             if (m.getSessionId() != null &&
+                msg.getSessionId() != null &&
                 !m.getSessionId().equals(msg.getSessionId())) {
                 m.sendMessage(msg);
             }
