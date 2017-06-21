@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.model.client;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
 import ru.nsu.ccfit.boltava.model.net.ClientMessageStreamFactory;
@@ -11,7 +13,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class DeliveryService {
 
-    private boolean isListening = false;
+    private final static Logger logger = LogManager.getLogger("ConsoleLogger");
+
+    private boolean isStarted = false;
+    private boolean isStopped = false;
     private IClientSocketMessageStream mStream;
     private Thread mSenderThread;
     private Thread mReceiverThread;
@@ -29,12 +34,11 @@ public class DeliveryService {
                 while (!Thread.interrupted()) {
                     mStream.write(mSendMsgQueue.take());
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (InterruptedException e) {
-                System.err.println("Interrupted");
+            } catch (IOException e) {
             } finally {
-                stop();
+                logger.info(Thread.currentThread().getName() + " interrupted");
+                shutDown();
             }
         }, "Sender Thread");
 
@@ -46,9 +50,9 @@ public class DeliveryService {
                     msg.handle(mMsgHandler);
                 }
             } catch (IOException | ClassNotFoundException e) {
-
             } finally {
-                stop();
+                logger.info(Thread.currentThread().getName() + " interrupted");
+                shutDown();
             }
         }, "Receiver Thread");
 
@@ -59,20 +63,27 @@ public class DeliveryService {
     }
 
     public void start() {
-        if (isListening) throw new IllegalStateException("Delivery Service is already running");
+        if (isStarted) throw new IllegalStateException("Delivery Service cannot be started more than once");
         mSenderThread.start();
         mReceiverThread.start();
-        isListening = true;
+        isStarted = true;
     }
 
     public void stop() {
         try {
+            shutDown();
             mSocket.close();
-            mReceiverThread.interrupt();
-            mSenderThread.interrupt();
-            // on connection closed listener
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void shutDown() {
+        if (!isStopped) {
+            isStopped = true;
+            mReceiverThread.interrupt();
+            mSenderThread.interrupt();
+            // notify observers
         }
     }
 
