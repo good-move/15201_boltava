@@ -1,6 +1,5 @@
 package ru.nsu.ccfit.boltava.model.message.message_content;
 
-import ru.nsu.ccfit.boltava.model.client.IChatMessageHandler;
 import ru.nsu.ccfit.boltava.view.IChatMessageRenderer;
 
 public class TextMessage extends ChatMessage {
@@ -18,11 +17,6 @@ public class TextMessage extends ChatMessage {
 
     public void setMessageText(String messageText) {
         this.messageText = messageText;
-    }
-
-    @Override
-    public void handle(IChatMessageHandler handler) {
-        handler.handle(this);
     }
 
     @Override
