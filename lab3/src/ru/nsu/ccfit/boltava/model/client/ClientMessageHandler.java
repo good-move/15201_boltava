@@ -2,7 +2,8 @@ package ru.nsu.ccfit.boltava.model.client;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.nsu.ccfit.boltava.model.message.notification.NewChatMessageNotification;
+import ru.nsu.ccfit.boltava.model.message.TextMessage;
+import ru.nsu.ccfit.boltava.model.message.notification.NewTextMessageNotification;
 import ru.nsu.ccfit.boltava.model.message.notification.UserJoinedChat;
 import ru.nsu.ccfit.boltava.model.message.notification.UserLeftChat;
 import ru.nsu.ccfit.boltava.model.message.response.*;
@@ -48,13 +49,13 @@ public class ClientMessageHandler implements IClientMessageHandler {
 
     @Override
     public void handle(GetUserListSuccess msg) {
-        logger.info(String.format("%s response. session id: %s", msg.getClass().getSimpleName(), msg.getSessionId()));
+        logger.info(String.format("%s response.", msg.getClass().getSimpleName()));
     }
 
     @Override
-    public void handle(NewChatMessageNotification msg) {
-        logger.info("Got a new message:" + msg.getContent().getClass().getSimpleName());
-        client.addMessageToHistory(msg.getContent());
+    public void handle(NewTextMessageNotification msg) {
+        logger.info("Got a new message:" + msg.getMessage().getClass().getSimpleName());
+        client.addMessageToHistory(new TextMessage(msg.getSender(), msg.getMessage()));
     }
 
     @Override

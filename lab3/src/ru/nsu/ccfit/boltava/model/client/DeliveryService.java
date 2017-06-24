@@ -6,6 +6,8 @@ import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
 import ru.nsu.ccfit.boltava.model.net.ClientMessageStreamFactory;
 import ru.nsu.ccfit.boltava.model.net.IClientSocketMessageStream;
+import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream;
+import ru.nsu.ccfit.boltava.model.serializer.IMessageSerializer;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -35,10 +37,14 @@ public class DeliveryService {
                     mStream.write(mSendMsgQueue.take());
                 }
             } catch (InterruptedException e) {
-            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ISocketMessageStream.StreamWriteException e) {
+                e.printStackTrace();
+            } catch (IMessageSerializer.MessageSerializationException e) {
+                e.printStackTrace();
             } finally {
-                logger.info(Thread.currentThread().getName() + " interrupted");
-                shutDown();
+                logger.info("interrupted");
+                stop();
             }
         }, "Sender Thread");
 
@@ -49,10 +55,13 @@ public class DeliveryService {
                     msg = msg.getClass().cast(msg);
                     msg.handle(mMsgHandler);
                 }
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IMessageSerializer.MessageSerializationException e) {
+                e.printStackTrace();
+            } catch (ISocketMessageStream.StreamReadException e) {
+                e.printStackTrace();
             } finally {
-                logger.info(Thread.currentThread().getName() + " interrupted");
-                shutDown();
+                logger.info( "interrupted");
+                stop();
             }
         }, "Receiver Thread");
 
@@ -71,19 +80,12 @@ public class DeliveryService {
 
     public void stop() {
         try {
-            shutDown();
+            isStopped = true;
             mSocket.close();
+            mSenderThread.interrupt();
+            mReceiverThread.interrupt();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void shutDown() {
-        if (!isStopped) {
-            isStopped = true;
-            mReceiverThread.interrupt();
-            mSenderThread.interrupt();
-            // notify observers
         }
     }
 

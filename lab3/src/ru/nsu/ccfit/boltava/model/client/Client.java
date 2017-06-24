@@ -4,20 +4,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.message.Request;
-import ru.nsu.ccfit.boltava.model.message.ServerMessage;
-import ru.nsu.ccfit.boltava.model.message.message_content.ChatMessage;
-import ru.nsu.ccfit.boltava.model.message.message_content.TextMessage;
+import ru.nsu.ccfit.boltava.model.message.TextMessage;
 import ru.nsu.ccfit.boltava.model.message.request.GetUserList;
 import ru.nsu.ccfit.boltava.model.message.request.Login;
-import ru.nsu.ccfit.boltava.model.message.request.Logout;
-import ru.nsu.ccfit.boltava.model.message.request.SendChatMessage;
-import ru.nsu.ccfit.boltava.model.net.ClientMessageStreamFactory;
-import ru.nsu.ccfit.boltava.model.net.IClientSocketMessageStream;
+import ru.nsu.ccfit.boltava.model.message.request.SendTextMessage;
 import ru.nsu.ccfit.boltava.view.*;
 
+import javax.xml.soap.Text;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Properties;
@@ -34,7 +29,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
     private String sessionId;
     private String queriedUsername;
     private ArrayList<User> onlineUsers = new ArrayList<>();
-    private ArrayList<ChatMessage> chatHistory = new ArrayList<>();
+    private ArrayList<TextMessage> chatHistory = new ArrayList<>();
 
     private boolean isLoggedIn = false;
 
@@ -42,9 +37,10 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
     private DeliveryService deliveryService;
 
     private HashSet<IChatMessageRenderer> chatMessageRenderers = new HashSet<>();
+    private LinkedBlockingQueue<Request> sentRequests = new LinkedBlockingQueue<>();
 
 
-    private Client () {
+    public Client () {
         client = this;
         setUp();
     }
@@ -52,6 +48,8 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
     public static void main(String[] args) {
         Client client = new Client();
     }
+
+//    ****************************** Lifecycle methods ******************************
 
     private void setUp() {
         try (FileInputStream is = new FileInputStream("client.properties")) {
@@ -94,6 +92,42 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
         }
     }
 
+    //    ****************************** Client state control methods ******************************
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public User getProfile() {
+        return profile;
+    }
+
+    public ArrayList<User> getOnlineUsers() {
+        return onlineUsers;
+    }
+
+    public void setOnlineUsers(ArrayList<User> onlineUsers) {
+        this.onlineUsers = onlineUsers;
+        // update listeners
+    }
+
+    public ArrayList<TextMessage> getChatHistory() {
+        return chatHistory;
+    }
+
+    public void setChatHistory(ArrayList<TextMessage> chatHistory) {
+        this.chatHistory = chatHistory;
+    }
+
+    public Request getLastSentRequest() {
+        return sentRequests.poll();
+    }
+
+    void addMessageToHistory(TextMessage msg) {
+        chatHistory.add(msg);
+        chatMessageRenderers.forEach(msg::render);
+    }
+
     void onLogin(String sessionId) {
         if (isLoggedIn) {
             throw new RuntimeException("Double login on client side");
@@ -114,47 +148,19 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
         }
     }
 
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public User getProfile() {
-        return profile;
-    }
-
-    public ArrayList<User> getOnlineUsers() {
-        return onlineUsers;
-    }
-
-    public void setOnlineUsers(ArrayList<User> onlineUsers) {
-        this.onlineUsers = onlineUsers;
-        // update listeners
-    }
-
-    public ArrayList<ChatMessage> getChatHistory() {
-        return chatHistory;
-    }
-
-    void setChatHistory(ArrayList<ChatMessage> chatHistory) {
-        this.chatHistory = chatHistory;
-    }
+    //    ****************************** Interface methods ******************************
 
     public void addChatMessageRenderer(IChatMessageRenderer renderer) {
         chatMessageRenderers.add(renderer);
     }
 
-    void addMessageToHistory(ChatMessage msg) {
-        chatHistory.add(msg);
-        chatMessageRenderers.forEach(msg::render);
-    }
-
     @Override
     public void onTextMessageSubmit(String textMessage) {
         try {
-            TextMessage message = new TextMessage(profile.getUsername(), textMessage);
-            Request request = new SendChatMessage(profile.getUsername(), message);
+            Request request = new SendTextMessage(profile.getUsername(), textMessage);
             request.setSessionId(sessionId);
-            addMessageToHistory(message);
+            addMessageToHistory(new TextMessage(profile.getUsername(), textMessage));
+            sentRequests.put(request);
             deliveryService.sendMessage(request);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -164,7 +170,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
     @Override
     public void onLoginSubmit(String username) {
         try {
-            deliveryService.sendMessage(new Login(username));
+            deliveryService.sendMessage(new Login(username, "TYPE"));
             this.queriedUsername = username;
         } catch (InterruptedException e) {
             e.printStackTrace();
