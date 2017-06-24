@@ -2,9 +2,9 @@ package ru.nsu.ccfit.boltava.model.message.request;
 
 import ru.nsu.ccfit.boltava.model.message.MessageFactory;
 import ru.nsu.ccfit.boltava.model.message.Request;
-import ru.nsu.ccfit.boltava.model.message.message_content.ChatMessage;
 import ru.nsu.ccfit.boltava.model.server.IServerMessageHandler;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -13,17 +13,18 @@ import javax.xml.bind.annotation.XmlType;
         factoryClass = MessageFactory.class,
         factoryMethod = "getLoginRequest"
 )
-public class SendChatMessage extends Request {
+public class SendTextMessage extends Request {
 
-    private ChatMessage content;
+    private String message;
 
-    public SendChatMessage(String user, ChatMessage content) {
+    public SendTextMessage(String user, String message) {
         super(user);
-        this.content = content;
+        this.message = message;
     }
 
-    public ChatMessage getContent() {
-        return content;
+    @XmlElement(name = "message")
+    public String getMessage() {
+        return message;
     }
 
     @Override

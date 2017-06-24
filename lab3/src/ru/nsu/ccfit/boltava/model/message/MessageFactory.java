@@ -1,6 +1,6 @@
 package ru.nsu.ccfit.boltava.model.message;
 
-import ru.nsu.ccfit.boltava.model.message.notification.NewChatMessageNotification;
+import ru.nsu.ccfit.boltava.model.message.notification.NewTextMessageNotification;
 import ru.nsu.ccfit.boltava.model.message.notification.UserJoinedChat;
 import ru.nsu.ccfit.boltava.model.message.notification.UserLeftChat;
 import ru.nsu.ccfit.boltava.model.message.request.GetUserList;
@@ -42,8 +42,8 @@ public class MessageFactory {
         return new SuccessResponse();
     }
 
-    public static NewChatMessageNotification getNewChatMessage() {
-        return new NewChatMessageNotification(null, null);
+    public static NewTextMessageNotification getNewChatMessage() {
+        return new NewTextMessageNotification(null, null);
     }
 
     public static UserLeftChat getUserLeftChat() {
