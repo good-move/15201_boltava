@@ -1,6 +1,6 @@
 package ru.nsu.ccfit.boltava.view;
 
-import ru.nsu.ccfit.boltava.model.message.message_content.TextMessage;
+import ru.nsu.ccfit.boltava.model.message.TextMessage;
 
 import javax.swing.*;
 
@@ -8,7 +8,7 @@ public class ChatView extends JComponent implements IChatMessageRenderer {
 
     private JPanel panel;
     private JList<String> messageList;
-    DefaultListModel<String> model = new DefaultListModel<>();
+    private DefaultListModel<String> model = new DefaultListModel<>();
     private JScrollPane scrollPane;
 
     private final String MESSAGE_MARKUP = (
@@ -26,7 +26,7 @@ public class ChatView extends JComponent implements IChatMessageRenderer {
 
     @Override
     public void render(TextMessage msg) {
-        model.addElement(String.format(MESSAGE_MARKUP, scrollPane.getViewport().getWidth(), msg.getAuthor(), msg.getMessageText()));
+        model.addElement(String.format(MESSAGE_MARKUP, scrollPane.getViewport().getWidth(), msg.getAuthor(), msg.getMessage()));
         SwingUtilities.invokeLater(() -> {
             int lastIndex = model.getSize() - 1;
             if (lastIndex >= 0) {

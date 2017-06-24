@@ -1,6 +1,6 @@
 package ru.nsu.ccfit.boltava.view;
 
-import ru.nsu.ccfit.boltava.model.message.message_content.TextMessage;
+import ru.nsu.ccfit.boltava.model.message.TextMessage;
 
 
 public interface IChatMessageRenderer {

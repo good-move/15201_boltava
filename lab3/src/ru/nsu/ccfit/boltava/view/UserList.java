@@ -1,7 +1,5 @@
 package ru.nsu.ccfit.boltava.view;
 
-import ru.nsu.ccfit.boltava.model.chat.User;
-
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashSet;
