@@ -1,22 +1,31 @@
 package ru.nsu.ccfit.boltava.model.message.response;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
+import ru.nsu.ccfit.boltava.model.message.MessageFactory;
 import ru.nsu.ccfit.boltava.model.message.Response;
 import ru.nsu.ccfit.boltava.model.message.message_content.ChatMessage;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 
+@XmlRootElement
+@XmlType (
+        factoryClass = MessageFactory.class,
+        factoryMethod = "getLoginSuccess"
+)
 public class LoginSuccess extends Response {
 
-    private ArrayList<ChatMessage> chatHistory;
+    private String sessionId;
 
-    public LoginSuccess(String sessionId, ArrayList<ChatMessage> chatHistory) {
-        super(sessionId);
-        this.chatHistory = chatHistory;
+    public LoginSuccess(String sessionId) {
+        this.sessionId = sessionId;
     }
 
-    public ArrayList<ChatMessage> getChatHistory() {
-        return chatHistory;
+    @XmlElement (name = "session")
+    public String getSessionId() {
+        return sessionId;
     }
 
     @Override

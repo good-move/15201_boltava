@@ -5,9 +5,7 @@ import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 
 public abstract class Response extends ServerMessage {
 
-    public Response(String sessionId) {
-        this.sessionId = sessionId;
-    }
+    public Response() {}
 
     public abstract void handle(IClientMessageHandler handler);
 

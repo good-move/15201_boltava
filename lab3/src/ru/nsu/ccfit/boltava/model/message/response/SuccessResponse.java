@@ -1,13 +1,18 @@
 package ru.nsu.ccfit.boltava.model.message.response;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
+import ru.nsu.ccfit.boltava.model.message.MessageFactory;
 import ru.nsu.ccfit.boltava.model.message.Response;
 
-public class SuccessResponse extends Response {
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-    public SuccessResponse(String sessionId) {
-        super(sessionId);
-    }
+@XmlRootElement
+@XmlType(
+        factoryClass = MessageFactory.class,
+        factoryMethod = "getSuccessResponse"
+)
+public class SuccessResponse extends Response {
 
     @Override
     public void handle(IClientMessageHandler messageHandler) {
