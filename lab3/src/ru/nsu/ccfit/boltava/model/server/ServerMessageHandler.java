@@ -34,26 +34,23 @@ public class ServerMessageHandler implements IServerMessageHandler {
 
     @Override
     public void handle(Login msg) throws InterruptedException {
-        logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), msg.getSender()));
+        logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), msg.getUsername()));
 
         Response response;
 
         if (member.getSessionId() != null) {
             response = new LoginError(
-                    member.getSessionId(),
                     ErrorBundle.ErrorMessages.get(DoubleLogin),
                     ErrorBundle.ErrorCodes.get(DoubleLogin)
             );
         }
-        else if (server.isUsernameTaken(msg.getSender())) {
+        else if (server.isUsernameTaken(msg.getUsername())) {
             response = new LoginError(
-                    member.getSessionId(),
                     ErrorBundle.ErrorMessages.get(UsernameIsTaken),
                     ErrorBundle.ErrorCodes.get(UsernameIsTaken)
             );
-        } else if(!server.isUsernameFormatValid(msg.getSender())) {
+        } else if(!server.isUsernameFormatValid(msg.getUsername())) {
             response = new LoginError(
-                    member.getSessionId(),
                     ErrorBundle.ErrorMessages.get(InvalidUsernameFormat),
                     ErrorBundle.ErrorCodes.get(InvalidUsernameFormat)
             );
@@ -61,10 +58,10 @@ public class ServerMessageHandler implements IServerMessageHandler {
             // add "valid username format" message
         } else {
             String sessionId = String.valueOf(member.getID());
-            member.setUser(new User(msg.getSender()));
-            server.registerUsername(msg.getSender());
+            member.setUser(new User(msg.getUsername()));
+            server.registerUsername(msg.getUsername());
             member.setSessionId(sessionId);
-            response = new LoginSuccess(sessionId, server.getChatHistorySneakPeek());
+            response = new LoginSuccess(sessionId);
 
             member.sendMessage(response);
 
@@ -80,18 +77,18 @@ public class ServerMessageHandler implements IServerMessageHandler {
 
     @Override
     public void handle(Logout msg) throws InterruptedException {
-        logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), msg.getSender()));
+        logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), member.getUser().getUsername()));
         member.close();
     }
 
     @Override
     public void handle(SendChatMessage msg) throws InterruptedException {
-        logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), msg.getSender()));
+        logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), member.getUser().getUsername()));
 
         ServerMessage serverMessage = checkMessageBroken(msg);
 
         if (serverMessage == null) {
-            serverMessage = new NewChatMessageNotification(member.getSessionId(), msg.getContent(), msg.getSender());
+            serverMessage = new NewChatMessageNotification(member.getSessionId(), msg.getContent(), member.getUser().getUsername());
             server.broadcastMessageFrom(serverMessage, member);
         } else {
             member.sendMessage(serverMessage);
@@ -101,7 +98,7 @@ public class ServerMessageHandler implements IServerMessageHandler {
 
     @Override
     public void handle(GetUserList msg) throws InterruptedException {
-        logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), msg.getSender()));
+        logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), member.getUser().getUsername()));
 
         Response response = checkMessageBroken(msg);
 
@@ -117,33 +114,22 @@ public class ServerMessageHandler implements IServerMessageHandler {
 
         if (member.getSessionId() == null) {
             response = new LoginError(
-                    member.getSessionId(),
                     ErrorBundle.ErrorMessages.get(LoginRequired),
                     ErrorBundle.ErrorCodes.get(LoginRequired)
             );
-        }
-        else if (msg.getSender() == null) {
-            response = new LoginError(
-                    member.getSessionId(),
-                    ErrorBundle.ErrorMessages.get(NullUsername),
-                    ErrorBundle.ErrorCodes.get(NullUsername)
-            );
+//        }
+//        else if (msg.getSender() == null) {
+//            response = new LoginError(
+//                    ErrorBundle.ErrorMessages.get(NullUsername),
+//                    ErrorBundle.ErrorCodes.get(NullUsername)
+//            );
         } else if (msg.getSessionId() == null) {
             response = new LoginError(
-                    member.getSessionId(),
                     ErrorBundle.ErrorMessages.get(NullSessionId),
                     ErrorBundle.ErrorCodes.get(NullSessionId)
             );
-        }
-        else if (!member.getUser().getUsername().equals(msg.getSender())){
-            response = new LoginError(
-                    member.getSessionId(),
-                    ErrorBundle.ErrorMessages.get(UsernameMismatch),
-                    ErrorBundle.ErrorCodes.get(UsernameMismatch)
-            );
         } else if (!member.getSessionId().equals(msg.getSessionId())) {
             response = new LoginError(
-                    member.getSessionId(),
                     ErrorBundle.ErrorMessages.get(SessionIdMismatch),
                     ErrorBundle.ErrorCodes.get(SessionIdMismatch)
             );

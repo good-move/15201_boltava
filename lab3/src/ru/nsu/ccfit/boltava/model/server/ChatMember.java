@@ -23,7 +23,7 @@ public class ChatMember {
 
     private Socket socket;
     private Server server;
-    private ServerMessageHandler messageHandler;
+    private IServerMessageHandler messageHandler;
     private IServerSocketMessageStream stream;
 
     private Thread senderThread;
@@ -103,7 +103,9 @@ public class ChatMember {
             if (!isClosed) {
                 isClosed = true;
                 socket.close();
-                server.broadcastMessageFrom(new UserLeftChat(getUser().getUsername()), this);
+                if (getUser() != null) {
+                    server.broadcastMessageFrom(new UserLeftChat(getUser().getUsername()), this);
+                }
                 server.removeChatMember(this);
             }
         } catch (InterruptedException e) {
@@ -120,7 +122,8 @@ public class ChatMember {
 
         ChatMember that = (ChatMember) o;
 
-        return id == that.id && (sessionId != null ? sessionId.equals(that.sessionId) : that.sessionId == null);
+        if (id != that.id) return false;
+        return sessionId != null ? sessionId.equals(that.sessionId) : that.sessionId == null;
     }
 
     @Override

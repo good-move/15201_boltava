@@ -28,7 +28,6 @@ public class Server {
     private Server server;
     private Thread xmlListener;
     private Thread objectListener;
-    private Thread messageSender;
 
     private final String USERNAME_PATTERN_STRING = "(\\w+){5,}";
     private final Pattern usernamePattern = Pattern.compile(USERNAME_PATTERN_STRING);
@@ -47,8 +46,6 @@ public class Server {
                     MessageStreamType.OBJ), "OBJ Listener");
             xmlListener = new Thread(new ClientsListener(Integer.parseInt(props.getProperty("xml_port")),
                     MessageStreamType.XML), "XML Listener");
-
-            messageSender = new Thread(new Broadcaster(), "Broadcaster");
         }
     }
 
@@ -67,13 +64,11 @@ public class Server {
         server = this;
         xmlListener.start();
         objectListener.start();
-        messageSender.start();
     }
 
     private void stop() {
         xmlListener.interrupt();
         objectListener.interrupt();
-        messageSender.interrupt();
         // send SHUT_SOWN message to members?
     }
 
@@ -113,16 +108,6 @@ public class Server {
                 if (member != null && !m.equals(member)) {
                     m.sendMessage(msg);
                 }
-            }
-        }
-    }
-
-    private void broadcastMessage(ServerMessage msg) throws InterruptedException {
-        for (ChatMember m : chatMembers) {
-            if (m.getSessionId() != null &&
-                msg.getSessionId() != null &&
-                !m.getSessionId().equals(msg.getSessionId())) {
-                m.sendMessage(msg);
             }
         }
     }
@@ -173,25 +158,6 @@ public class Server {
                     e.printStackTrace();
                 }
             }
-        }
-
-    }
-
-    private class Broadcaster implements Runnable {
-
-        @Override
-        public void run() {
-            try {
-                while (!Thread.interrupted()) {
-                    ServerMessage msg = mMsgQueue.take();
-                    logger.info("Will process msg");
-                    broadcastMessage(msg);
-                    logger.info("Did process msg");
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
         }
 
     }
