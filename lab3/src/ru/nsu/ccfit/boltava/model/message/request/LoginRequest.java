@@ -8,28 +8,28 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement
+@XmlRootElement (name = "login_command")
 @XmlType(
         factoryClass = MessageFactory.class,
         factoryMethod = "getLoginRequest"
 )
-public class Login extends Request {
+public class LoginRequest extends Request {
 
+    @XmlElement(name = "name")
     private final String username;
+    @XmlElement(name = "type")
     private final String clientType;
 
-    public Login(String username, String clientType) {
+    public LoginRequest(String username, String clientType) {
         super("");
         this.username = username;
         this.clientType = clientType;
     }
 
-    @XmlElement(name = "name")
     public String getUsername() {
         return username;
     }
 
-    @XmlElement(name = "type")
     public String getClientType() {
         return clientType;
     }

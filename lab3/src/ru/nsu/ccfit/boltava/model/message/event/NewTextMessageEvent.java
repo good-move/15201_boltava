@@ -1,35 +1,37 @@
-package ru.nsu.ccfit.boltava.model.message.notification;
+package ru.nsu.ccfit.boltava.model.message.event;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
+import ru.nsu.ccfit.boltava.model.message.Event;
 import ru.nsu.ccfit.boltava.model.message.MessageFactory;
-import ru.nsu.ccfit.boltava.model.message.Notification;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-@XmlRootElement
+@XmlRootElement (name = "message_event")
 @XmlType(
         factoryClass = MessageFactory.class,
         factoryMethod = "getNewTextMessage"
 )
-public class NewTextMessageNotification extends Notification {
+public class NewTextMessageEvent extends Event {
 
+    @XmlElement(name = "name")
     private String sender;
+
+    @XmlElement(name = "message")
     private String message;
 
-    public NewTextMessageNotification(String message, String sender) {
+    public NewTextMessageEvent(String message, String sender) {
         this.message = message;
         this.sender = sender;
     }
 
-    @XmlElement(name = "name")
     public String getSender() {
         return sender;
     }
 
-    @XmlElement(name = "message")
     public String getMessage() {
         return message;
     }

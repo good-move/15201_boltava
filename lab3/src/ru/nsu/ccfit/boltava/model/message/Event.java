@@ -2,9 +2,9 @@ package ru.nsu.ccfit.boltava.model.message;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 
-public abstract class Notification extends ServerMessage {
+public abstract class Event extends ServerMessage {
 
-    public Notification() {}
+    public Event() {}
 
     public abstract void handle(IClientMessageHandler handler);
 

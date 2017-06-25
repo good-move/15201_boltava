@@ -1,17 +1,18 @@
 package ru.nsu.ccfit.boltava.model.message;
 
-import ru.nsu.ccfit.boltava.model.message.notification.NewTextMessageNotification;
-import ru.nsu.ccfit.boltava.model.message.notification.UserJoinedChat;
-import ru.nsu.ccfit.boltava.model.message.notification.UserLeftChat;
-import ru.nsu.ccfit.boltava.model.message.request.GetUserList;
-import ru.nsu.ccfit.boltava.model.message.request.Login;
-import ru.nsu.ccfit.boltava.model.message.request.Logout;
+import ru.nsu.ccfit.boltava.model.message.event.NewTextMessageEvent;
+import ru.nsu.ccfit.boltava.model.message.event.UserJoinedChatEvent;
+import ru.nsu.ccfit.boltava.model.message.event.UserLeftChatEvent;
+import ru.nsu.ccfit.boltava.model.message.request.GetUserListRequest;
+import ru.nsu.ccfit.boltava.model.message.request.LoginRequest;
+import ru.nsu.ccfit.boltava.model.message.request.LogoutRequest;
+import ru.nsu.ccfit.boltava.model.message.request.PostTextMessageRequest;
 import ru.nsu.ccfit.boltava.model.message.response.*;
 
 public class MessageFactory {
 
-    public static Login getLoginRequest() {
-        return new Login( "", "");
+    public static LoginRequest getLoginRequest() {
+        return new LoginRequest( "", "");
     }
 
     public static LoginSuccess getLoginSuccess() {
@@ -22,12 +23,12 @@ public class MessageFactory {
         return new LoginError("",0);
     }
 
-    public static Logout getLogoutRequest() {
-        return new Logout("");
+    public static LogoutRequest getLogoutRequest() {
+        return new LogoutRequest("");
     }
 
-    public static GetUserList getUserListRequest() {
-        return new GetUserList("");
+    public static GetUserListRequest getUserListRequest() {
+        return new GetUserListRequest("");
     }
 
     public static GetUserListSuccess getUserListSuccess() {
@@ -42,16 +43,19 @@ public class MessageFactory {
         return new SuccessResponse();
     }
 
-    public static NewTextMessageNotification getNewChatMessage() {
-        return new NewTextMessageNotification(null, null);
+    public static NewTextMessageEvent getNewTextMessage() {
+        return new NewTextMessageEvent(null, null);
     }
 
-    public static UserLeftChat getUserLeftChat() {
-        return new UserLeftChat(null);
+    public static UserLeftChatEvent getUserLeftChat() {
+        return new UserLeftChatEvent(null);
     }
 
-    public static UserJoinedChat getUserJoinedChat() {
-        return new UserJoinedChat(null);
+    public static UserJoinedChatEvent getUserJoinedChat() {
+        return new UserJoinedChatEvent(null);
+    }
+    public static PostTextMessageRequest getSendTextMessageRequest() {
+        return new PostTextMessageRequest(null, null);
     }
 
 }

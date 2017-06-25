@@ -1,24 +1,26 @@
-package ru.nsu.ccfit.boltava.model.message.notification;
+package ru.nsu.ccfit.boltava.model.message.event;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.MessageFactory;
-import ru.nsu.ccfit.boltava.model.message.Notification;
+import ru.nsu.ccfit.boltava.model.message.Event;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-@XmlRootElement
+@XmlRootElement (name = "userlogin_event")
 @XmlType(
         factoryClass = MessageFactory.class,
         factoryMethod = "getUserJoinedChat"
 )
-public class UserJoinedChat extends Notification {
+public class UserJoinedChatEvent extends Event {
 
+    @XmlElement(name = "name")
     private String username;
 
-    public UserJoinedChat(String username) {
+    public UserJoinedChatEvent(String username) {
         this.username = username;
     }
 
@@ -27,7 +29,6 @@ public class UserJoinedChat extends Notification {
         messageHandler.handle(this);
     }
 
-    @XmlElement(name = "name")
     public String getUsername() {
         return username;
     }

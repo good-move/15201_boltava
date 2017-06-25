@@ -1,23 +1,25 @@
-package ru.nsu.ccfit.boltava.model.message.notification;
+package ru.nsu.ccfit.boltava.model.message.event;
 
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.MessageFactory;
-import ru.nsu.ccfit.boltava.model.message.Notification;
+import ru.nsu.ccfit.boltava.model.message.Event;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement
+@XmlRootElement (name = "userlogout_event")
 @XmlType(
         factoryClass = MessageFactory.class,
         factoryMethod = "getUserLeftChat"
 )
-public class UserLeftChat extends Notification {
+public class UserLeftChatEvent extends Event {
 
+    @XmlElement(name = "name")
     private String username;
 
-    public UserLeftChat(String username) {
+    public UserLeftChatEvent(String username) {
         this.username = username;
     }
 
@@ -26,7 +28,6 @@ public class UserLeftChat extends Notification {
         messageHandler.handle(this);
     }
 
-    @XmlElement(name = "name")
     public String getUsername() {
         return username;
     }

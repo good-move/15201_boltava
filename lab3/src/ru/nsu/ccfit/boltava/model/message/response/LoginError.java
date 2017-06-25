@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-@XmlRootElement
+@XmlRootElement (name = "error")
 @XmlType(
         factoryClass = MessageFactory.class,
         factoryMethod = "getLoginError"

@@ -7,7 +7,7 @@ import ru.nsu.ccfit.boltava.model.message.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement
+@XmlRootElement (name = "success")
 @XmlType(
         factoryClass = MessageFactory.class,
         factoryMethod = "getSuccessResponse"

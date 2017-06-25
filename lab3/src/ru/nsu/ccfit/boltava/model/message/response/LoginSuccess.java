@@ -9,20 +9,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 
-@XmlRootElement
+@XmlRootElement (name = "success")
 @XmlType (
         factoryClass = MessageFactory.class,
         factoryMethod = "getLoginSuccess"
 )
 public class LoginSuccess extends Response {
 
+    @XmlElement (name = "session")
     private String sessionId;
 
     public LoginSuccess(String sessionId) {
         this.sessionId = sessionId;
     }
 
-    @XmlElement (name = "session")
     public String getSessionId() {
         return sessionId;
     }
