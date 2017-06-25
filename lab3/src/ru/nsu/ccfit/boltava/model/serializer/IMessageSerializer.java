@@ -9,9 +9,17 @@ public interface IMessageSerializer<T> {
 
     class MessageSerializationException extends Exception {
 
-        MessageSerializationException() {};
+        MessageSerializationException() {}
 
-        MessageSerializationException(String msg) { super(msg); };
+        MessageSerializationException(String msg) { super(msg); }
+
+        MessageSerializationException(String message, Throwable cause) { super(message, cause); }
+
+        MessageSerializationException(Throwable cause) { super(cause); }
+
+        MessageSerializationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+            super(message, cause, enableSuppression, writableStackTrace);
+        }
 
     }
 

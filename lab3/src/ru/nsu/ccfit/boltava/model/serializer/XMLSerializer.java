@@ -23,7 +23,6 @@ import java.util.concurrent.BlockingQueue;
 
 public class XMLSerializer implements IMessageSerializer<String> {
 
-
     private BlockingQueue<Request> lastSentRequestQueue;
     private final Marshaller marshaller;
     private final Unmarshaller unmarshaller;
@@ -75,7 +74,7 @@ public class XMLSerializer implements IMessageSerializer<String> {
             }
         } catch (SAXException | IOException | JAXBException | ParserConfigurationException e) {
             e.printStackTrace();
-            throw new MessageSerializationException(e.getMessage());
+            throw new MessageSerializationException(e.getMessage(), e);
         }
     }
 
