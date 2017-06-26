@@ -7,12 +7,16 @@ import ru.nsu.ccfit.boltava.model.message.response.*;
 
 public interface IClientMessageHandler {
 
-    void handle(ErrorResponse msg);
-    void handle(SuccessResponse msg);
     void handle(LoginSuccess msg);
+    void handle(LoginError msg);
     void handle(GetUserListSuccess msg);
+    void handle(GetUserListError msg);
+    void handle(PostTextMessageSuccess msg);
+    void handle(PostTextMessageError msg);
+    void handle(LogoutSuccess msg);
+    void handle(LogoutError msg);
+
     void handle(NewTextMessageEvent msg);
     void handle(UserJoinedChatEvent msg);
     void handle(UserLeftChatEvent msg);
-    void handle(LoginError msg);
 }

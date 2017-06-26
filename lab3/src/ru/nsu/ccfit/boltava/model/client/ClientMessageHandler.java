@@ -16,7 +16,7 @@ public class ClientMessageHandler implements IClientMessageHandler {
 
     private Client client;
     private HashSet<IUserListObserver> userListObservers = new HashSet<>();
-    private HashSet<IChatMessageRenderer> messageRenderers = new HashSet<>();
+    private HashSet<IChatMessageRenderer> chatMessageRenderers = new HashSet<>();
 
     private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
@@ -25,7 +25,7 @@ public class ClientMessageHandler implements IClientMessageHandler {
     }
 
     void addMessageRenderer(IChatMessageRenderer renderer) {
-        messageRenderers.add(renderer);
+        chatMessageRenderers.add(renderer);
     }
 
     void addUserListObserver(IUserListObserver observer) {
@@ -33,28 +33,19 @@ public class ClientMessageHandler implements IClientMessageHandler {
     }
 
     void renderTextMessage(TextMessage message) {
-        messageRenderers.forEach(message::render);
-    }
-
-    @Override
-    public void handle(ErrorResponse msg) {
-        logger.error(msg.getErrorMessage());
-    }
-
-    @Override
-    public void handle(SuccessResponse msg) {
-        logger.info("Success response");
+        chatMessageRenderers.forEach(message::render);
     }
 
     @Override
     public void handle(LoginSuccess msg) {
         logger.info(String.format("%s response. session id: %s", msg.getClass().getSimpleName(), msg.getSessionId()));
-        client.onLogin(msg.getSessionId());
+        client.onLoginSuccess(msg.getSessionId());
     }
 
     @Override
-    public void handle(LoginError msg) {
-        logger.error(msg.getErrorMessage());
+    public void handle(LoginError error) {
+        logger.error(error.getErrorMessage());
+        client.onLoginError(error);
     }
 
     @Override
@@ -65,25 +56,50 @@ public class ClientMessageHandler implements IClientMessageHandler {
     }
 
     @Override
+    public void handle(GetUserListError msg) {
+
+    }
+
+    @Override
+    public void handle(PostTextMessageSuccess msg) {
+
+    }
+
+    @Override
+    public void handle(PostTextMessageError msg) {
+
+    }
+
+    @Override
+    public void handle(LogoutSuccess msg) {
+
+    }
+
+    @Override
+    public void handle(LogoutError msg) {
+
+    }
+
+    @Override
     public void handle(NewTextMessageEvent msg) {
         logger.info("Got a new message:" + msg.getMessage().getClass().getSimpleName());
         TextMessage message = new TextMessage(msg.getSender(), msg.getMessage());
         client.addMessageToHistory(message);
-        messageRenderers.forEach(message::render);
+        chatMessageRenderers.forEach(message::render);
     }
 
     @Override
     public void handle(UserJoinedChatEvent msg) {
         logger.info("Got a new message:" + msg.getClass().getSimpleName());
         userListObservers.forEach(observer -> observer.onUserJoined(msg.getUsername()));
-        messageRenderers.forEach(msg::render);
+        chatMessageRenderers.forEach(msg::render);
     }
 
     @Override
     public void handle(UserLeftChatEvent msg) {
         logger.info("Got a new message:" + msg.getClass().getSimpleName());
         userListObservers.forEach(observer -> observer.onUserLeft(msg.getUsername()));
-        messageRenderers.forEach(msg::render);
+        chatMessageRenderers.forEach(msg::render);
 
     }
 

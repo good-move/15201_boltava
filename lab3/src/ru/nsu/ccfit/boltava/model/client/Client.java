@@ -143,7 +143,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
         chatHistory.add(msg);
     }
 
-    void onLogin(String sessionId) {
+    void onLoginSuccess(String sessionId) {
         if (isLoggedIn) {
             throw new RuntimeException("Double login on client side");
         }
@@ -160,6 +160,10 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             e.printStackTrace();
             WORKFLOW_LOGGER.info(e.getMessage());
         }
+    }
+
+    void onLoginError(LoginError error) {
+        loginView.displayError(error.getErrorMessage());
     }
 
     private LinkedBlockingQueue<Request> getSentRequestsQueue() {
@@ -293,14 +297,17 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
                     UserJoinedChatEvent.class,
                     UserLeftChatEvent.class,
                     LoginRequest.class,
-                    LogoutRequest.class,
-                    PostTextMessageRequest.class,
-                    GetUserListRequest.class,
-                    SuccessResponse.class,
-                    ErrorResponse.class,
-                    GetUserListSuccess.class,
                     LoginError.class,
-                    LoginSuccess.class
+                    LoginSuccess.class,
+                    LogoutRequest.class,
+                    LogoutSuccess.class,
+                    LogoutError.class,
+                    PostTextMessageRequest.class,
+                    PostTextMessageSuccess.class,
+                    PostTextMessageError.class,
+                    GetUserListRequest.class,
+                    GetUserListSuccess.class,
+                    GetUserListError.class
             };
 
             try {

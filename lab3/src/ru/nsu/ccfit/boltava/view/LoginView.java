@@ -9,7 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
-public class LoginView extends JFrame implements IOnValueChangedListener<String> {
+public class LoginView extends JFrame {
 
     private JTextField usernameTextField;
     private JPanel panel;
@@ -20,7 +20,8 @@ public class LoginView extends JFrame implements IOnValueChangedListener<String>
     private ArrayList<IOnLoginSubmitListener> listeners = new ArrayList<>();
 
     public LoginView(Client client) {
-        titleLabel.setText("GChat");
+        this.setTitle("Chat");
+        titleLabel.setText("<html><p style='font-size:1.1em'>Welcome!</p></html>");
         errorLabel.setText("");
         loginBtn.setText("Log in");
         loginBtn.addActionListener((e) -> {
@@ -35,6 +36,7 @@ public class LoginView extends JFrame implements IOnValueChangedListener<String>
                 }
             }
         });
+        usernameTextField.setToolTipText("Enter your username");
 
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -62,9 +64,8 @@ public class LoginView extends JFrame implements IOnValueChangedListener<String>
         listeners.add(listener);
     }
 
-    @Override
-    public void onValueChanged(String value) {
-        errorLabel.setText(value);
+    public void displayError(String errorText) {
+        errorLabel.setText(errorText);
     }
 
 }
