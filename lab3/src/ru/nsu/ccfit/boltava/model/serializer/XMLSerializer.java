@@ -109,7 +109,12 @@ public class XMLSerializer implements IMessageSerializer<String> {
     private Response deserializeResponse(String xmlString, String tagName) throws MessageSerializationException, JAXBException {
         Class<? extends Response> responseClass = mapRequestToResponseClass(tagName);
         StringReader reader = new StringReader(xmlString);
-        return (Response) JAXBContext.newInstance(responseClass).createUnmarshaller().unmarshal(reader);
+
+        Response r = (Response) JAXBContext.newInstance(responseClass).createUnmarshaller().unmarshal(reader);
+
+        logger.info("Deserializing response for class: " + responseClass.getSimpleName() + " Result: " + r.getClass().getSimpleName());
+
+        return r;
     }
 
     private Class<? extends Response> mapRequestToResponseClass(String responseTagName) throws MessageSerializationException {
@@ -123,14 +128,16 @@ public class XMLSerializer implements IMessageSerializer<String> {
             throw new MessageSerializationException("No requests are available to make response serialization");
         }
 
+        logger.info("Mapping request to response. Request: " + request.getClass().getSimpleName());
+
         if (request.getClass().equals(GetUserListRequest.class)) {
-            return responseTagName.equals(TagNames.SUCCESS) ? GetUserListSuccess.class : ErrorResponse.class;
+            return responseTagName.equals(TagNames.SUCCESS) ? GetUserListSuccess.class : GetUserListError.class;
         } else if (request.getClass().equals(LoginRequest.class)) {
             return responseTagName.equals(TagNames.SUCCESS) ? LoginSuccess.class : LoginError.class;
         } else if (request.getClass().equals(LogoutRequest.class)) {
-            return responseTagName.equals(TagNames.SUCCESS) ? SuccessResponse.class : ErrorResponse.class;
+            return responseTagName.equals(TagNames.SUCCESS) ? LogoutSuccess.class : LogoutError.class;
         } else if (request.getClass().equals(PostTextMessageRequest.class)) {
-            return responseTagName.equals(TagNames.SUCCESS) ? SuccessResponse.class : ErrorResponse.class;
+            return responseTagName.equals(TagNames.SUCCESS) ? PostTextMessageSuccess.class : PostTextMessageError.class;
         } else {
             throw new MessageSerializationException(
                     String.format("Failed to map tag name %s to any known Message subclass", responseTagName)
