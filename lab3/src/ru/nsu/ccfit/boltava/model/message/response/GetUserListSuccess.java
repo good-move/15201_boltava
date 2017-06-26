@@ -17,14 +17,14 @@ import java.util.List;
 )
 public class GetUserListSuccess extends Response {
 
+    @XmlElementWrapper(name = "userlist")
+    @XmlElement(name = "user")
     private List<String> onlineUsers;
 
     public GetUserListSuccess(List<String> onlineUsers) {
         this.onlineUsers = onlineUsers;
     }
 
-    @XmlElementWrapper(name = "userlist")
-    @XmlElement(name = "user")
     public List<String> getOnlineUsers() {
         return onlineUsers;
     }
