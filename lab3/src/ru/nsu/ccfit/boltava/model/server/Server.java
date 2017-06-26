@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
 public class Server {
@@ -34,7 +37,7 @@ public class Server {
     private final Pattern usernamePattern = Pattern.compile(USERNAME_PATTERN_STRING);
     private final int CHAT_HISTORY_SNEAK_PEEK_SIZE = 10;
 
-    private ArrayList<TextMessage> chatHistory = new ArrayList<>();
+    private BlockingQueue<TextMessage> chatHistory = new LinkedBlockingQueue<TextMessage>();
 
     private final Object lock = new Object();
 
@@ -120,11 +123,18 @@ public class Server {
             int historySize = chatHistory.size();
             int min = CHAT_HISTORY_SNEAK_PEEK_SIZE < historySize ? CHAT_HISTORY_SNEAK_PEEK_SIZE : historySize;
             for (int i = 0; i < min; i++) {
-                result.add(chatHistory.get(historySize - i - 1));
+                result.add(chatHistory.peek());
             }
         }
 
         return result;
+    }
+
+    void rollMessageHistory(TextMessage message) {
+        chatHistory.add(message);
+        if (chatHistory.size() > CHAT_HISTORY_SNEAK_PEEK_SIZE) {
+            chatHistory.poll();
+        }
     }
 
     List<User> getOnlineUsersList() {

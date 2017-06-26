@@ -4,10 +4,7 @@ package ru.nsu.ccfit.boltava.model.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.chat.User;
-import ru.nsu.ccfit.boltava.model.message.Event;
-import ru.nsu.ccfit.boltava.model.message.Request;
-import ru.nsu.ccfit.boltava.model.message.Response;
-import ru.nsu.ccfit.boltava.model.message.ServerMessage;
+import ru.nsu.ccfit.boltava.model.message.*;
 import ru.nsu.ccfit.boltava.model.message.event.NewTextMessageEvent;
 import ru.nsu.ccfit.boltava.model.message.event.UserJoinedChatEvent;
 import ru.nsu.ccfit.boltava.model.message.request.GetUserListRequest;
@@ -65,6 +62,14 @@ public class ServerMessageHandler implements IServerMessageHandler {
 
             member.sendMessage(response);
 
+            server.getChatHistorySneakPeek().forEach(message -> {
+                try {
+                    member.sendMessage(new NewTextMessageEvent(message.getMessage(), message.getAuthor()));
+                } catch (InterruptedException e) {
+                    logger.trace(e.getMessage());
+                }
+            });
+
             Event event = new UserJoinedChatEvent(
                     member.getUser().getUsername()
             );
@@ -88,6 +93,7 @@ public class ServerMessageHandler implements IServerMessageHandler {
         ServerMessage serverMessage = checkMessageBroken(msg);
 
         if (serverMessage == null) {
+            server.rollMessageHistory(new TextMessage(member.getUser().getUsername(), msg.getMessage()));
             serverMessage = new NewTextMessageEvent(msg.getMessage(), member.getUser().getUsername());
             server.broadcastMessageFrom(serverMessage, member);
         } else {
