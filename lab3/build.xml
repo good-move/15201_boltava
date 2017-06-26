@@ -4,6 +4,7 @@
 
   <!--<property file="build.properties"/>-->
 
+  <property name="basedir" value="." />
   <property name="lab3.jar.output.name.client" value="Client.jar" />
   <property name="lab3.jar.output.name.server" value="Server.jar" />
   <property name="lab3.jar.output.dir" value="${basedir}" />
@@ -35,6 +36,7 @@
     <pathelement location="${javac2.home}/jdom.jar"/>
     <pathelement location="${javac2.home}/asm-all.jar"/>
     <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+    <pathelement location="${javac2.home}/forms_rt.jar"/>
   </path>
 
   <target name="register.custom.compilers">
@@ -43,30 +45,22 @@
 
   <!-- Module lab3 -->
 
-  <dirname property="module.lab3.basedir" file="${ant.file}"/>
-
   <property name="compiler.args.lab3" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
 
-  <property name="lab3.output.dir" value="${module.lab3.basedir}/out/production/lab3/"/>
-  <property name="lab3.testoutput.dir" value="${module.lab3.basedir}/out/test/lab3/"/>
-
-  <path id="lab3.module.bootclasspath">
-    <!-- Paths to be included in compilation bootclasspath -->
-  </path>
+  <property name="lab3.output.dir" value="${basedir}/out/production/lab3/"/>
+  <property name="lab3.testoutput.dir" value="${basedir}/out/test/lab3/"/>
 
   <path id="lab3.module.production.classpath">
-    <!--<path refid="${module.jdk.classpath.lab3}"/>-->
     <path refid="library.lib.classpath"/>
     <path path="${basedir}" />
   </path>
 
   <path id="lab3.module.sourcepath">
-    <dirset dir="${module.lab3.basedir}">
+    <dirset dir="${basedir}">
       <include name="src/"/>
       <include name="lib"/>
     </dirset>
   </path>
-
 
   <target name="compile.module.lab3" depends="compile.module.lab3.production,compile.module.lab3.tests" description="Compile module lab3"/>
 
@@ -84,11 +78,11 @@
     </javac2>
 
     <copy todir="${lab3.output.dir}">
-      <fileset dir="${module.lab3.basedir}/src">
+      <fileset dir="${basedir}/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
-      <fileset dir="${module.lab3.basedir}/lib">
+      <fileset dir="${basedir}/lib">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -136,13 +130,9 @@
     <java jar="${lab3.jar.output.dir}/${lab3.jar.output.name.server}" fork="true" />
   </target>
 
-  <target name="init" description="Build initialization">
-    <!-- Perform any build initialization in this target -->
-  </target>
-
   <target name="clean" depends="clean.module.lab3" description="cleanup all"/>
 
-  <target name="build.modules" depends="init, clean.module.lab3, compile.module.lab3, build.client.jar, build.server.jar" description="build all modules"/>
+  <target name="build.modules" depends="clean.module.lab3, compile.module.lab3, build.client.jar, build.server.jar" description="build all modules"/>
 
   <target name="all" depends="build.modules" description="build all"/>
 
