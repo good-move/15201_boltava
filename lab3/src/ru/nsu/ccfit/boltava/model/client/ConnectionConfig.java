@@ -2,7 +2,7 @@ package ru.nsu.ccfit.boltava.model.client;
 
 import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream;
 
-public class ConnectionConfig {
+class ConnectionConfig {
 
     private String mHost;
     private int mPort;

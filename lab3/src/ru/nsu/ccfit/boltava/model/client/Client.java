@@ -4,15 +4,26 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.message.Request;
+import ru.nsu.ccfit.boltava.model.message.ServerMessage;
 import ru.nsu.ccfit.boltava.model.message.TextMessage;
-import ru.nsu.ccfit.boltava.model.message.request.GetUserList;
-import ru.nsu.ccfit.boltava.model.message.request.Login;
-import ru.nsu.ccfit.boltava.model.message.request.SendTextMessage;
+import ru.nsu.ccfit.boltava.model.message.event.NewTextMessageEvent;
+import ru.nsu.ccfit.boltava.model.message.event.UserJoinedChatEvent;
+import ru.nsu.ccfit.boltava.model.message.event.UserLeftChatEvent;
+import ru.nsu.ccfit.boltava.model.message.request.GetUserListRequest;
+import ru.nsu.ccfit.boltava.model.message.request.LoginRequest;
+import ru.nsu.ccfit.boltava.model.message.request.LogoutRequest;
+import ru.nsu.ccfit.boltava.model.message.request.PostTextMessageRequest;
+import ru.nsu.ccfit.boltava.model.message.response.*;
+import ru.nsu.ccfit.boltava.model.net.*;
+import ru.nsu.ccfit.boltava.model.serializer.IMessageSerializer;
+import ru.nsu.ccfit.boltava.model.serializer.XMLSerializer;
 import ru.nsu.ccfit.boltava.view.*;
 
-import javax.xml.soap.Text;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Properties;
@@ -37,7 +48,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
     private DeliveryService deliveryService;
 
     private HashSet<IChatMessageRenderer> chatMessageRenderers = new HashSet<>();
-    private LinkedBlockingQueue<Request> sentRequests = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<Request> sentRequestsQueue = new LinkedBlockingQueue<>();
 
 
     public Client () {
@@ -66,7 +77,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
 
             loginView = new LoginView(client);
             loginView.addOnLoginSubmitListener(client);
-        } catch (IOException e) {
+        } catch (IOException | JAXBException e) {
             e.printStackTrace();
         }
     }
@@ -119,10 +130,6 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
         this.chatHistory = chatHistory;
     }
 
-    public Request getLastSentRequest() {
-        return sentRequests.poll();
-    }
-
     void addMessageToHistory(TextMessage msg) {
         chatHistory.add(msg);
         chatMessageRenderers.forEach(msg::render);
@@ -137,15 +144,22 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             this.sessionId = sessionId;
             this.profile = new User(queriedUsername);
 
-            Request request = new GetUserList(profile.getUsername());
-            request.setSessionId(sessionId);
-            deliveryService.sendMessage(request);
+            sendRequest(new GetUserListRequest(sessionId));
 
             loginView.setVisible(false);
             app = new App(client);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private LinkedBlockingQueue<Request> getSentRequestsQueue() {
+        return sentRequestsQueue;
+    }
+
+    private void sendRequest(Request request) throws InterruptedException {
+        deliveryService.sendMessage(request);
+        sentRequestsQueue.put(request);
     }
 
     //    ****************************** Interface methods ******************************
@@ -157,11 +171,8 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
     @Override
     public void onTextMessageSubmit(String textMessage) {
         try {
-            Request request = new SendTextMessage(profile.getUsername(), textMessage);
-            request.setSessionId(sessionId);
+            sendRequest(new PostTextMessageRequest(sessionId, textMessage));
             addMessageToHistory(new TextMessage(profile.getUsername(), textMessage));
-            sentRequests.put(request);
-            deliveryService.sendMessage(request);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -170,11 +181,126 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
     @Override
     public void onLoginSubmit(String username) {
         try {
-            deliveryService.sendMessage(new Login(username, "TYPE"));
+            sendRequest(new LoginRequest(username, "TYPE"));
             this.queriedUsername = username;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private class DeliveryService {
+
+        private boolean isStarted = false;
+        private boolean isStopped = false;
+        private IClientSocketMessageStream mStream;
+        private Thread mSenderThread;
+        private Thread mReceiverThread;
+        private Socket mSocket;
+        private IClientMessageHandler mMsgHandler;
+        private LinkedBlockingQueue<Request> mSendMsgQueue = new LinkedBlockingQueue<>();
+
+        private DeliveryService(ConnectionConfig connectionConfig, IClientMessageHandler handler) throws IOException, JAXBException {
+            mSocket = new Socket(connectionConfig.getHost(), connectionConfig.getPort());
+            mMsgHandler = handler;
+
+            switch (connectionConfig.getStreamType()) {
+                case OBJ: mStream = new ClientObjectStream(mSocket); break;
+                case XML: {
+                    XMLSerializer serializer = new XMLSerializer(XMLContext.getContext());
+                    serializer.setRequestQueue(client.getSentRequestsQueue());
+                    mStream = new ClientXMLStream(mSocket, serializer);
+                    break;
+                    }
+                default: throw new RuntimeException("Unknown stream type: " + connectionConfig.getStreamType().toString());
+            }
+
+            mSenderThread = new Thread(() -> {
+                try {
+                    while (!Thread.interrupted()) {
+                        mStream.write(mSendMsgQueue.take());
+                    }
+                } catch (InterruptedException |
+                        ISocketMessageStream.StreamWriteException |
+                        IMessageSerializer.MessageSerializationException e) {
+                    e.printStackTrace();
+                } finally {
+                    logger.info("interrupted");
+                    stop();
+                }
+            }, "Sender Thread");
+
+            mReceiverThread = new Thread(() -> {
+                try {
+                    while (!Thread.interrupted()) {
+                        ServerMessage msg = mStream.read();
+                        msg.handle(mMsgHandler);
+                    }
+                } catch (IMessageSerializer.MessageSerializationException | ISocketMessageStream.StreamReadException e) {
+                    e.printStackTrace();
+                } finally {
+                    logger.info( "interrupted");
+                    stop();
+                }
+            }, "Receiver Thread");
+
+        }
+
+        public void sendMessage(Request msg) throws InterruptedException {
+            mSendMsgQueue.put(msg);
+        }
+
+        public void start() {
+            if (isStarted) throw new IllegalStateException("Delivery Service cannot be started more than once");
+            mSenderThread.start();
+            mReceiverThread.start();
+            isStarted = true;
+        }
+
+        public void stop() {
+            try {
+                isStopped = true;
+                mSocket.close();
+                mSenderThread.interrupt();
+                mReceiverThread.interrupt();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private static class XMLContext {
+
+        private static JAXBContext jaxbContext;
+        static  {
+            Class[] classes = new Class[] {
+                    NewTextMessageEvent.class,
+                    UserJoinedChatEvent.class,
+                    UserLeftChatEvent.class,
+                    LoginRequest.class,
+                    LogoutRequest.class,
+                    PostTextMessageRequest.class,
+                    GetUserListRequest.class,
+                    SuccessResponse.class,
+                    ErrorResponse.class,
+                    GetUserListSuccess.class,
+                    LoginError.class,
+                    LoginSuccess.class
+            };
+
+            try {
+                jaxbContext = JAXBContext.newInstance(classes);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        public static JAXBContext getContext() {
+            return jaxbContext;
+        }
+
     }
 
 }

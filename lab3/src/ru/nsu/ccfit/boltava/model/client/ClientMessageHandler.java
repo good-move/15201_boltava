@@ -3,9 +3,9 @@ package ru.nsu.ccfit.boltava.model.client;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.message.TextMessage;
-import ru.nsu.ccfit.boltava.model.message.notification.NewTextMessageNotification;
-import ru.nsu.ccfit.boltava.model.message.notification.UserJoinedChat;
-import ru.nsu.ccfit.boltava.model.message.notification.UserLeftChat;
+import ru.nsu.ccfit.boltava.model.message.event.NewTextMessageEvent;
+import ru.nsu.ccfit.boltava.model.message.event.UserJoinedChatEvent;
+import ru.nsu.ccfit.boltava.model.message.event.UserLeftChatEvent;
 import ru.nsu.ccfit.boltava.model.message.response.*;
 import ru.nsu.ccfit.boltava.view.IUserListObserver;
 
@@ -53,22 +53,20 @@ public class ClientMessageHandler implements IClientMessageHandler {
     }
 
     @Override
-    public void handle(NewTextMessageNotification msg) {
+    public void handle(NewTextMessageEvent msg) {
         logger.info("Got a new message:" + msg.getMessage().getClass().getSimpleName());
         client.addMessageToHistory(new TextMessage(msg.getSender(), msg.getMessage()));
     }
 
     @Override
-    public void handle(UserJoinedChat msg) {
+    public void handle(UserJoinedChatEvent msg) {
         logger.info("Got a new message:" + msg.getClass().getSimpleName());
-
         userListObservers.forEach(observer -> observer.onUserJoined(msg.getUsername()));
     }
 
     @Override
-    public void handle(UserLeftChat msg) {
+    public void handle(UserLeftChatEvent msg) {
         logger.info("Got a new message:" + msg.getClass().getSimpleName());
-
         userListObservers.forEach(observer -> observer.onUserLeft(msg.getUsername()));
     }
 

@@ -1,8 +1,8 @@
 package ru.nsu.ccfit.boltava.model.client;
 
-import ru.nsu.ccfit.boltava.model.message.notification.NewTextMessageNotification;
-import ru.nsu.ccfit.boltava.model.message.notification.UserJoinedChat;
-import ru.nsu.ccfit.boltava.model.message.notification.UserLeftChat;
+import ru.nsu.ccfit.boltava.model.message.event.NewTextMessageEvent;
+import ru.nsu.ccfit.boltava.model.message.event.UserJoinedChatEvent;
+import ru.nsu.ccfit.boltava.model.message.event.UserLeftChatEvent;
 import ru.nsu.ccfit.boltava.model.message.response.*;
 
 public interface IClientMessageHandler {
@@ -11,8 +11,8 @@ public interface IClientMessageHandler {
     void handle(SuccessResponse msg);
     void handle(LoginSuccess msg);
     void handle(GetUserListSuccess msg);
-    void handle(NewTextMessageNotification msg);
-    void handle(UserJoinedChat msg);
-    void handle(UserLeftChat msg);
+    void handle(NewTextMessageEvent msg);
+    void handle(UserJoinedChatEvent msg);
+    void handle(UserLeftChatEvent msg);
     void handle(LoginError msg);
 }
