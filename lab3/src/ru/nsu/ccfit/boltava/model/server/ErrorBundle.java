@@ -16,8 +16,8 @@ abstract class ErrorBundle {
         ErrorMessages.put(SessionIdMismatch, "Given out session id doesn't match message sender's session id");
         ErrorMessages.put(NullUsername, "Message contains no username");
         ErrorMessages.put(NullSessionId, "Message contains no session id");
-        ErrorMessages.put(DoubleLogin, "Login request sent when already logged in");
-        ErrorMessages.put(LoginRequired, "Login required before any other request can be handled");
+        ErrorMessages.put(DoubleLogin, "LoginRequest request sent when already logged in");
+        ErrorMessages.put(LoginRequired, "LoginRequest required before any other request can be handled");
     }
 
     static {

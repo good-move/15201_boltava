@@ -1,15 +1,15 @@
 package ru.nsu.ccfit.boltava.model.server;
 
-import ru.nsu.ccfit.boltava.model.message.request.GetUserList;
-import ru.nsu.ccfit.boltava.model.message.request.Login;
-import ru.nsu.ccfit.boltava.model.message.request.Logout;
-import ru.nsu.ccfit.boltava.model.message.request.SendChatMessage;
+import ru.nsu.ccfit.boltava.model.message.request.GetUserListRequest;
+import ru.nsu.ccfit.boltava.model.message.request.LoginRequest;
+import ru.nsu.ccfit.boltava.model.message.request.LogoutRequest;
+import ru.nsu.ccfit.boltava.model.message.request.PostTextMessageRequest;
 
 public interface IServerMessageHandler {
 
-    void handle(Login msg) throws InterruptedException;
-    void handle(Logout msg) throws InterruptedException;
-    void handle(SendChatMessage msg) throws InterruptedException;
-    void handle(GetUserList msg) throws InterruptedException;
+    void handle(LoginRequest msg) throws InterruptedException;
+    void handle(LogoutRequest msg) throws InterruptedException;
+    void handle(PostTextMessageRequest msg) throws InterruptedException;
+    void handle(GetUserListRequest msg) throws InterruptedException;
 
 }

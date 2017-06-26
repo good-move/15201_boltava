@@ -3,9 +3,10 @@ package ru.nsu.ccfit.boltava.model.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
-import ru.nsu.ccfit.boltava.model.message.message_content.ChatMessage;
+import ru.nsu.ccfit.boltava.model.message.TextMessage;
 import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream.MessageStreamType;
 
+import javax.xml.bind.JAXBException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -33,7 +34,7 @@ public class Server {
     private final Pattern usernamePattern = Pattern.compile(USERNAME_PATTERN_STRING);
     private final int CHAT_HISTORY_SNEAK_PEEK_SIZE = 10;
 
-    private ArrayList<ChatMessage> chatHistory = new ArrayList<>();
+    private ArrayList<TextMessage> chatHistory = new ArrayList<>();
 
     private final Object lock = new Object();
 
@@ -112,8 +113,8 @@ public class Server {
         }
     }
 
-    ArrayList<ChatMessage> getChatHistorySneakPeek() {
-        ArrayList<ChatMessage> result = new ArrayList<>();
+    ArrayList<TextMessage> getChatHistorySneakPeek() {
+        ArrayList<TextMessage> result = new ArrayList<>();
         synchronized (lock) {
             int historySize = chatHistory.size();
             int min = CHAT_HISTORY_SNEAK_PEEK_SIZE < historySize ? CHAT_HISTORY_SNEAK_PEEK_SIZE : historySize;
@@ -149,7 +150,7 @@ public class Server {
                     chatMembers.add(member);
                     logger.info("Client connected: " + socket.getInetAddress());
                 }
-            } catch (IOException e) {
+            } catch (IOException | JAXBException e) {
                 e.printStackTrace();
             } finally {
                 try {

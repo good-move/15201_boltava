@@ -4,16 +4,16 @@ package ru.nsu.ccfit.boltava.model.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.chat.User;
-import ru.nsu.ccfit.boltava.model.message.Notification;
+import ru.nsu.ccfit.boltava.model.message.Event;
 import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.message.Response;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
-import ru.nsu.ccfit.boltava.model.message.notification.NewChatMessageNotification;
-import ru.nsu.ccfit.boltava.model.message.notification.UserJoinedChat;
-import ru.nsu.ccfit.boltava.model.message.request.GetUserList;
-import ru.nsu.ccfit.boltava.model.message.request.Login;
-import ru.nsu.ccfit.boltava.model.message.request.Logout;
-import ru.nsu.ccfit.boltava.model.message.request.SendChatMessage;
+import ru.nsu.ccfit.boltava.model.message.event.NewTextMessageEvent;
+import ru.nsu.ccfit.boltava.model.message.event.UserJoinedChatEvent;
+import ru.nsu.ccfit.boltava.model.message.request.GetUserListRequest;
+import ru.nsu.ccfit.boltava.model.message.request.LoginRequest;
+import ru.nsu.ccfit.boltava.model.message.request.LogoutRequest;
+import ru.nsu.ccfit.boltava.model.message.request.PostTextMessageRequest;
 import ru.nsu.ccfit.boltava.model.message.response.GetUserListSuccess;
 import ru.nsu.ccfit.boltava.model.message.response.LoginError;
 import ru.nsu.ccfit.boltava.model.message.response.LoginSuccess;
@@ -33,7 +33,7 @@ public class ServerMessageHandler implements IServerMessageHandler {
     }
 
     @Override
-    public void handle(Login msg) throws InterruptedException {
+    public void handle(LoginRequest msg) throws InterruptedException {
         logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), msg.getUsername()));
 
         Response response;
@@ -65,10 +65,10 @@ public class ServerMessageHandler implements IServerMessageHandler {
 
             member.sendMessage(response);
 
-            Notification notification = new UserJoinedChat(
+            Event event = new UserJoinedChatEvent(
                     member.getUser().getUsername()
             );
-            server.broadcastMessageFrom(notification, member);
+            server.broadcastMessageFrom(event, member);
             return;
         }
 
@@ -76,19 +76,19 @@ public class ServerMessageHandler implements IServerMessageHandler {
     }
 
     @Override
-    public void handle(Logout msg) throws InterruptedException {
+    public void handle(LogoutRequest msg) throws InterruptedException {
         logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), member.getUser().getUsername()));
         member.close();
     }
 
     @Override
-    public void handle(SendChatMessage msg) throws InterruptedException {
+    public void handle(PostTextMessageRequest msg) throws InterruptedException {
         logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), member.getUser().getUsername()));
 
         ServerMessage serverMessage = checkMessageBroken(msg);
 
         if (serverMessage == null) {
-            serverMessage = new NewChatMessageNotification(member.getSessionId(), msg.getContent(), member.getUser().getUsername());
+            serverMessage = new NewTextMessageEvent(msg.getMessage(), member.getUser().getUsername());
             server.broadcastMessageFrom(serverMessage, member);
         } else {
             member.sendMessage(serverMessage);
@@ -97,13 +97,13 @@ public class ServerMessageHandler implements IServerMessageHandler {
     }
 
     @Override
-    public void handle(GetUserList msg) throws InterruptedException {
+    public void handle(GetUserListRequest msg) throws InterruptedException {
         logger.info(String.format("%s request. Username: %s", msg.getClass().getSimpleName(), member.getUser().getUsername()));
 
         Response response = checkMessageBroken(msg);
 
         if (response == null) {
-            response = new GetUserListSuccess(member.getSessionId(), server.getOnlineUsersList());
+            response = new GetUserListSuccess(server.getOnlineUsersList());
         }
 
         member.sendMessage(response);
@@ -117,12 +117,6 @@ public class ServerMessageHandler implements IServerMessageHandler {
                     ErrorBundle.ErrorMessages.get(LoginRequired),
                     ErrorBundle.ErrorCodes.get(LoginRequired)
             );
-//        }
-//        else if (msg.getSender() == null) {
-//            response = new LoginError(
-//                    ErrorBundle.ErrorMessages.get(NullUsername),
-//                    ErrorBundle.ErrorCodes.get(NullUsername)
-//            );
         } else if (msg.getSessionId() == null) {
             response = new LoginError(
                     ErrorBundle.ErrorMessages.get(NullSessionId),
