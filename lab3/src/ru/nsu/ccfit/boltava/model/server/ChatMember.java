@@ -108,12 +108,14 @@ public class ChatMember {
             if (!isClosed) {
                 isClosed = true;
                 socket.close();
+                server.removeChatMember(this);
                 if (getUser() != null) {
                     server.broadcastMessageFrom(new UserLeftChatEvent(getUser().getUsername()), this);
                 }
-                server.removeChatMember(this);
             }
-        } catch (InterruptedException | IOException e) {}
+        } catch (InterruptedException | IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @Override
@@ -123,14 +125,11 @@ public class ChatMember {
 
         ChatMember that = (ChatMember) o;
 
-        if (id != that.id) return false;
-        return sessionId != null ? sessionId.equals(that.sessionId) : that.sessionId == null;
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (sessionId != null ? sessionId.hashCode() : 0);
-        return result;
+        return (int) (id ^ (id >>> 32));
     }
 }

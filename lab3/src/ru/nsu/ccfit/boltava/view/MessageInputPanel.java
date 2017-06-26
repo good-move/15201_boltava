@@ -46,7 +46,6 @@ public class MessageInputPanel extends JComponent {
     private void submitTextMessage() {
         String text = msgInputField.getText();
         if (text.length() > 0) {
-            System.out.println("UI: send message. Text: " + text);
             listeners.forEach(l -> l.onTextMessageSubmit(text));
             msgInputField.setText("");
         }

@@ -34,7 +34,7 @@ public class Chat extends JFrame {
     }
 
     private void createUIComponents() {
-        userListPanel = new UserList(client.getOnlineUsers());
+        userListPanel = new UserList();
         client.addUserListObserver(userListPanel);
         mainView = new MainView(client);
     }

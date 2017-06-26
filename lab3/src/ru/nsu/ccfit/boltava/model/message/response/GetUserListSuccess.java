@@ -1,5 +1,6 @@
 package ru.nsu.ccfit.boltava.model.message.response;
 
+import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.MessageFactory;
 import ru.nsu.ccfit.boltava.model.message.Response;
@@ -19,13 +20,13 @@ public class GetUserListSuccess extends Response {
 
     @XmlElementWrapper(name = "userlist")
     @XmlElement(name = "user")
-    private List<String> onlineUsers;
+    private List<User> onlineUsers;
 
-    public GetUserListSuccess(List<String> onlineUsers) {
+    public GetUserListSuccess(List<User> onlineUsers) {
         this.onlineUsers = onlineUsers;
     }
 
-    public List<String> getOnlineUsers() {
+    public List<User> getOnlineUsers() {
         return onlineUsers;
     }
 

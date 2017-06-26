@@ -22,7 +22,7 @@ import static ru.nsu.ccfit.boltava.model.server.ErrorBundle.ErrorName.*;
 
 public class ServerMessageHandler implements IServerMessageHandler {
 
-    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
+    private static final Logger logger = LogManager.getLogger(ServerMessage.class);
 
     private ChatMember member;
     private Server server;
@@ -58,7 +58,7 @@ public class ServerMessageHandler implements IServerMessageHandler {
             // add "valid username format" message
         } else {
             String sessionId = String.valueOf(member.getID());
-            member.setUser(new User(msg.getUsername()));
+            member.setUser(new User(msg.getUsername(), msg.getClientType()));
             server.registerUsername(msg.getUsername());
             member.setSessionId(sessionId);
             response = new LoginSuccess(sessionId);

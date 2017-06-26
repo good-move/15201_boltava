@@ -1,30 +1,40 @@
 package ru.nsu.ccfit.boltava.view;
 
+import ru.nsu.ccfit.boltava.model.chat.User;
+
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserList extends JComponent implements  IUserListObserver {
 
-    private HashSet<String> usernames;
+    private HashSet<String> usernames = new HashSet<>();
     private JList<String> userListComponent;
-    private DefaultListModel<String> model;
+    private DefaultListModel<String> model = new DefaultListModel<>();
     private JPanel panel;
     private JScrollPane scrollPane;
     private JLabel title;
 
-    UserList(List<String> usernames) {
-        this.usernames = new HashSet<>(usernames);
-        model = new DefaultListModel<>();
-        this.usernames.forEach(u -> model.addElement(u));
+    UserList() {
         userListComponent.setModel(model);
-
         title.setText("Online users");
     }
 
-    @Override
-    public void onUserListSet(List<String> usernames) {
+    UserList(List<String> usernames) {
+        this();
         this.usernames = new HashSet<>(usernames);
+        this.usernames.forEach(u -> model.addElement(u));
+    }
+
+    @Override
+    public void onUserListSet(List<User> users) {
+        this.usernames = new HashSet<>(
+                users.stream()
+                        .map(User::getUsername)
+                        .collect(Collectors.toCollection(ArrayList::new))
+        );
         model.clear();
         this.usernames.forEach(u -> model.addElement(u));
     }

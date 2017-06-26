@@ -2,6 +2,7 @@ package ru.nsu.ccfit.boltava.model.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
 import ru.nsu.ccfit.boltava.model.message.TextMessage;
 import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream.MessageStreamType;
@@ -29,7 +30,7 @@ public class Server {
     private Thread xmlListener;
     private Thread objectListener;
 
-    private final String USERNAME_PATTERN_STRING = "(\\w+){5,}";
+    private final String USERNAME_PATTERN_STRING = "\\w+";
     private final Pattern usernamePattern = Pattern.compile(USERNAME_PATTERN_STRING);
     private final int CHAT_HISTORY_SNEAK_PEEK_SIZE = 10;
 
@@ -54,7 +55,7 @@ public class Server {
             Server server = new Server();
             server.start();
         } catch (IOException e) {
-            WORKFLOW_LOGGER.error(e.getMessage());
+            CONSOLE_LOGGER.error("Failed to start up server" + e.getMessage());
         } catch (NumberFormatException e) {
             CONSOLE_LOGGER.error("[Error] Invalid port number format: " + e.getMessage());
         }
@@ -69,11 +70,14 @@ public class Server {
     private void stop() {
         xmlListener.interrupt();
         objectListener.interrupt();
-        // send SHUT_SOWN message to members?
     }
 
     boolean isUsernameTaken(String username) {
-        return reservedUserNames.contains(username);
+        boolean isFree;
+        synchronized (lock) {
+            isFree = reservedUserNames.contains(username);
+        }
+        return isFree;
     }
 
     boolean isUsernameFormatValid(String username) {
@@ -88,7 +92,9 @@ public class Server {
 
     void removeChatMember(ChatMember member) {
         synchronized (lock) {
+            System.out.println("HERE");
             if (member.getUser() != null) {
+                WORKFLOW_LOGGER.info("Freeing username: " + member.getUser().getUsername());
                 reservedUserNames.remove(member.getUser().getUsername());
             }
             chatMembers.remove(member);
@@ -96,7 +102,7 @@ public class Server {
     }
 
     void broadcastMessageFrom(ServerMessage msg, ChatMember member) throws InterruptedException {
-        CONSOLE_LOGGER.info("Broadcasting: " + msg.getClass().getSimpleName());
+        WORKFLOW_LOGGER.info("Broadcasting: " + msg.getClass().getSimpleName());
 
         synchronized (lock) {
             for (ChatMember m : chatMembers) {
@@ -115,14 +121,20 @@ public class Server {
             for (int i = 0; i < min; i++) {
                 result.add(chatHistory.get(historySize - i - 1));
             }
-            lock.notifyAll();
         }
 
         return result;
     }
 
-    List<String> getOnlineUsersList() {
-        return new ArrayList<>(reservedUserNames);
+    List<User> getOnlineUsersList() {
+        List<User> userList = new ArrayList<>();
+        synchronized (lock) {
+            chatMembers.forEach(m -> {
+                User user = m.getUser();
+                if (user != null) userList.add(user);
+            });
+        }
+        return userList;
     }
 
     private class ClientsListener implements Runnable {

@@ -44,8 +44,9 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
 
     private User profile;
     private String sessionId;
+    private String clientType;
     private String queriedUsername;
-    private List<String> onlineUsers = new ArrayList<>();
+    private List<User> onlineUsers = new ArrayList<>();
     private ArrayList<TextMessage> chatHistory = new ArrayList<>();
 
     private boolean isLoggedIn = false;
@@ -78,6 +79,8 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             config.setHost(props.getProperty("host"));
             config.setPort(Integer.parseInt(props.getProperty("port")));
             config.setStreamType(props.getProperty("mode"));
+
+            clientType = config.getStreamType().toString();
 
             messageHandler = new ClientMessageHandler(client);
             deliveryService = new DeliveryService(config, messageHandler);
@@ -125,11 +128,11 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
         return profile;
     }
 
-    public List<String> getOnlineUsers() {
+    public List<User> getOnlineUsers() {
         return onlineUsers;
     }
 
-    public void setOnlineUsers(List<String> onlineUsers) {
+    void setOnlineUsers(List<User> onlineUsers) {
         this.onlineUsers = onlineUsers;
     }
 
@@ -153,13 +156,14 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
         try {
             this.isLoggedIn = true;
             this.sessionId = sessionId;
-            this.profile = new User(queriedUsername);
+            this.profile = new User(queriedUsername, clientType);
 
             sendRequest(new GetUserListRequest(sessionId));
 
             loginView.setVisible(false);
             chat = new Chat(client);
         } catch (InterruptedException e) {
+            e.printStackTrace();
             WORKFLOW_LOGGER.info(e.getMessage());
         }
     }
@@ -192,7 +196,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
     @Override
     public void onLoginSubmit(String username) {
         try {
-            sendRequest(new LoginRequest(username, "TYPE"));
+            sendRequest(new LoginRequest(username, clientType));
             this.queriedUsername = username;
         } catch (InterruptedException e) {
             WORKFLOW_LOGGER.info(e.getMessage());
