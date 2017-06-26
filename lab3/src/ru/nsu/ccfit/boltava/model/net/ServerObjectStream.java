@@ -24,7 +24,6 @@ public class ServerObjectStream implements IServerSocketMessageStream {
         try {
             return (Request) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
             throw new StreamReadException(e.getMessage(), e);
         }
     }

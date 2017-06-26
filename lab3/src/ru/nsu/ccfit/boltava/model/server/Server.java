@@ -15,16 +15,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
 public class Server {
 
-    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
+    private static final Logger WORKFLOW_LOGGER = LogManager.getLogger(Server.class);
+    private static final Logger CONSOLE_LOGGER = LogManager.getLogger("ConsoleLogger");
 
     private HashSet<ChatMember> chatMembers = new HashSet<>();
     private HashSet<String> reservedUserNames = new HashSet<>();
-    private LinkedBlockingQueue<ServerMessage> mMsgQueue = new LinkedBlockingQueue<>();
 
     private Server server;
     private Thread xmlListener;
@@ -55,9 +54,9 @@ public class Server {
             Server server = new Server();
             server.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            WORKFLOW_LOGGER.error(e.getMessage());
         } catch (NumberFormatException e) {
-            logger.error("[Error] Invalid port number format: " + e.getMessage());
+            CONSOLE_LOGGER.error("[Error] Invalid port number format: " + e.getMessage());
         }
     }
 
@@ -71,11 +70,6 @@ public class Server {
         xmlListener.interrupt();
         objectListener.interrupt();
         // send SHUT_SOWN message to members?
-    }
-
-    void enqueueMessage(ServerMessage msg) throws InterruptedException {
-        mMsgQueue.put(msg);
-        logger.info("Put a message in queue: " + msg.getClass().getSimpleName());
     }
 
     boolean isUsernameTaken(String username) {
@@ -102,7 +96,7 @@ public class Server {
     }
 
     void broadcastMessageFrom(ServerMessage msg, ChatMember member) throws InterruptedException {
-        logger.info("Broadcasting: " + msg.getClass().getSimpleName());
+        CONSOLE_LOGGER.info("Broadcasting: " + msg.getClass().getSimpleName());
 
         synchronized (lock) {
             for (ChatMember m : chatMembers) {
@@ -148,15 +142,15 @@ public class Server {
                     Socket socket = serverSocket.accept();
                     ChatMember member = new ChatMember(socket, server, streamType);
                     chatMembers.add(member);
-                    logger.info("Client connected: " + socket.getInetAddress());
+                    CONSOLE_LOGGER.info("Client connected: " + socket.getInetAddress());
                 }
             } catch (IOException | JAXBException e) {
-                e.printStackTrace();
+                WORKFLOW_LOGGER.error(e.getMessage());
             } finally {
                 try {
                     serverSocket.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    WORKFLOW_LOGGER.error(e.getMessage());
                 }
             }
         }

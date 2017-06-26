@@ -23,7 +23,6 @@ public class ClientObjectStream implements IClientSocketMessageStream {
         try {
             return (ServerMessage) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
             throw new StreamReadException(e.getMessage());
         }
     }
@@ -33,7 +32,6 @@ public class ClientObjectStream implements IClientSocketMessageStream {
         try {
             out.writeObject(msg);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new StreamWriteException(e.getMessage());
         }
     }

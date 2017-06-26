@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.model.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
@@ -17,6 +19,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ChatMember {
+
+    private static final Logger logger = LogManager.getLogger(ChatMember.class);
 
     private static AtomicLong ID_GENERATOR = new AtomicLong(0);
 
@@ -48,9 +52,9 @@ public class ChatMember {
                     stream.write(messageQueue.take());
                 }
             } catch (InterruptedException e) {
-                System.err.println("Interrupted");
+                logger.info("Interrupted");
             } catch (ISocketMessageStream.StreamWriteException | IMessageSerializer.MessageSerializationException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             } finally {
                 close();
             }
@@ -64,7 +68,7 @@ public class ChatMember {
                     msg.handle(messageHandler);
                 }
             } catch (InterruptedException | IMessageSerializer.MessageSerializationException | ISocketMessageStream.StreamReadException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             } finally {
                 close();
             }

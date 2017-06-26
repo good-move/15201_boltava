@@ -28,7 +28,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class XMLSerializer implements IMessageSerializer<String> {
 
-    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
+    private static final Logger logger = LogManager.getLogger(XMLSerializer.class);
 
     private BlockingQueue<Request> lastSentRequestQueue;
     private final Marshaller marshaller;
@@ -59,7 +59,6 @@ public class XMLSerializer implements IMessageSerializer<String> {
 
             return adaptJAXBToProtocol(xml);
         } catch (JAXBException e) {
-            e.printStackTrace();
             throw new MessageSerializationException(
                     String.format("Failed to marshal message type %s", message.getClass().getSimpleName())
             );
@@ -87,7 +86,6 @@ public class XMLSerializer implements IMessageSerializer<String> {
                 default: throw new MessageSerializationException("Unknown tag name: " + response.getTagName());
             }
         } catch (SAXException | IOException | JAXBException | ParserConfigurationException e) {
-            e.printStackTrace();
             throw new MessageSerializationException(e.getMessage(), e);
         }
     }

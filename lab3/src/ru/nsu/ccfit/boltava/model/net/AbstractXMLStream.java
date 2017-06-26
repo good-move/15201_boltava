@@ -31,7 +31,6 @@ public abstract class AbstractXMLStream<InMessage extends Message, OutMessage ex
             out.write(bytes);
             out.flush();
         } catch (IOException e) {
-            e.printStackTrace();
             throw new StreamWriteException(e.getMessage());
         }
     }
@@ -46,14 +45,6 @@ public abstract class AbstractXMLStream<InMessage extends Message, OutMessage ex
             }
 
             byte[] bytes = new byte[messageSize];
-//            int bytesRead = 0;
-//            while (bytesRead < messageSize) {
-//                bytesRead += in.read(bytes);
-//            }
-//            if (bytesRead != messageSize) {
-//                throw new StreamReadException("Failed to read whole xml message");
-//            }
-
             in.readFully(bytes);
 
             String xmlString = new String(bytes, Charset.forName("UTF-8"));
@@ -61,7 +52,6 @@ public abstract class AbstractXMLStream<InMessage extends Message, OutMessage ex
             return (OutMessage) serializer.deserialize(xmlString);
 
         } catch (IOException e) {
-            e.printStackTrace();
             throw new StreamReadException(e.getMessage());
         }
     }

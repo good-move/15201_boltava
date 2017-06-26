@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.model.net;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.nsu.ccfit.boltava.model.message.event.NewTextMessageEvent;
 import ru.nsu.ccfit.boltava.model.message.event.UserJoinedChatEvent;
 import ru.nsu.ccfit.boltava.model.message.event.UserLeftChatEvent;
@@ -16,6 +18,9 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ServerMessageStreamFactory {
+
+    private static final Logger logger = LogManager.getLogger(ServerMessageStreamFactory.class);
+
 
     private static JAXBContext jaxbContext;
     static  {
@@ -37,7 +42,7 @@ public class ServerMessageStreamFactory {
         try {
             jaxbContext = JAXBContext.newInstance(classes);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 

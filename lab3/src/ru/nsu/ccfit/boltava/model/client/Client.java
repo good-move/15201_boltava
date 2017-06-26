@@ -35,7 +35,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitListener {
 
-    private static Logger logger = LogManager.getLogger("ConsoleLogger");
+
+    private final static Logger WORKFLOW_LOGGER = LogManager.getLogger(Client.class);
+    private final static Logger CONSOLE_LOGGER = LogManager.getLogger("ConsoleLogger");
 
     private Chat chat;
     private LoginView loginView;
@@ -84,7 +86,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             loginView = new LoginView(client);
             loginView.addOnLoginSubmitListener(client);
         } catch (IOException | JAXBException e) {
-            e.printStackTrace();
+            CONSOLE_LOGGER.error(e.getMessage());
         }
     }
 
@@ -105,7 +107,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             loginView.dispose();
             chat.dispose();
         } catch (NullPointerException e) {
-
+            WORKFLOW_LOGGER.info(e.getMessage());
         }
     }
 
@@ -129,7 +131,6 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
 
     public void setOnlineUsers(List<String> onlineUsers) {
         this.onlineUsers = onlineUsers;
-        // update listeners
     }
 
     public ArrayList<TextMessage> getChatHistory() {
@@ -159,7 +160,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             loginView.setVisible(false);
             chat = new Chat(client);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            WORKFLOW_LOGGER.info(e.getMessage());
         }
     }
 
@@ -184,7 +185,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             sendRequest(new PostTextMessageRequest(sessionId, textMessage));
             addMessageToHistory(new TextMessage(profile.getUsername(), textMessage));
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            WORKFLOW_LOGGER.info(e.getMessage());
         }
     }
 
@@ -194,7 +195,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             sendRequest(new LoginRequest(username, "TYPE"));
             this.queriedUsername = username;
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            WORKFLOW_LOGGER.info(e.getMessage());
         }
     }
 
@@ -232,9 +233,9 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
                 } catch (InterruptedException |
                         ISocketMessageStream.StreamWriteException |
                         IMessageSerializer.MessageSerializationException e) {
-                    e.printStackTrace();
+                    WORKFLOW_LOGGER.error(e.getMessage());
                 } finally {
-                    logger.info("interrupted");
+                    WORKFLOW_LOGGER.info("interrupted");
                     stop();
                 }
             }, "Sender Thread");
@@ -246,9 +247,9 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
                         msg.handle(mMsgHandler);
                     }
                 } catch (IMessageSerializer.MessageSerializationException | ISocketMessageStream.StreamReadException e) {
-                    e.printStackTrace();
+                    WORKFLOW_LOGGER.error(e.getMessage());
                 } finally {
-                    logger.info( "interrupted");
+                    WORKFLOW_LOGGER.info( "interrupted");
                     stop();
                 }
             }, "Receiver Thread");
@@ -273,7 +274,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
                 mSenderThread.interrupt();
                 mReceiverThread.interrupt();
             } catch (IOException e) {
-                e.printStackTrace();
+                WORKFLOW_LOGGER.error(e.getMessage());
             }
         }
 
@@ -301,7 +302,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             try {
                 jaxbContext = JAXBContext.newInstance(classes);
             } catch (JAXBException e) {
-                e.printStackTrace();
+                WORKFLOW_LOGGER.error(e.getMessage());
             }
         }
 
