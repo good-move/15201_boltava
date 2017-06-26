@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5level %thread - %msg%n" />
+        </Console>
+
+        <File name="WorkflowAppender" fileName="logs/log.log">
+            <PatternLayout pattern="%-5level [%thread]: %C %M - %msg%n" />
+        </File>
+
+        <File name="SerializationAppender" fileName="logs/serialization.log">
+            <PatternLayout pattern="%-5level %C %M - %msg%n" />
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info" >
+            <AppenderRef ref="WorkflowAppender" />
+        </Root>
+
+        <Logger name="ConsoleLogger" level="trace">
+            <AppenderRef ref="ConsoleAppender" />
+        </Logger>
+
+        <Logger name="SerializationLogger" level="trace">
+            <AppenderRef ref="SerializationAppender" />
+        </Logger>
+
+    </Loggers>
+</Configuration>

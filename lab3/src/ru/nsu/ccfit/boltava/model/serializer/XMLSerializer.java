@@ -28,7 +28,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class XMLSerializer implements IMessageSerializer<String> {
 
-    private static final Logger logger = LogManager.getLogger(XMLSerializer.class);
+    private static final Logger logger = LogManager.getLogger("SerializationLogger");
 
     private BlockingQueue<Request> lastSentRequestQueue;
     private final Marshaller marshaller;
