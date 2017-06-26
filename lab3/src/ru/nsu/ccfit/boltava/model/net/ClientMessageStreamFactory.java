@@ -8,7 +8,6 @@ import ru.nsu.ccfit.boltava.model.message.request.LoginRequest;
 import ru.nsu.ccfit.boltava.model.message.request.LogoutRequest;
 import ru.nsu.ccfit.boltava.model.message.request.PostTextMessageRequest;
 import ru.nsu.ccfit.boltava.model.message.response.*;
-import ru.nsu.ccfit.boltava.model.serializer.IMessageSerializer;
 import ru.nsu.ccfit.boltava.model.serializer.XMLSerializer;
 
 import javax.xml.bind.JAXBContext;

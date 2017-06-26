@@ -50,6 +50,8 @@ public class ClientMessageHandler implements IClientMessageHandler {
     @Override
     public void handle(GetUserListSuccess msg) {
         logger.info(String.format("%s response.", msg.getClass().getSimpleName()));
+        client.setOnlineUsers(msg.getOnlineUsers());
+        userListObservers.forEach(observer -> observer.onUserListSet(msg.getOnlineUsers()));
     }
 
     @Override

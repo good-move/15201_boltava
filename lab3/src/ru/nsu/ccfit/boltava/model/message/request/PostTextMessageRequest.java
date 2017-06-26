@@ -4,7 +4,6 @@ import ru.nsu.ccfit.boltava.model.message.MessageFactory;
 import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.server.IServerMessageHandler;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;

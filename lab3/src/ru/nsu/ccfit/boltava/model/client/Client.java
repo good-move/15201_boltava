@@ -14,7 +14,10 @@ import ru.nsu.ccfit.boltava.model.message.request.LoginRequest;
 import ru.nsu.ccfit.boltava.model.message.request.LogoutRequest;
 import ru.nsu.ccfit.boltava.model.message.request.PostTextMessageRequest;
 import ru.nsu.ccfit.boltava.model.message.response.*;
-import ru.nsu.ccfit.boltava.model.net.*;
+import ru.nsu.ccfit.boltava.model.net.ClientObjectStream;
+import ru.nsu.ccfit.boltava.model.net.ClientXMLStream;
+import ru.nsu.ccfit.boltava.model.net.IClientSocketMessageStream;
+import ru.nsu.ccfit.boltava.model.net.ISocketMessageStream;
 import ru.nsu.ccfit.boltava.model.serializer.IMessageSerializer;
 import ru.nsu.ccfit.boltava.model.serializer.XMLSerializer;
 import ru.nsu.ccfit.boltava.view.*;
@@ -26,6 +29,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -33,19 +37,20 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
 
     private static Logger logger = LogManager.getLogger("ConsoleLogger");
 
-    private App app;
+    private Chat chat;
     private LoginView loginView;
 
     private User profile;
     private String sessionId;
     private String queriedUsername;
-    private ArrayList<User> onlineUsers = new ArrayList<>();
+    private List<String> onlineUsers = new ArrayList<>();
     private ArrayList<TextMessage> chatHistory = new ArrayList<>();
 
     private boolean isLoggedIn = false;
 
     private Client client;
     private DeliveryService deliveryService;
+    private ClientMessageHandler messageHandler;
 
     private HashSet<IChatMessageRenderer> chatMessageRenderers = new HashSet<>();
     private LinkedBlockingQueue<Request> sentRequestsQueue = new LinkedBlockingQueue<>();
@@ -72,7 +77,8 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             config.setPort(Integer.parseInt(props.getProperty("port")));
             config.setStreamType(props.getProperty("mode"));
 
-            deliveryService = new DeliveryService(config, new ClientMessageHandler(client));
+            messageHandler = new ClientMessageHandler(client);
+            deliveryService = new DeliveryService(config, messageHandler);
             deliveryService.start();
 
             loginView = new LoginView(client);
@@ -97,13 +103,17 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
         try {
             deliveryService.stop();
             loginView.dispose();
-            app.dispose();
+            chat.dispose();
         } catch (NullPointerException e) {
 
         }
     }
 
     //    ****************************** Client state control methods ******************************
+
+    public void addUserListObserver(IUserListObserver observer) {
+        messageHandler.addUserListObserver(observer);
+    }
 
     public String getSessionId() {
         return sessionId;
@@ -113,11 +123,11 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
         return profile;
     }
 
-    public ArrayList<User> getOnlineUsers() {
+    public List<String> getOnlineUsers() {
         return onlineUsers;
     }
 
-    public void setOnlineUsers(ArrayList<User> onlineUsers) {
+    public void setOnlineUsers(List<String> onlineUsers) {
         this.onlineUsers = onlineUsers;
         // update listeners
     }
@@ -147,7 +157,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             sendRequest(new GetUserListRequest(sessionId));
 
             loginView.setVisible(false);
-            app = new App(client);
+            chat = new Chat(client);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -187,7 +197,6 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             e.printStackTrace();
         }
     }
-
 
     private class DeliveryService {
 
