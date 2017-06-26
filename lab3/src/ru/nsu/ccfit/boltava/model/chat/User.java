@@ -1,16 +1,21 @@
 package ru.nsu.ccfit.boltava.model.chat;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User implements Serializable {
 
     private int mID;
 
+    @XmlElement (name = "name")
     private String username;
 
+    @XmlElement (name = "type")
     private String type;
 
     public User() {}
@@ -24,12 +29,10 @@ public class User implements Serializable {
         return mID;
     }
 
-    @XmlElement (name = "type")
     public String getType() {
         return type;
     }
 
-    @XmlElement (name = "name")
     public String getUsername() {
         return username;
     }

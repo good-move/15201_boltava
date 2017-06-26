@@ -18,7 +18,7 @@ import java.util.List;
 )
 public class GetUserListSuccess extends Response {
 
-    @XmlElementWrapper(name = "userlist")
+    @XmlElementWrapper(name = "listusers")
     @XmlElement(name = "user")
     private List<User> onlineUsers;
 
