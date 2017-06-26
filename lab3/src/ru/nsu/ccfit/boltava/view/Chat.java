@@ -1,23 +1,20 @@
 package ru.nsu.ccfit.boltava.view;
 
-import ru.nsu.ccfit.boltava.model.chat.User;
 import ru.nsu.ccfit.boltava.model.client.Client;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
-public class App extends JFrame {
+public class Chat extends JFrame {
 
     Client client;
     private JPanel panel;
     private MainView mainView;
     private UserList userListPanel;
 
-    public App(Client client) {
+    public Chat(Client client) {
         this.client = client;
 
         this.addWindowListener(new WindowAdapter() {
@@ -27,6 +24,7 @@ public class App extends JFrame {
             }
         });
 
+        this.setTitle("Chat");
         this.setContentPane(panel);
         this.setResizable(true);
         this.setLocationRelativeTo(null);
