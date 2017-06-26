@@ -19,13 +19,23 @@ public class ClientObjectStream implements IClientSocketMessageStream {
     }
 
     @Override
-    public ServerMessage read() throws IOException, ClassNotFoundException {
-        return (ServerMessage) in.readObject();
+    public ServerMessage read() throws StreamReadException {
+        try {
+            return (ServerMessage) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new StreamReadException(e.getMessage());
+        }
     }
 
     @Override
-    public void write(Request msg) throws IOException {
-        out.writeObject(msg);
+    public void write(Request msg) throws StreamWriteException {
+        try {
+            out.writeObject(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new StreamWriteException(e.getMessage());
+        }
     }
 
 }

@@ -2,12 +2,13 @@ package ru.nsu.ccfit.boltava.model.net;
 
 import ru.nsu.ccfit.boltava.model.message.Request;
 import ru.nsu.ccfit.boltava.model.message.ServerMessage;
+import ru.nsu.ccfit.boltava.model.serializer.IMessageSerializer;
 
 import java.io.IOException;
 
-public interface IServerSocketMessageStream extends ISocketMessageStream<Request, ServerMessage> {
+public interface IServerSocketMessageStream extends ISocketMessageStream<ServerMessage, Request> {
 
-    Request read() throws IOException, ClassNotFoundException;
-    void write(ServerMessage msg) throws IOException;
+    Request read() throws StreamReadException, IMessageSerializer.MessageSerializationException;
+    void write(ServerMessage msg) throws StreamWriteException, IMessageSerializer.MessageSerializationException;
 
 }
