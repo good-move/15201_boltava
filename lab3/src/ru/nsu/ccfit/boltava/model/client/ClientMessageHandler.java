@@ -18,7 +18,7 @@ public class ClientMessageHandler implements IClientMessageHandler {
     private HashSet<IUserListObserver> userListObservers = new HashSet<>();
     private HashSet<IChatMessageRenderer> chatMessageRenderers = new HashSet<>();
 
-    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
+    private static final Logger logger = LogManager.getLogger(ClientMessageHandler.class);
 
     ClientMessageHandler(Client client) {
         this.client = client;
