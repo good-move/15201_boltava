@@ -6,7 +6,6 @@ import javax.swing.*;
 
 public class MainView extends JComponent {
     private JPanel panel;
-    private JSplitPane splitPane;
     private ChatView chatView;
     private MessageInputPanel messageInputPanel;
 

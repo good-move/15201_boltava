@@ -36,12 +36,8 @@ public class App extends JFrame {
     }
 
     private void createUIComponents() {
-        userListPanel = new UserList(
-                client.getOnlineUsers()
-                        .stream()
-                        .map(User::getUsername)
-                        .collect(Collectors.toCollection(ArrayList::new))
-        );
+        userListPanel = new UserList(client.getOnlineUsers());
+        client.addUserListObserver(userListPanel);
         mainView = new MainView(client);
     }
 
