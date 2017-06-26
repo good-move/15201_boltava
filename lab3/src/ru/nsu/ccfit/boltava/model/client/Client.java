@@ -219,6 +219,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
 
         private DeliveryService(ConnectionConfig connectionConfig, IClientMessageHandler handler) throws IOException, JAXBException {
             mSocket = new Socket(connectionConfig.getHost(), connectionConfig.getPort());
+            mSocket.setKeepAlive(true);
             mMsgHandler = handler;
 
             switch (connectionConfig.getStreamType()) {

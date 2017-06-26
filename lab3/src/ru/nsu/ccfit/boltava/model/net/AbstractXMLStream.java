@@ -15,7 +15,7 @@ public abstract class AbstractXMLStream<InMessage extends Message, OutMessage ex
     private final DataInputStream in;
     private final DataOutputStream out;
 
-    public AbstractXMLStream(Socket socket, IMessageSerializer<String> serializer) throws IOException {
+    AbstractXMLStream(Socket socket, IMessageSerializer<String> serializer) throws IOException {
         out = new DataOutputStream(socket.getOutputStream());
         out.flush();
         in = new DataInputStream(socket.getInputStream());
@@ -51,7 +51,7 @@ public abstract class AbstractXMLStream<InMessage extends Message, OutMessage ex
 
             return (OutMessage) serializer.deserialize(xmlString);
 
-        } catch (IOException e) {
+        } catch (IOException | OutOfMemoryError e) {
             throw new StreamReadException(e.getMessage());
         }
     }

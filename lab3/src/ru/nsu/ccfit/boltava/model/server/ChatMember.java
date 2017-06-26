@@ -42,6 +42,7 @@ public class ChatMember {
                       Server server,
                       MessageStreamType type) throws IOException, JAXBException {
         this.socket = socket;
+        socket.setKeepAlive(true);
         this.server = server;
         messageHandler = new ServerMessageHandler(server, this);
         stream = ServerMessageStreamFactory.get(type, socket);
