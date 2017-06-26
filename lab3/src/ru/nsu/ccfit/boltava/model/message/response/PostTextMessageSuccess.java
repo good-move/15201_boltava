@@ -6,17 +6,12 @@ import ru.nsu.ccfit.boltava.model.message.MessageFactory;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-@XmlRootElement (name = "error")
-@XmlType(
+@XmlRootElement (name = "success")
+@XmlType (
         factoryClass = MessageFactory.class,
-        factoryMethod = "getLoginError"
+        factoryMethod = "getPostTextMessageSuccess"
 )
-public class LoginError extends ErrorResponse {
-
-    public LoginError(String msg, int code) {
-        super(msg, code);
-    }
+public class PostTextMessageSuccess extends SuccessResponse {
 
     @Override
     public void handle(IClientMessageHandler messageHandler) {

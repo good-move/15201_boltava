@@ -35,14 +35,6 @@ public class MessageFactory {
         return new GetUserListSuccess(null);
     }
 
-    public static ErrorResponse getErrorResponse() {
-        return new ErrorResponse(null, 0);
-    }
-
-    public static SuccessResponse getSuccessResponse() {
-        return new SuccessResponse();
-    }
-
     public static NewTextMessageEvent getNewTextMessage() {
         return new NewTextMessageEvent(null, null);
     }
@@ -56,6 +48,26 @@ public class MessageFactory {
     }
     public static PostTextMessageRequest getSendTextMessageRequest() {
         return new PostTextMessageRequest(null, null);
+    }
+
+    public static LogoutError getLogoutError() {
+        return new LogoutError(null, 0);
+    }
+
+    public static PostTextMessageError getPostTextMessageError() {
+        return new PostTextMessageError(null, 0);
+    }
+
+    public static GetUserListError getUserListError() {
+        return new GetUserListError(null, 0);
+    }
+
+    public static LogoutSuccess getLogoutSuccess() {
+        return new LogoutSuccess();
+    }
+
+    public static PostTextMessageSuccess getPostTextMessageSuccess() {
+        return new PostTextMessageSuccess();
     }
 
 }

@@ -8,17 +8,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement (name = "error")
-@XmlType(
-        factoryClass = MessageFactory.class,
-        factoryMethod = "getErrorResponse"
-)
-public class ErrorResponse extends Response {
+
+public abstract class ErrorResponse extends Response {
 
     @XmlElement (name = "code")
-    final int mErrorCode;
+    private final int mErrorCode;
     @XmlElement (name = "message")
-    final String mErrorMessage;
+    private final String mErrorMessage;
 
     public ErrorResponse(String msg, int code) {
         mErrorCode = code;
@@ -33,10 +29,7 @@ public class ErrorResponse extends Response {
         return mErrorMessage;
     }
 
-    @Override
-    public void handle(IClientMessageHandler messageHandler) {
-        messageHandler.handle(this);
-    }
+    public abstract void handle(IClientMessageHandler messageHandler);
 
     @Override
     public String toString() {

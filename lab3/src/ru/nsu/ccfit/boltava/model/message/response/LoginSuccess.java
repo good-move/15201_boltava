@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
         factoryClass = MessageFactory.class,
         factoryMethod = "getLoginSuccess"
 )
-public class LoginSuccess extends Response {
+public class LoginSuccess extends SuccessResponse {
 
     @XmlElement (name = "session")
     private String sessionId;

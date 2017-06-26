@@ -3,20 +3,16 @@ package ru.nsu.ccfit.boltava.model.message.response;
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.MessageFactory;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-@XmlRootElement (name = "error")
-@XmlType(
+@XmlRootElement (name = "success")
+@XmlType (
         factoryClass = MessageFactory.class,
-        factoryMethod = "getLoginError"
+        factoryMethod = "getLogoutSuccess"
 )
-public class LoginError extends ErrorResponse {
-
-    public LoginError(String msg, int code) {
-        super(msg, code);
-    }
+public class LogoutSuccess extends SuccessResponse {
 
     @Override
     public void handle(IClientMessageHandler messageHandler) {

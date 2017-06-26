@@ -7,16 +7,7 @@ import ru.nsu.ccfit.boltava.model.message.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement (name = "success")
-@XmlType(
-        factoryClass = MessageFactory.class,
-        factoryMethod = "getSuccessResponse"
-)
-public class SuccessResponse extends Response {
+public abstract class SuccessResponse extends Response {
 
-    @Override
-    public void handle(IClientMessageHandler messageHandler) {
-        messageHandler.handle(this);
-    }
-
+    public abstract void handle(IClientMessageHandler messageHandler);
 }

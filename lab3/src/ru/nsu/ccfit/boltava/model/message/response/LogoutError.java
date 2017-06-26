@@ -10,11 +10,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement (name = "error")
 @XmlType(
         factoryClass = MessageFactory.class,
-        factoryMethod = "getLoginError"
+        factoryMethod = "getLogoutError"
 )
-public class LoginError extends ErrorResponse {
+public class LogoutError extends ErrorResponse {
 
-    public LoginError(String msg, int code) {
+    public LogoutError(String msg, int code) {
         super(msg, code);
     }
 
