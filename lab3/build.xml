@@ -57,6 +57,7 @@
   <path id="lab3.module.production.classpath">
     <!--<path refid="${module.jdk.classpath.lab3}"/>-->
     <path refid="library.lib.classpath"/>
+    <path path="${basedir}" />
   </path>
 
   <path id="lab3.module.sourcepath">
@@ -97,7 +98,7 @@
   <target name="build.client.jar">
     <mkdir dir="." />
     <manifestclasspath property="manifest.classpath" jarfile="${lab3.jar.output.dir}/${lab3.jar.output.name.client}">
-      <classpath refid="library.lib.classpath"/>
+      <classpath refid="lab3.module.production.classpath"/>
     </manifestclasspath>
     <jar basedir="${lab3.output.dir}" destfile="${lab3.jar.output.dir}/${lab3.jar.output.name.client}">
       <manifest>
@@ -110,7 +111,7 @@
   <target name="build.server.jar">
     <mkdir dir="." />
     <manifestclasspath property="manifest.classpath" jarfile="${lab3.jar.output.dir}/${lab3.jar.output.name.server}">
-      <classpath refid="library.lib.classpath"/>
+      <classpath refid="lab3.module.production.classpath"/>
     </manifestclasspath>
     <jar basedir="${lab3.output.dir}" destfile="${lab3.jar.output.dir}/${lab3.jar.output.name.server}">
       <manifest>
