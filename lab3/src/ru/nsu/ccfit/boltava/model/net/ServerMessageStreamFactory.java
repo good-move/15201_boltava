@@ -29,14 +29,17 @@ public class ServerMessageStreamFactory {
                 UserJoinedChatEvent.class,
                 UserLeftChatEvent.class,
                 LoginRequest.class,
-                LogoutRequest.class,
-                PostTextMessageRequest.class,
-                GetUserListRequest.class,
-                SuccessResponse.class,
-                ErrorResponse.class,
-                GetUserListSuccess.class,
                 LoginError.class,
-                LoginSuccess.class
+                LoginSuccess.class,
+                LogoutRequest.class,
+                LogoutSuccess.class,
+                LogoutError.class,
+                PostTextMessageRequest.class,
+                PostTextMessageSuccess.class,
+                PostTextMessageError.class,
+                GetUserListRequest.class,
+                GetUserListSuccess.class,
+                GetUserListError.class
         };
 
         try {
