@@ -62,6 +62,7 @@ public class Server {
     }
 
     private void start() {
+        WORKFLOW_LOGGER.info("\nStarting server\n");
         server = this;
         xmlListener.start();
         objectListener.start();
@@ -70,6 +71,7 @@ public class Server {
     private void stop() {
         xmlListener.interrupt();
         objectListener.interrupt();
+        WORKFLOW_LOGGER.info("\nShutting down server\n");
     }
 
     boolean isUsernameTaken(String username) {

@@ -7,6 +7,7 @@ import ru.nsu.ccfit.boltava.model.message.event.NewTextMessageEvent;
 import ru.nsu.ccfit.boltava.model.message.event.UserJoinedChatEvent;
 import ru.nsu.ccfit.boltava.model.message.event.UserLeftChatEvent;
 import ru.nsu.ccfit.boltava.model.message.response.*;
+import ru.nsu.ccfit.boltava.view.IChatMessageRenderer;
 import ru.nsu.ccfit.boltava.view.IUserListObserver;
 
 import java.util.HashSet;
@@ -15,6 +16,7 @@ public class ClientMessageHandler implements IClientMessageHandler {
 
     private Client client;
     private HashSet<IUserListObserver> userListObservers = new HashSet<>();
+    private HashSet<IChatMessageRenderer> messageRenderers = new HashSet<>();
 
     private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
@@ -22,8 +24,16 @@ public class ClientMessageHandler implements IClientMessageHandler {
         this.client = client;
     }
 
-    public void addUserListObserver(IUserListObserver observer) {
+    void addMessageRenderer(IChatMessageRenderer renderer) {
+        messageRenderers.add(renderer);
+    }
+
+    void addUserListObserver(IUserListObserver observer) {
         userListObservers.add(observer);
+    }
+
+    void renderTextMessage(TextMessage message) {
+        messageRenderers.forEach(message::render);
     }
 
     @Override
@@ -57,19 +67,24 @@ public class ClientMessageHandler implements IClientMessageHandler {
     @Override
     public void handle(NewTextMessageEvent msg) {
         logger.info("Got a new message:" + msg.getMessage().getClass().getSimpleName());
-        client.addMessageToHistory(new TextMessage(msg.getSender(), msg.getMessage()));
+        TextMessage message = new TextMessage(msg.getSender(), msg.getMessage());
+        client.addMessageToHistory(message);
+        messageRenderers.forEach(message::render);
     }
 
     @Override
     public void handle(UserJoinedChatEvent msg) {
         logger.info("Got a new message:" + msg.getClass().getSimpleName());
         userListObservers.forEach(observer -> observer.onUserJoined(msg.getUsername()));
+        messageRenderers.forEach(msg::render);
     }
 
     @Override
     public void handle(UserLeftChatEvent msg) {
         logger.info("Got a new message:" + msg.getClass().getSimpleName());
         userListObservers.forEach(observer -> observer.onUserLeft(msg.getUsername()));
+        messageRenderers.forEach(msg::render);
+
     }
 
 }

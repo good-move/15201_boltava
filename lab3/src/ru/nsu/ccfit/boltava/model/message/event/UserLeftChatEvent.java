@@ -3,6 +3,7 @@ package ru.nsu.ccfit.boltava.model.message.event;
 import ru.nsu.ccfit.boltava.model.client.IClientMessageHandler;
 import ru.nsu.ccfit.boltava.model.message.Event;
 import ru.nsu.ccfit.boltava.model.message.MessageFactory;
+import ru.nsu.ccfit.boltava.view.IChatMessageRenderer;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -29,6 +30,10 @@ public class UserLeftChatEvent extends Event {
 
     public String getUsername() {
         return username;
+    }
+
+    public void render(IChatMessageRenderer renderer) {
+        renderer.render(this);
     }
 
 }

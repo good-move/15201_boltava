@@ -55,7 +55,6 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
     private DeliveryService deliveryService;
     private ClientMessageHandler messageHandler;
 
-    private HashSet<IChatMessageRenderer> chatMessageRenderers = new HashSet<>();
     private LinkedBlockingQueue<Request> sentRequestsQueue = new LinkedBlockingQueue<>();
 
 
@@ -116,10 +115,6 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
 
     //    ****************************** Client state control methods ******************************
 
-    public void addUserListObserver(IUserListObserver observer) {
-        messageHandler.addUserListObserver(observer);
-    }
-
     public String getSessionId() {
         return sessionId;
     }
@@ -146,7 +141,6 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
 
     void addMessageToHistory(TextMessage msg) {
         chatHistory.add(msg);
-        chatMessageRenderers.forEach(msg::render);
     }
 
     void onLogin(String sessionId) {
@@ -179,15 +173,21 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
 
     //    ****************************** Interface methods ******************************
 
+    public void addUserListObserver(IUserListObserver observer) {
+        messageHandler.addUserListObserver(observer);
+    }
+
     public void addChatMessageRenderer(IChatMessageRenderer renderer) {
-        chatMessageRenderers.add(renderer);
+        messageHandler.addMessageRenderer(renderer);
     }
 
     @Override
     public void onTextMessageSubmit(String textMessage) {
         try {
             sendRequest(new PostTextMessageRequest(sessionId, textMessage));
-            addMessageToHistory(new TextMessage(profile.getUsername(), textMessage));
+            TextMessage message = new TextMessage(profile.getUsername(), textMessage);
+            chatHistory.add(message);
+            messageHandler.renderTextMessage(message);
         } catch (InterruptedException e) {
             WORKFLOW_LOGGER.info(e.getMessage());
         }
@@ -311,7 +311,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
         }
 
 
-        public static JAXBContext getContext() {
+        static JAXBContext getContext() {
             return jaxbContext;
         }
 
