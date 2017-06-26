@@ -94,7 +94,6 @@ public class Server {
 
     void removeChatMember(ChatMember member) {
         synchronized (lock) {
-            System.out.println("HERE");
             if (member.getUser() != null) {
                 WORKFLOW_LOGGER.info("Freeing username: " + member.getUser().getUsername());
                 reservedUserNames.remove(member.getUser().getUsername());
