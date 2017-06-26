@@ -22,7 +22,7 @@ public class ClientObjectStream implements IClientSocketMessageStream {
     public ServerMessage read() throws StreamReadException {
         try {
             return (ServerMessage) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | OutOfMemoryError e) {
             throw new StreamReadException(e.getMessage());
         }
     }

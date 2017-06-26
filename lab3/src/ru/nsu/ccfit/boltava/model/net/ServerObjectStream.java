@@ -23,7 +23,7 @@ public class ServerObjectStream implements IServerSocketMessageStream {
     public Request read() throws StreamReadException, IMessageSerializer.MessageSerializationException {
         try {
             return (Request) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | OutOfMemoryError e) {
             throw new StreamReadException(e.getMessage(), e);
         }
     }
