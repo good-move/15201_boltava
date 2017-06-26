@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.boltava.model.serializer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -22,6 +24,8 @@ import java.util.concurrent.BlockingQueue;
 
 
 public class XMLSerializer implements IMessageSerializer<String> {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
     private BlockingQueue<Request> lastSentRequestQueue;
     private final Marshaller marshaller;
@@ -46,6 +50,10 @@ public class XMLSerializer implements IMessageSerializer<String> {
             StringWriter writer = new StringWriter();
             marshaller.marshal(message, writer);
             String xml = writer.toString();
+
+            logger.info("Serializing");
+            logger.info(xml);
+
             return adaptJAXBToProtocol(xml);
         } catch (JAXBException e) {
             e.printStackTrace();
@@ -57,6 +65,9 @@ public class XMLSerializer implements IMessageSerializer<String> {
 
     @Override
     public Message deserialize(String xmlString) throws MessageSerializationException {
+        logger.info("Deserializing");
+        logger.info(xmlString);
+
         try {
             xmlString = xmlString.trim();
             Element response = DocumentBuilderFactory
@@ -101,6 +112,10 @@ public class XMLSerializer implements IMessageSerializer<String> {
     }
 
     private Class<? extends Response> mapRequestToResponseClass(String responseTagName) throws MessageSerializationException {
+        if (lastSentRequestQueue == null) {
+            throw new MessageSerializationException("Requests queue is not initialized");
+        }
+
         Request request = lastSentRequestQueue.poll();
 
         if (request == null) {
