@@ -268,7 +268,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
                         ISocketMessageStream.StreamReadException e) {
                     CONSOLE_LOGGER.info("Communication stopped. Check log files for possible errors");
                     WORKFLOW_LOGGER.error(e.getMessage());
-                    if (e.getCause().getClass().equals(EOFException.class)) {
+                    if (e.getCause() != null && e.getCause().getClass().equals(EOFException.class)) {
                         CONSOLE_LOGGER.info("Lost connection with server");
                     }
                 } finally {
