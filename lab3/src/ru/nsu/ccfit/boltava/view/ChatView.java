@@ -10,54 +10,65 @@ import java.awt.*;
 
 public class ChatView extends JComponent implements IChatMessageRenderer {
 
+    private final int BORDER_OFFSET = 10;
     private JPanel panel;
     private JList<String> messageList;
     private DefaultListModel<String> model = new DefaultListModel<>();
     private JScrollPane scrollPane;
 
     ChatView() {
-        ChatMessageRenderer renderer = new ChatMessageRenderer();
+        ListElementRenderer renderer = new ListElementRenderer();
         messageList.setCellRenderer(renderer);
         messageList.setModel(model);
-        JViewport viewport = scrollPane.getViewport();
-        viewport.addChangeListener(e -> {
-            renderer.setWidth(viewport.getWidth()  - 10);
-            scrollPane.validate();
-            scrollPane.repaint();
-        });
-    }
-
-    private void renderMessage(String message) {
-        model.addElement(message);
-        SwingUtilities.invokeLater(this::autoscroll);
-        scrollPane.validate();
-        scrollPane.repaint();
-    }
-
-    private void autoscroll() {
-        int lastIndex = model.getSize() - 1;
-        if (lastIndex >= 0) {
-            messageList.ensureIndexIsVisible(lastIndex);
-        }
+        messageList.setVisible(true);
     }
 
     @Override
     public void render(TextMessage msg) {
-        renderMessage(String.format(StylesBundle.TEXT_MESSAGE_MARKUP, msg.getAuthor(), msg.getMessage()));
+        SwingUtilities.invokeLater(
+                new Renderer(String.format(StylesBundle.TEXT_MESSAGE_MARKUP, msg.getAuthor(), msg.getMessage()))
+        );
     }
 
     @Override
     public void render(UserLeftChatEvent msg) {
-        renderMessage(String.format(StylesBundle.USERLIST_EVENT_MARKUP, msg.getUsername(), "left chat" ));
+        SwingUtilities.invokeLater(
+                new Renderer(String.format(StylesBundle.USERLIST_EVENT_MARKUP, msg.getUsername(), "left chat" ))
+        );
     }
 
     @Override
     public void render(UserJoinedChatEvent msg) {
-        renderMessage(String.format(StylesBundle.USERLIST_EVENT_MARKUP, msg.getUsername(), "joined chat" ));
+        SwingUtilities.invokeLater(
+                new Renderer(String.format(StylesBundle.USERLIST_EVENT_MARKUP, msg.getUsername(), "joined chat" ))
+        );
+    }
+
+    private class Renderer implements Runnable {
+
+        String message;
+
+        Renderer(String message) {
+            this.message = message;
+        }
+
+        @Override
+        public void run() {
+            model.addElement(message);
+            SwingUtilities.invokeLater(this::scrollToBottom);
+        }
+
+        private void scrollToBottom() {
+            int lastIndex = model.getSize() - 1;
+            if (lastIndex >= 0) {
+                messageList.ensureIndexIsVisible(lastIndex);
+            }
+        }
+
     }
 
 
-    private class ChatMessageRenderer extends DefaultListCellRenderer {
+    private class ListElementRenderer extends DefaultListCellRenderer {
 
         private int width = super.getWidth();
 
@@ -69,6 +80,7 @@ public class ChatView extends JComponent implements IChatMessageRenderer {
         @Override
         public Component getListCellRendererComponent(JList list, Object object,
                                                       int index, boolean isSelected, boolean hasFocus) {
+            width = scrollPane.getViewport().getWidth()  - BORDER_OFFSET;
             final String text = String.format(CHAT_MESSAGE_FORMAT, width, object.toString());
             return super.getListCellRendererComponent(list, text, index, isSelected, hasFocus);
         }

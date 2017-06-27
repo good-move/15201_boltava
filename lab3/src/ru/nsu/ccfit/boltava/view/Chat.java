@@ -13,6 +13,7 @@ public class Chat extends JFrame {
     private JPanel panel;
     private MainView mainView;
     private UserList userListPanel;
+    private JSplitPane splitPane;
 
     public Chat(Client client) {
         this.client = client;

@@ -10,13 +10,13 @@
       <nested-form id="7b73" form-file="ru/nsu/ccfit/boltava/view/ChatView.form" binding="chatView">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="1.0" weighty="2.0"/>
+          <gridbag weightx="1.0" weighty="5.0"/>
         </constraints>
       </nested-form>
       <nested-form id="4a336" form-file="ru/nsu/ccfit/boltava/view/MessageInputPanel.form" binding="messageInputPanel">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="1.0" weighty="1.0"/>
+          <gridbag weightx="3.0" weighty="3.0"/>
         </constraints>
       </nested-form>
     </children>
