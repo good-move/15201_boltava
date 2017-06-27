@@ -151,10 +151,10 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
             this.sessionId = sessionId;
             this.profile = new User(queriedUsername, clientType);
 
-            sendRequest(new GetUserListRequest(sessionId));
-
             loginView.setVisible(false);
             chat = new Chat(client);
+
+            sendRequest(new GetUserListRequest(sessionId));
         } catch (InterruptedException e) {
             e.printStackTrace();
             WORKFLOW_LOGGER.info(e.getMessage());
