@@ -9,7 +9,7 @@ import java.awt.event.WindowEvent;
 
 public class Chat extends JFrame {
 
-    Client client;
+    private Client client;
     private JPanel panel;
     private MainView mainView;
     private UserList userListPanel;

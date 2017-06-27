@@ -5,6 +5,8 @@ import ru.nsu.ccfit.boltava.model.message.event.UserJoinedChatEvent;
 import ru.nsu.ccfit.boltava.model.message.event.UserLeftChatEvent;
 
 import javax.swing.*;
+import java.awt.*;
+
 
 public class ChatView extends JComponent implements IChatMessageRenderer {
 
@@ -13,25 +15,16 @@ public class ChatView extends JComponent implements IChatMessageRenderer {
     private DefaultListModel<String> model = new DefaultListModel<>();
     private JScrollPane scrollPane;
 
-    private static final String TEXT_MESSAGE_MARKUP = (
-        "<html>" +
-            "<div style='padding:5px; max-width=%d'>" +
-                "<p style='color:blue; font-size:1em'>%s</p>" +
-                "<p style='font-size:1.1em;'>%s</p>" +
-            "</div>" +
-        "</html>"
-    );
-
-    private static final String USERLIST_EVENT_MARKUP = (
-        "<html>" +
-            "<div style='padding:5px; max-width=%d;'>" +
-                "<p style='color:gray'>%s %s</p>" +
-            "</div>" +
-        "</html>"
-    );
-
     ChatView() {
+        ChatMessageRenderer renderer = new ChatMessageRenderer();
+        messageList.setCellRenderer(renderer);
         messageList.setModel(model);
+        JViewport viewport = scrollPane.getViewport();
+        viewport.addChangeListener(e -> {
+            renderer.setWidth(viewport.getWidth()  - 10);
+            scrollPane.validate();
+            scrollPane.repaint();
+        });
     }
 
     private void renderMessage(String message) {
@@ -42,21 +35,59 @@ public class ChatView extends JComponent implements IChatMessageRenderer {
                 messageList.ensureIndexIsVisible(lastIndex);
             }
         });
+        scrollPane.validate();
+        scrollPane.repaint();
     }
 
     @Override
     public void render(TextMessage msg) {
-        renderMessage(String.format(TEXT_MESSAGE_MARKUP, scrollPane.getViewport().getWidth(), msg.getAuthor(), msg.getMessage()));
+        renderMessage(String.format(StylesBundle.TEXT_MESSAGE_MARKUP, msg.getAuthor(), msg.getMessage()));
     }
 
     @Override
     public void render(UserLeftChatEvent msg) {
-        renderMessage(String.format(USERLIST_EVENT_MARKUP, scrollPane.getViewport().getWidth(), msg.getUsername(), "left chat" ));
+        renderMessage(String.format(StylesBundle.USERLIST_EVENT_MARKUP, msg.getUsername(), "left chat" ));
     }
 
     @Override
     public void render(UserJoinedChatEvent msg) {
-        renderMessage(String.format(USERLIST_EVENT_MARKUP, scrollPane.getViewport().getWidth(), msg.getUsername(), "joined chat" ));
+        renderMessage(String.format(StylesBundle.USERLIST_EVENT_MARKUP, msg.getUsername(), "joined chat" ));
+    }
+
+
+    private class ChatMessageRenderer extends DefaultListCellRenderer {
+
+        private int width = super.getWidth();
+
+        private static final String CHAT_MESSAGE_FORMAT =
+                "<html>" +
+                    "<body><p WIDTH=%d style='padding:5px'>%s</p</body>" +
+                "</html>";
+
+        @Override
+        public Component getListCellRendererComponent(JList list, Object object,
+                                                      int index, boolean isSelected, boolean hasFocus) {
+            final String text = String.format(CHAT_MESSAGE_FORMAT, width, object.toString());
+            return super.getListCellRendererComponent(list, text, index, isSelected, hasFocus);
+        }
+
+        void setWidth(int width) {
+            this.width = width;
+        }
+
+    }
+
+    private static class StylesBundle {
+
+        static final String TEXT_MESSAGE_MARKUP = (
+                    "<span style='color:blue;'>%s</span><br>" +
+                    "<span style='font-size:1.1em;'>%s</span>"
+        );
+
+        static final String USERLIST_EVENT_MARKUP = (
+                    "<span style='color:gray'>%s %s</span>"
+        );
+
     }
 
 }
