@@ -11,13 +11,13 @@
       <splitpane id="ac941" binding="splitPane">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="200" height="200"/>
+            <preferred-size width="230" height="230"/>
           </grid>
         </constraints>
         <properties>
           <continuousLayout value="false"/>
           <dividerLocation value="180"/>
-          <dividerSize value="1"/>
+          <dividerSize value="0"/>
           <enabled value="false"/>
           <oneTouchExpandable value="false"/>
         </properties>
