@@ -37,7 +37,7 @@ public class Server {
     private final Pattern usernamePattern = Pattern.compile(USERNAME_PATTERN_STRING);
     private final int CHAT_HISTORY_SNEAK_PEEK_SIZE = 10;
 
-    private BlockingQueue<TextMessage> chatHistory = new LinkedBlockingQueue<TextMessage>();
+    private ArrayList<TextMessage> chatHistory = new ArrayList<TextMessage>();
 
     private final Object lock = new Object();
 
@@ -123,7 +123,7 @@ public class Server {
             int historySize = chatHistory.size();
             int min = CHAT_HISTORY_SNEAK_PEEK_SIZE < historySize ? CHAT_HISTORY_SNEAK_PEEK_SIZE : historySize;
             for (int i = 0; i < min; i++) {
-                result.add(chatHistory.peek());
+                result.add(chatHistory.get(i));
             }
         }
 
@@ -131,9 +131,11 @@ public class Server {
     }
 
     void rollMessageHistory(TextMessage message) {
-        chatHistory.add(message);
-        if (chatHistory.size() > CHAT_HISTORY_SNEAK_PEEK_SIZE) {
-            chatHistory.poll();
+        synchronized (lock) {
+            chatHistory.add(message);
+            if (chatHistory.size() > CHAT_HISTORY_SNEAK_PEEK_SIZE) {
+                chatHistory.remove(0);
+            }
         }
     }
 
