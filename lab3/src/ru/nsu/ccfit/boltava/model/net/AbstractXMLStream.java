@@ -5,6 +5,7 @@ import ru.nsu.ccfit.boltava.model.serializer.IMessageSerializer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.Charset;
@@ -50,9 +51,8 @@ public abstract class AbstractXMLStream<InMessage extends Message, OutMessage ex
             String xmlString = new String(bytes, Charset.forName("UTF-8"));
 
             return (OutMessage) serializer.deserialize(xmlString);
-
-        } catch (IOException | OutOfMemoryError e) {
-            throw new StreamReadException(e.getMessage());
+        } catch (IOException | OutOfMemoryError | ClassCastException e) {
+            throw new StreamReadException(e.getMessage(), e);
         }
     }
 

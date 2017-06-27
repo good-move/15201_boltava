@@ -24,6 +24,7 @@ import ru.nsu.ccfit.boltava.view.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -86,8 +87,14 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
 
             loginView = new LoginView(client);
             loginView.addOnLoginSubmitListener(client);
-        } catch (IOException | JAXBException e) {
-            CONSOLE_LOGGER.error(e.getMessage());
+        } catch (IOException e) {
+            CONSOLE_LOGGER.error("Communication with server crashed. Check connection configuration: " + e.getMessage());
+        } catch (JAXBException e) {
+            CONSOLE_LOGGER.error("Failed to initialize xml stream: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            CONSOLE_LOGGER.error("Failed to parse config. " + e.getMessage());
+        } catch (Exception e) {
+            CONSOLE_LOGGER.error("Failed to start client. " + e.getMessage());
         }
     }
 
@@ -242,6 +249,7 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
                         ISocketMessageStream.StreamWriteException |
                         IMessageSerializer.MessageSerializationException e) {
                     WORKFLOW_LOGGER.error(e.getMessage());
+                    CONSOLE_LOGGER.info("Communication stopped. Check log files for possible errors");
                 } finally {
                     WORKFLOW_LOGGER.info("interrupted");
                     stop();
@@ -254,8 +262,15 @@ public class Client implements IMessageInputPanelEventListener, IOnLoginSubmitLi
                         ServerMessage msg = mStream.read();
                         msg.handle(mMsgHandler);
                     }
-                } catch (IMessageSerializer.MessageSerializationException | ISocketMessageStream.StreamReadException e) {
+                } catch (NullPointerException e) {
+                    WORKFLOW_LOGGER.error("Null pointer");
+                } catch (IMessageSerializer.MessageSerializationException |
+                        ISocketMessageStream.StreamReadException e) {
+                    CONSOLE_LOGGER.info("Communication stopped. Check log files for possible errors");
                     WORKFLOW_LOGGER.error(e.getMessage());
+                    if (e.getCause().getClass().equals(EOFException.class)) {
+                        CONSOLE_LOGGER.info("Lost connection with server");
+                    }
                 } finally {
                     WORKFLOW_LOGGER.info( "interrupted");
                     stop();

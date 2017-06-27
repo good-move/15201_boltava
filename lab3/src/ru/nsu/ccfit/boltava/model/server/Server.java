@@ -60,7 +60,9 @@ public class Server {
         } catch (IOException e) {
             CONSOLE_LOGGER.error("Failed to start up server" + e.getMessage());
         } catch (NumberFormatException e) {
-            CONSOLE_LOGGER.error("[Error] Invalid port number format: " + e.getMessage());
+            CONSOLE_LOGGER.error("Invalid port number format: " + e.getMessage());
+        } catch (Exception e) {
+            CONSOLE_LOGGER.error(e.getMessage());
         }
     }
 

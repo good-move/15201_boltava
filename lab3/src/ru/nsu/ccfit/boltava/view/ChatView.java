@@ -29,14 +29,16 @@ public class ChatView extends JComponent implements IChatMessageRenderer {
 
     private void renderMessage(String message) {
         model.addElement(message);
-        SwingUtilities.invokeLater(() -> {
-            int lastIndex = model.getSize() - 1;
-            if (lastIndex >= 0) {
-                messageList.ensureIndexIsVisible(lastIndex);
-            }
-        });
+        SwingUtilities.invokeLater(this::autoscroll);
         scrollPane.validate();
         scrollPane.repaint();
+    }
+
+    private void autoscroll() {
+        int lastIndex = model.getSize() - 1;
+        if (lastIndex >= 0) {
+            messageList.ensureIndexIsVisible(lastIndex);
+        }
     }
 
     @Override

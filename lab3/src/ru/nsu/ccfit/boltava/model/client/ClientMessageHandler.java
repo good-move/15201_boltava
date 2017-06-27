@@ -85,7 +85,7 @@ public class ClientMessageHandler implements IClientMessageHandler {
         logger.info("Got a new message:" + msg.getMessage().getClass().getSimpleName());
         TextMessage message = new TextMessage(msg.getSender(), msg.getMessage());
         client.addMessageToHistory(message);
-        chatMessageRenderers.forEach(message::render);
+        renderTextMessage(message);
     }
 
     @Override
