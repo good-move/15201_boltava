@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.nsu.ccfit.boltava.view.MainView">
+  <grid id="27dc6" binding="panel" default-binding="true" layout-manager="GridBagLayout">
+    <constraints>
+      <xy x="20" y="6" width="675" height="414"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <nested-form id="7b73" form-file="ru/nsu/ccfit/boltava/view/ChatView.form" binding="chatView">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="1.0" weighty="5.0"/>
+        </constraints>
+      </nested-form>
+      <nested-form id="4a336" form-file="ru/nsu/ccfit/boltava/view/MessageInputPanel.form" binding="messageInputPanel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="3.0" weighty="3.0"/>
+        </constraints>
+      </nested-form>
+    </children>
+  </grid>
+</form>

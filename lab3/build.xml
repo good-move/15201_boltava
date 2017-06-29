@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="lab3" default="all">
+
+
+  <!--<property file="build.properties"/>-->
+
+  <property name="basedir" value="." />
+  <property name="lab3.jar.output.name.client" value="Client.jar" />
+  <property name="lab3.jar.output.name.server" value="Server.jar" />
+  <property name="lab3.jar.output.dir" value="${basedir}" />
+
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+
+  <!-- Project Libraries -->
+
+  <path id="library.lib.classpath">
+    <fileset dir="${basedir}/lib">
+    </fileset>
+  </path>
+
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+  </patternset>
+
+  <!-- Register Custom Compiler -->
+
+  <property name="javac2.home" value="${basedir}/lib" />
+
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+    <pathelement location="${javac2.home}/forms_rt.jar"/>
+  </path>
+
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+  </target>
+
+  <!-- Module lab3 -->
+
+  <property name="compiler.args.lab3" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+
+  <property name="lab3.output.dir" value="${basedir}/out/production/lab3/"/>
+  <property name="lab3.testoutput.dir" value="${basedir}/out/test/lab3/"/>
+
+  <path id="lab3.module.production.classpath">
+    <path refid="library.lib.classpath"/>
+    <path path="${basedir}" />
+  </path>
+
+  <path id="lab3.module.sourcepath">
+    <dirset dir="${basedir}">
+      <include name="src/"/>
+      <include name="lib"/>
+    </dirset>
+  </path>
+
+  <target name="compile.module.lab3" depends="compile.module.lab3.production,compile.module.lab3.tests" description="Compile module lab3"/>
+
+  <target name="compile.module.lab3.production" depends="register.custom.compilers" description="Compile module lab3; production classes">
+    <mkdir dir="${lab3.output.dir}"/>
+    <unjar src="${javac2.home}/forms_rt.jar" dest="${lab3.output.dir}">
+      <patternset>
+        <include name="**/*.class"/>
+      </patternset>
+    </unjar>
+    <javac2 destdir="${lab3.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" includeantruntime="false" fork="true">
+      <compilerarg line="${compiler.args.lab3}"/>
+      <classpath refid="lab3.module.production.classpath"/>
+      <src refid="lab3.module.sourcepath"/>
+    </javac2>
+
+    <copy todir="${lab3.output.dir}">
+      <fileset dir="${basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${basedir}/lib">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="build.client.jar">
+    <mkdir dir="." />
+    <manifestclasspath property="manifest.classpath" jarfile="${lab3.jar.output.dir}/${lab3.jar.output.name.client}">
+      <classpath refid="lab3.module.production.classpath"/>
+    </manifestclasspath>
+    <jar basedir="${lab3.output.dir}" destfile="${lab3.jar.output.dir}/${lab3.jar.output.name.client}">
+      <manifest>
+        <attribute name="Main-Class" value="ru.nsu.ccfit.boltava.model.client.Client"/>
+        <attribute name="Class-Path" value="${manifest.classpath}"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="build.server.jar">
+    <mkdir dir="." />
+    <manifestclasspath property="manifest.classpath" jarfile="${lab3.jar.output.dir}/${lab3.jar.output.name.server}">
+      <classpath refid="lab3.module.production.classpath"/>
+    </manifestclasspath>
+    <jar basedir="${lab3.output.dir}" destfile="${lab3.jar.output.dir}/${lab3.jar.output.name.server}">
+      <manifest>
+        <attribute name="Main-Class" value="ru.nsu.ccfit.boltava.model.server.Server"/>
+        <attribute name="Class-Path" value="${manifest.classpath}"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="compile.module.lab3.tests" depends="register.custom.compilers,compile.module.lab3.production" description="compile module lab3; test classes" unless="skip.tests"/>
+
+  <target name="clean.module.lab3" description="cleanup module">
+    <delete dir="${lab3.output.dir}"/>
+    <delete dir="${lab3.testoutput.dir}"/>
+  </target>
+
+  <target name="run.client">
+    <java jar="${lab3.jar.output.dir}/${lab3.jar.output.name.client}" fork="true" />
+  </target>
+
+  <target name="run.server">
+    <java jar="${lab3.jar.output.dir}/${lab3.jar.output.name.server}" fork="true" />
+  </target>
+
+  <target name="clean" depends="clean.module.lab3" description="cleanup all"/>
+
+  <target name="build.modules" depends="clean.module.lab3, compile.module.lab3, build.client.jar, build.server.jar" description="build all modules"/>
+
+  <target name="all" depends="build.modules" description="build all"/>
+
+</project>
